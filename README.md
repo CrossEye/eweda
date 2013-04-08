@@ -9,7 +9,7 @@ Goals
 -----
 
 Using this library should feel as much like using Javascript as possible.  Of course it's functional Javascript, but
-we're not introducting lambda expressions in strings, we're not borrowing CONSed lists, we're not porting over all of
+we're not introducting lambda expressions in strings, we're not borrowing CONsed lists, we're not porting over all of
 the Clojure functions.
 
 Our basic data structures will be normal Javascript objects, and our usual collections will be Javascript arrays.  We

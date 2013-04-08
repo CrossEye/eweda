@@ -140,8 +140,8 @@ and this:
 
 The question is how big a performance hit such code would introduce.  Obviously the original CONsed list wouldn't do,
 but if we had a list implementation that worked similarly but was actually backed by an array, using native array
-operations underneath when necessary, but just fiddling with indices for things like `tail` this might not be too costly
-and might therefore be worth considering.
+operations underneath when necessary, and just fiddling with indices for things like `tail,` this might not be too
+costly and might therefore be worth considering.
 
 
   [cons]: https://gist.github.com/buzzdecafe/5272249

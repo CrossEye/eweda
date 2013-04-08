@@ -20,6 +20,9 @@ length function signatures and functions as objects with properties.
 Functional programming is in good part about immutable objects and side-effect free functions.  We will stick to that
 as much as feasible, but will not be dogmatic about it.
 
+As much as we can, we would like the implementation to be both clean and elegant.  But the API is king: we will
+sacrifice a great deal of implementation elegance for even a slightly cleaner API.
+
 
 Structure
 ---------
@@ -32,14 +35,18 @@ The idea is that, if foldl has this signature:
 
     var foldl = function(fn, accum, arr) { /* ... */}
 
+and we have this simple function:
+
+    var add = function(a, b) {return a + b;};
+
 then, instead of having to manually call lPartial like this:
 
-     var sum = lPartial(foldl, 0, add);
+     var sum = lPartial(foldl, add, 0);
      var total = sum([1, 2, 3, 4]);
 
 we could just do this:
 
-     var sum = foldl(0, add);
+     var sum = foldl(add, 0);
      var total = sum([1, 2, 3, 4]);
 
 **Question**: Is this really a good idea?  Is this convenience worth the implementation complexity, and would users
@@ -98,11 +105,44 @@ To-Do
 Obviously the most important thing is to get started on the code.  But there are several other things we would like to
 make sure are done.
 
-  * This should come with a good set of unit tests right from the beginning.  We have to choose the test framework.
-  * By default this should probably be built with a wrapper that lets it run with browser globals, with an AMD loader
-    or in the Common.js loader.  This is straightforward.  But we should provide a mechanism that allows the user
+  * <del>This should come with a good set of unit tests right from the beginning.  We have to choose the test
+    framework.</del> *Done*: Using Mocha, at least for now, with a custom wrapper to let it run in both Node and
+    in the browser.  We'll see if that wrapper holds up to more than casual use.
+  * <del>By default this should probably be built with a wrapper that lets it run with browser globals, with an AMD
+    loader or in the Common.js loader.</del>  *Done*.  But we should provide a mechanism that allows the user
     instead to choose the target environment.  This is probably to include a grunt script along with the code, and
     possibly to push several outputs up with each change.
   * At the moment, this looks small enough that it may not matter, but if this grows, it would also be nice to offer
     the ability to generate modular builds, which would require us to track dependencies.  It might be worth finding
     a way to do that from the start.
+
+
+Open Question
+-------------
+
+It might be possible to extend the [cons, car, cdr][cons] notion [buzzdecafe][mike] has been leading to work with actual
+arrays rather than the CONsed pairs.  Is it worth doing this?  There would certainly make for cleaner, more elegant
+code, with the difference between this:
+
+     var foldl = function(fn, acc, arr) {
+         var total = acc;
+         for (var i = 0, len = arr.length; i <len; i++) {
+             total = fn(total, arr[i]);
+         }
+         return total;
+     };
+
+and this:
+
+     var foldl = function(fn, acc, list) {
+         return (isEmpty(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
+     }
+
+The question is how big a performance hit such code would introduce.  Obviously the original CONsed list wouldn't do,
+but if we had a list implementation that worked similarly but was actually backed by an array, using native array
+operations underneath when necessary, but just fiddling with indices for things like `tail` this might not be too costly
+and might therefore be worth considering.
+
+
+  [cons]: https://gist.github.com/buzzdecafe/5272249
+  [mike]: https://github.com/buzzdecafe

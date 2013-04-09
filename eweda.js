@@ -16,30 +16,22 @@
         return f([]);
     };
 
-    var foldl = _(function(fn, acc, arr) {
-        var total = acc;
-        for (var i = 0, len = arr.length; i <len; i++) {
-            total = fn(total, arr[i]);
-        }
-        return total;
-    });
-
     var emptyList = function(list) {
         return !list || !list.length;
-    }
+    };
 
     var head = function(arr) {
         arr = arr || [];
         return (arr.length) ? arr[0] : [];
-    }
+    };
 
     var tail = function(arr) {
         arr = arr || [];
         return (arr.length > 1) ? arr.slice(1) : [];
-    }
+    };
     
-    var rfoldl = _(function(fn, acc, list) {
-        return (emptyList(list)) ? acc : rfoldl(fn, fn(acc, head(list)), tail(list));
+    var foldl = _(function(fn, acc, list) {
+        return (emptyList(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
     });
 
 
@@ -47,7 +39,6 @@
         foldl: foldl,
         head: head,
         tail: tail,
-        rfoldl: rfoldl
     };
 
 }));

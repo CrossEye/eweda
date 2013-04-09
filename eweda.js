@@ -1,9 +1,29 @@
 (function (root, factory) {if (typeof exports === 'object') {module.exports = factory();} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory();}}(this, function () { // see https://github.com/umdjs/umd/blob/master/returnExports.js
 
     var E = {};
+
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
+    var keys = function(obj) {
+        var results = [];
+        for (var prop in obj) {if (obj.hasOwnProperty(prop)) {
+            results.push(prop);
+        }}
+        return results;
+    };
+    var forEach = function(fn, arr) {
+        for (var i = 0, len = arr.length; i < len; i++) {
+          fn.call(this, arr[i], i, arr);
+        }
+    };
+    var last = function (arr) {
+        if (arr.length) {
+            return arr[arr.length - 1];
+        }
+        throw new Error('last of empty array');
+    };
+
 
     var _ = function(fn) { // should we spell out "curry" or "partial" or leave super-short?
         var arity = fn.length;
@@ -23,7 +43,7 @@
         return !list || !list.length;
     };
 
-    // should prepend, head, tail, atom, etc be exposed?
+    // should prepend, head, tail, isAtom, etc be exposed?
 
     var prepend = E.prepend = function(el, arr) {
         return [el].concat(arr);
@@ -43,67 +63,40 @@
         return (x !== null) && (x !== undefined) && !isArray(x);
     };
 
-    var foldl = E.foldl = _(function(fn, acc, list) {
-        return (emptyList(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
+    var append = E.append = _(function(arr1, arr2) {
+        return (emptyList(arr1)) ? arr2 : arr1.concat(arr2);
+    });
+
+    var reverse = E.reverse = function(arr) {
+        return (emptyList(arr)) ? [] : reverse(tail(arr)).concat(head(arr));
+    };
+
+    var foldl = E.foldl = _(function(fn, acc, arr) {
+        return (emptyList(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
     });
 
     var fold11 = E.fold11 = _(function (fn, arr) {
         if (emptyList(arr)) {
-            throw new Error("foldl does not work on empty lists");
+            throw new Error("foldl1 does not work on empty lists");
         }
         return foldl(fn, head(arr), tail(arr));
+    });
+
+    var foldr = E.foldr =_(function(fn, acc, arr) {
+        return (emptyList(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
+    });
+
+    var foldr1 = E.foldr1 = _(function (fn, arr) {
+        if (emptyList(arr)) {
+            throw new Error("foldr1 does not work on empty lists");
+        }
+        var rev = reverse(arr);
+        return foldr(fn, head(rev), reverse(tail(rev)));
     });
 
     var map = E.map = _(function(fn, arr) {
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
-
-    // TODO: A lot of effort for a little gain.  Can do the below without a full Object.keys shim.  Probably better.
-    // somewhat simplified from https://github.com/kangax/protolicious/blob/master/experimental/object.for_in.js#L18
-    // We can shim this one without issue as we use it directly.
-    var keys = Object.keys = Object.keys || (function () { // TODO: expose as eweda.keys?
-        var hasOwnProperty = Object.prototype.hasOwnProperty,
-            hasDontEnumBug = !{toString:null}.propertyIsEnumerable("toString"),
-            DontEnums = [
-                'toString',
-                'toLocaleString',
-                'valueOf',
-                'hasOwnProperty',
-                'isPrototypeOf',
-                'propertyIsEnumerable',
-                'constructor'
-            ],
-            DontEnumsLength = DontEnums.length;
-
-        return function (o) {
-            if (typeof o != "object" && typeof o != "function" || o === null) {
-                throw new TypeError("Object.keys called on a non-object");
-            }
-            var result = [];
-            for (var name in o) {
-                if (hasOwnProperty.call(o, name)) {
-                    result.push(name);
-                }
-            }
-
-            if (hasDontEnumBug) {
-                for (var i = 0; i < DontEnumsLength; i++) {
-                    if (hasOwnProperty.call(o, DontEnums[i])) {
-                        result.push(DontEnums[i]);
-                    }
-                }
-            }
-
-            return result;
-        };
-    }());
-
-    // Should we shim Array.prototype forEach?  We don't actually use it directly.
-    var forEach = function(fn, arr) {
-        for (var i = 0, len = arr.length; i < len; i++) {
-          fn.call(this, arr[i], i, arr);
-        }
-    };
 
     var aliases = {
         foldl: ["reduce"],

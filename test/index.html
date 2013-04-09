@@ -3,7 +3,6 @@
   <meta charset="utf-8">
   <title>Eweda Tests</title>
   <link rel="stylesheet" href="../lib/test/mocha.css" />
-  <!-- An attempt to wrap up Node's util and assert to run in the browser -->
   <script>function require(str) {return this[str.substring(str.lastIndexOf("/") +1)];}</script>
 </head>
 <body>
@@ -15,9 +14,10 @@
   <script src="../lib/test/assert.js"></script>
   <script src="../eweda.js"></script>
   <script>mocha.setup('bdd')</script>
-  <script src="test.foldl.js"></script>
-  <script src="test.headtail.js"></script>
+  <script src="test.fold.js"></script>
   <script src="test.map.js"></script>
+  <script src="test.reverse.js"></script>
+  <script src="test.headtail.js"></script>
   <script>
     mocha.checkLeaks();
     mocha.globals(['jQuery']);

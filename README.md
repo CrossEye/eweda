@@ -78,6 +78,8 @@ to use the most common names for these, possibly using multiple aliases for thos
   * first (head)
   * rest (tail)
   * splat ?
+  * take
+  * skip (drop)
 
 ### Functions ###
 

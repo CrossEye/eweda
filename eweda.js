@@ -5,18 +5,6 @@
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
-    var keys = function(obj) {
-        var results = [];
-        for (var prop in obj) {if (obj.hasOwnProperty(prop)) {
-            results.push(prop);
-        }}
-        return results;
-    };
-    var forEach = function(fn, arr) {
-        for (var i = 0, len = arr.length; i < len; i++) {
-          fn.call(this, arr[i], i, arr);
-        }
-    };
     var alias = function(oldName, newName) {
         E[newName] = E[oldName];
     };

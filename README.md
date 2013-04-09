@@ -74,10 +74,12 @@ to use the most common names for these, possibly using multiple aliases for thos
   * pluck
   * flatten
   * zip
-  * (cartesian product -- what's a good name?)
+  * zipWith
+  * <del>(cartesian product -- what's a good name?)</del>: Not common enough to do product of more than two sets.  So
+    just use zip.
   * first (head)
   * rest (tail)
-  * splat ?
+  * <del>splat</del>: Not needed when `map` is automatically curried, and function parameter comes first.
   * take
   * skip (drop)
 

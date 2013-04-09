@@ -84,6 +84,18 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
+    var all = E.all = _(function(fn, arr) {
+        function allAcc(list, acc) {
+            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
+        }
+        return (emptyList(arr)) ? false : allAcc(arr, true);
+    });
+    alias("all", "every");
+
+    var some = E.some = _(function(fn, arr) {
+        return (emptyList(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
+    });
+    alias("some", "any")
 
     return E;
 }));

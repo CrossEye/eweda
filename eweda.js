@@ -17,13 +17,9 @@
           fn.call(this, arr[i], i, arr);
         }
     };
-    var last = function (arr) {
-        if (arr.length) {
-            return arr[arr.length - 1];
-        }
-        throw new Error('last of empty array');
+    var alias = function(oldName, newName) {
+        E[newName] = E[oldName];
     };
-
 
     var _ = function(fn) { // should we spell out "curry" or "partial" or leave super-short?
         var arity = fn.length;
@@ -74,6 +70,7 @@
     var foldl = E.foldl = _(function(fn, acc, arr) {
         return (emptyList(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
     });
+    alias("foldl", "reduce");
 
     var fold11 = E.fold11 = _(function (fn, arr) {
         if (emptyList(arr)) {
@@ -85,6 +82,7 @@
     var foldr = E.foldr =_(function(fn, acc, arr) {
         return (emptyList(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
     });
+    alias("foldr", "reduceRight");
 
     var foldr1 = E.foldr1 = _(function (fn, arr) {
         if (emptyList(arr)) {
@@ -98,16 +96,6 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
-    var aliases = {
-        foldl: ["reduce"],
-        foldr: ["reduceRight"]
-    };
-
-    forEach(function(key) {
-        forEach(function(alias) {
-            E[alias] = E[key];
-        }, aliases[key]);
-    }, keys(aliases));
 
     return E;
 }));

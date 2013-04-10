@@ -7,18 +7,18 @@ describe('map', function() {
     var add1 = function(x) {return x + 1;};
 
     it('should map simple functions over arrays', function() {
-        assert.deepEqual([2, 4, 6, 8], map(times2, [1, 2, 3, 4]));
+        assert.deepEqual(map(times2, [1, 2, 3, 4]), [2, 4, 6, 8]);
     });
 
     it('should be automatically curried', function() {
         var inc = map(add1);
-        assert.deepEqual([2, 3, 4], inc([1, 2, 3]));
+        assert.deepEqual(inc([1, 2, 3]), [2, 3, 4]);
     });
 
     // TODO:  do we need to use a function constructor version of curry to make this work?
     it.skip('should correctly report the arity of curried versions', function() {
         var inc = map(add1);
-        assert.equal(1, inc.length);
+        assert.equal(inc.length, 1);
     });
 
 });

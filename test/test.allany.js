@@ -14,8 +14,8 @@ describe('all', function() {
         assert.equal(all(even, [2,4,6,8,9,10]), false);
     });
 
-    it('returns false for an empty list', function() {
-        assert.equal(all(T, []), false);
+    it('returns true for an empty list', function() {
+        assert.equal(all(T, []), true);
     });
 
 });
@@ -29,7 +29,7 @@ describe("some", function() {
         assert.equal(some(odd, [2,4,6,8,10,11,12]), true);
     });
 
-    it('returns false if any element fails to satisfy the predicate', function() {
+    it('returns false if all elements fails to satisfy the predicate', function() {
         assert.equal(some(odd, [2,4,6,8,10,12]), false);
     });
 

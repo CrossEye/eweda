@@ -47,6 +47,31 @@
         return (x !== null) && (x !== undefined) && !isArray(x);
     };
 
+    var and = E.and = _(function (a, b) {
+        return a && b;
+    });
+
+    var or = E.or = _(function (a, b) {
+        return a || b;
+    });
+
+    var not = E.not = function (a) {
+        return !a;
+    };
+
+    var andFn = E.andFn = _(function(f, g) { // TODO: arity?
+       return function() {return f.apply(this, arguments) && g.apply(this, arguments);}
+    });
+
+    var orFn = E.orFn = _(function(f, g) { // TODO: arity?
+       return function() {return f.apply(this, arguments) || g.apply(this, arguments);}
+    });
+
+    var notFn = E.notFn = function (f) {
+        return function() {return !f.apply(this, arguments)};
+    };
+
+
     var append = E.append = _(function(arr1, arr2) {
         return (emptyList(arr1)) ? arr2 : arr1.concat(arr2);
     });
@@ -84,18 +109,27 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
-    var all = E.all = _(function(fn, arr) {
-        function allAcc(list, acc) {
-            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
-        }
-        return (emptyList(arr)) ? false : allAcc(arr, true);
+//    var all = E.all = _(function(fn, arr) {
+//        function allAcc(list, acc) {
+//            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
+//        }
+//        return (emptyList(arr)) ? false : allAcc(arr, true);
+//    });
+
+// elegant but doesn't short-circuit in non-lazy language...
+//    var all = E.all = _(function (fn, arr) {
+//        return foldl(and, true, map(fn, arr));
+//    });
+
+    var all = E.all = _(function (fn, arr) {
+        return (emptyList(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
     });
     alias("all", "every");
 
     var some = E.some = _(function(fn, arr) {
         return (emptyList(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
     });
-    alias("some", "any")
+    alias("some", "any");
 
     return E;
 }));

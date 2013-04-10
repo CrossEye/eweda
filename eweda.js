@@ -141,5 +141,25 @@
         return (emptyList(arr)) ? [] : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
     });
 
+    var reject = E.reject = _(function(fn, arr) {
+        return filter(notFn(fn), arr);
+    });
+
+    var lPartial = E.lPartial = function (fn) {
+        var args = [].slice.call(arguments, 1);
+        return function() {
+            return fn.apply(this, args.concat([].slice.call(arguments)));
+        };
+    };
+    alias("lPartial", "applyLeft");
+
+    var rPartial = E.rPartial =function (fn) {
+        var args = [].slice.call(arguments, 1);
+        return function() {
+            return fn.apply(this, [].slice.call(arguments).concat(args));
+        };
+    };
+    alias("rPartial", "applyRight");
+
     return E;
 }));

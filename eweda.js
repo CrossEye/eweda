@@ -73,14 +73,6 @@
         return function() {return !f.apply(this, arguments)};
     };
 
-    var append = E.append = _(function(arr1, arr2) {
-        return (emptyList(arr1)) ? arr2 : arr1.concat(arr2);
-    });
-
-    var reverse = E.reverse = function(arr) {
-        return (emptyList(arr)) ? [] : reverse(tail(arr)).concat(head(arr));
-    };
-
     var foldl = E.foldl = _(function(fn, acc, arr) {
         return (emptyList(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
     });
@@ -106,6 +98,18 @@
         return foldr(fn, head(rev), reverse(tail(rev)));
     });
 
+    var flip = function(fn) {
+        return function(a, b) {
+            return fn.call(this, b, a);
+        };
+    };
+
+    var append = E.append = _(function(arr1, arr2) {
+        return (emptyList(arr1)) ? arr2 :  prepend(head(arr1), append(tail(arr1), arr2));
+    });
+
+    var reverse = E.reverse = foldl(flip(prepend), []);
+
     var map = E.map = _(function(fn, arr) {
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
@@ -118,7 +122,7 @@
 //        return (emptyList(arr)) ? false : allAcc(arr, true);
 //    });
 
-// elegant but doesn't short-circuit in non-lazy language...
+// elegant but doesn't short-circuit in our non-lazy language...
 //    var all = E.all = _(function (fn, arr) {
 //        return foldl(and, true, map(fn, arr));
 //    });
@@ -132,6 +136,10 @@
         return (emptyList(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
     });
     alias("some", "any");
+
+    var filter = E.filter = _(function(fn, arr) {
+        return (emptyList(arr)) ? [] : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
+    });
 
     return E;
 }));

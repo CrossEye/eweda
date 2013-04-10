@@ -75,8 +75,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * flatten
   * zip
   * zipWith
-  * <del>(cartesian product -- what's a good name?)</del>: Not common enough to do product of more than two sets.  So
-    just use zip.
+  * (cartesian product -- what's a good name?)
   * first (head)
   * rest (tail)
   * <del>splat</del>: Not needed when `map` is automatically curried, and function parameter comes first.

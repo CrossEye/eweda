@@ -48,29 +48,30 @@
     };
 
     var and = E.and = _(function (a, b) {
-        return a && b;
+        return !!(a && b);
     });
 
     var or = E.or = _(function (a, b) {
-        return a || b;
+        return !!(a || b);
     });
 
     var not = E.not = function (a) {
         return !a;
     };
 
+    // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
+
     var andFn = E.andFn = _(function(f, g) { // TODO: arity?
-       return function() {return f.apply(this, arguments) && g.apply(this, arguments);}
+       return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));}
     });
 
     var orFn = E.orFn = _(function(f, g) { // TODO: arity?
-       return function() {return f.apply(this, arguments) || g.apply(this, arguments);}
+       return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));}
     });
 
     var notFn = E.notFn = function (f) {
         return function() {return !f.apply(this, arguments)};
     };
-
 
     var append = E.append = _(function(arr1, arr2) {
         return (emptyList(arr1)) ? arr2 : arr1.concat(arr2);
@@ -109,6 +110,7 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
+// I think this was built around the wrong notion that all([]) => false... ask Mike
 //    var all = E.all = _(function(fn, arr) {
 //        function allAcc(list, acc) {
 //            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);

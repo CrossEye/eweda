@@ -114,7 +114,7 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
-// I think this was built around the wrong notion that all([]) => false... ask Mike
+//    I think this was built around the wrong notion that all([]) => false... ask Mike
 //    var all = E.all = _(function(fn, arr) {
 //        function allAcc(list, acc) {
 //            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
@@ -122,7 +122,7 @@
 //        return (emptyList(arr)) ? false : allAcc(arr, true);
 //    });
 
-// elegant but doesn't short-circuit in our non-lazy language...
+//    elegant but doesn't short-circuit in our non-lazy language...
 //    var all = E.all = _(function (fn, arr) {
 //        return foldl(and, true, map(fn, arr));
 //    });
@@ -160,6 +160,12 @@
         };
     };
     alias("rPartial", "applyRight");
+
+    var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
+    // alias("prop", "get"); // TODO?
+
+    var pluck = E.pluck = function(p) {return map(prop(p));};
+    // var pluck = E.pluck = map(prop); // TODO: shouldn't this work?
 
     return E;
 }));

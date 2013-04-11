@@ -9,16 +9,16 @@
         E[newName] = E[oldName];
     };
 
-    var _ = function(fn) { // should we spell out "curry" or "partial" or leave super-short?
+    var _ = function(fn) {
         var arity = fn.length;
         var f = function(args) {
             return function () {
                 var newArgs = args.concat(slice.call(arguments, 0));
                 if (newArgs.length >= arity) {
-                    return fn.apply(this, newArgs)
+                    return fn.apply(this, newArgs);
                 }
-                else return f(newArgs)
-            }
+                else {return f(newArgs);}
+            };
         };
         return f([]);
     };
@@ -162,10 +162,30 @@
     alias("rPartial", "applyRight");
 
     var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
-    // alias("prop", "get"); // TODO?
 
     var pluck = E.pluck = function(p) {return map(prop(p));};
-    // var pluck = E.pluck = E.map(E.prop); // TODO: shouldn't this work?
+    // var pluck = E.pluck = map(prop); // TODO: shouldn't this work? // ANS: Duh, requires compose
+
+    var contains = E.contains = _(function(a, arr) {
+        var h = head(arr), t = tail(arr);
+        if (emptyList(arr)) { return false; }
+        if (isAtom(h)) { return h === a || contains(a, t); }
+        else { return contains(a, h) || contains(a, t); }
+    });
+
+    var uniq = E.uniq = function(arr) {
+        var h = head(arr), t = tail(arr);
+        return (emptyList(arr)) ? [] : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+    };
+
+    var take = E.take = _(function(n, arr) {
+        return (emptyList(arr) || !(n > 0)) ? [] : prepend(head(arr), take(n -1, tail(arr)));
+    });
+
+    var skip = E.skip = _(function(n, arr) {
+        return emptyList(arr) ? [] : (n > 0) ? skip(n - 1, tail(arr)) : arr;
+    });
+    alias('skip', 'drop');
 
     return E;
 }));

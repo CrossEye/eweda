@@ -28,3 +28,29 @@ describe('reject', function() {
         assert.deepEqual(odd([1, 2, 3,4, 5, 6, 7]), [1, 3, 5, 7]);
     });
 });
+
+describe('take', function() {
+    var take = eweda.take;
+
+    it('should take only the first `n` elements from a list', function() {
+        assert.deepEqual(take(3, ['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['a', 'b', 'c']);
+    });
+});
+
+describe('skip', function() {
+    var skip = eweda.skip;
+
+    it('should skip the first `n` elements from a list, returning the remainder', function() {
+        assert.deepEqual(skip(3, ['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['d', 'e', 'f', 'g']);
+    });
+
+    it('should be automatically curried', function() {
+        var skip2 = skip(2);
+        assert.deepEqual(skip2(['a', 'b', 'c', 'd', 'e']), ['c', 'd', 'e']);
+    });
+
+    it('should be aliased by `drop`', function() {
+        assert.deepEqual(eweda.drop(1, ['a', 'b', 'c']), ['b', 'c']);
+        assert.strictEqual(eweda.drop, skip);
+    });
+});

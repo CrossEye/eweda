@@ -167,5 +167,17 @@
     var pluck = E.pluck = function(p) {return map(prop(p));};
     // var pluck = E.pluck = map(prop); // TODO: shouldn't this work?
 
+    var contains = E.contains = _(function(a, arr) {
+        var h = head(arr), t = tail(arr);
+        if (emptyList(arr)) { return false; }
+        if (isAtom(h)) { return h === a || contains(a, t); }
+        else { return contains(a, h) || contains(a, t); }
+    });
+
+    var uniq = E.uniq = function(arr) {
+        var h = head(arr), t = tail(arr);
+        return (emptyList(arr)) ? [] : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+    };
+
     return E;
 }));

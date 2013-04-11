@@ -63,39 +63,38 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Arrays ###
 
-  * map
-  * foldl/foldr (reduce/reduceRight)
-  * filter
-  * reject
+  * ✓ map
+  * ✓ foldl/foldr (reduce/reduceRight)
+  * ✓ filter
+  * ✓ reject
   * find
-  * all (every)
-  * any (some)
-  * contains
-  * pluck
+  * ✓ all (every)
+  * ✓ any (some)
+  * ✓ contains
+  * ✓ pluck
   * flatten
   * zip
   * zipWith
   * (cartesian product -- what's a good name?)
-  * first (head)
-  * rest (tail)
-  * <del>splat</del>: Not needed when `map` is automatically curried, and function parameter comes first.
-  * take
-  * skip (drop)
+  * ✓ first (head)
+  * ✓ rest (tail)
+  * ✓ take
+  * ✓ skip (drop)
 
 ### Functions ###
 
   * compose (but standard ordering seems wrong)
-  * flip
-  * lPartial/rPartial (applyLeft/applyRight)
+  * ✓ flip
+  * ✓ Partial/rPartial (applyLeft/applyRight)
   * memoize
   * once
   * wrap
-  * not
+  * ✓ not
 
 ### Objects ###
 
   * tap
-  * get (Ex: `var bday = get("dob"), day1 = bday(fred), day2 = bday(wilma);`)
+  * ✓ prop (Ex: `var bday = prop("dob"), day1 = bday(fred), day2 = bday(wilma);`)
   * props ? (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
   * identity (along with some utility versions such as alwaysTrue, alwaysFalse, alwaysZero, etc.)
   * maybe
@@ -108,6 +107,10 @@ To-Do
 Obviously the most important thing is to get started on the code.  But there are several other things we would like to
 make sure are done.
 
+  * Replace `emptyList()` with `isEmpty()`.  Create a constant (`NIL` ?) to use in place of all the `[]` instances.
+    (Probably should also rename all the `arr` variables to `list` too.)  Then make sure that everything else is
+    bootstrapped from just `prepend`, `head`, `tail`, `isEmpty`, and `NIL`.  This could make it very clean to change the
+    basic underlying data structure without breaking any functionality.
   * <del>This should come with a good set of unit tests right from the beginning.  We have to choose the test
     framework.</del> *Done*: Using Mocha, at least for now, with a custom wrapper to let it run in both Node and
     in the browser.  We'll see if that wrapper holds up to more than casual use.

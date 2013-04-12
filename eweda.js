@@ -178,19 +178,14 @@
         return (emptyList(a) || emptyList(b)) ? [] : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
     });
 
-    var xprod = E.xprod = xprodWith(function(x, y) {return [x, y];});
+    var xprod = E.xprod = xprodWith(prepend);
 
-    var contains = E.contains = _(function(a, arr) {
-        var h = head(arr), t = tail(arr);
-        if (emptyList(arr)) { return false; }
-        if (isAtom(h)) { return h === a || contains(a, t); }
-        else { return contains(a, h) || contains(a, t); }
+    var zipWith = E.zipWith = _(function(fn, a, b) {
+        if (emptyList(a) || emptyList(b)) return [];
+        return prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
     });
 
-    var uniq = E.uniq = function(arr) {
-        var h = head(arr), t = tail(arr);
-        return (emptyList(arr)) ? [] : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
-    };
+    var zip = E.zip = zipWith(prepend);
 
     return E;
 }));

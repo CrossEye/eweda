@@ -107,9 +107,9 @@ To-Do
 Obviously the most important thing is to get started on the code.  But there are several other things we would like to
 make sure are done.
 
-  * Replace `emptyList()` with `isEmpty()`.  Create a constant (`NIL` ?) to use in place of all the `[]` instances.
+  * Replace `emptyList()` with `isEmpty()`.  Create a constant (`EMTPY` ?) to use in place of all the `[]` instances.
     (Probably should also rename all the `arr` variables to `list` too.)  Then make sure that everything else is
-    bootstrapped from just `prepend`, `head`, `tail`, `isEmpty`, and `NIL`.  This could make it very clean to change the
+    bootstrapped from just `prepend`, `head`, `tail`, `isEmpty`, and `EMPTY`.  This could make it very clean to change the
     basic underlying data structure without breaking any functionality.
   * <del>This should come with a good set of unit tests right from the beginning.  We have to choose the test
     framework.</del> *Done*: Using Mocha, at least for now, with a custom wrapper to let it run in both Node and

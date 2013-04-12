@@ -9,16 +9,16 @@
         E[newName] = E[oldName];
     };
 
-    var _ = function(fn) { // should we spell out "curry" or "partial" or leave super-short?
+    var _ = function(fn) {
         var arity = fn.length;
         var f = function(args) {
             return function () {
                 var newArgs = args.concat(slice.call(arguments, 0));
                 if (newArgs.length >= arity) {
-                    return fn.apply(this, newArgs)
+                    return fn.apply(this, newArgs);
                 }
-                else return f(newArgs)
-            }
+                else {return f(newArgs);}
+            };
         };
         return f([]);
     };
@@ -78,7 +78,7 @@
     });
     alias("foldl", "reduce");
 
-    var fold11 = E.fold11 = _(function (fn, arr) {
+    var foldl1 = E.foldl1 = _(function (fn, arr) {
         if (emptyList(arr)) {
             throw new Error("foldl1 does not work on empty lists");
         }
@@ -114,19 +114,6 @@
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
 
-// I think this was built around the wrong notion that all([]) => false... ask Mike
-//    var all = E.all = _(function(fn, arr) {
-//        function allAcc(list, acc) {
-//            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
-//        }
-//        return (emptyList(arr)) ? false : allAcc(arr, true);
-//    });
-
-// elegant but doesn't short-circuit in our non-lazy language...
-//    var all = E.all = _(function (fn, arr) {
-//        return foldl(and, true, map(fn, arr));
-//    });
-
     var all = E.all = _(function (fn, arr) {
         return (emptyList(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
     });
@@ -160,6 +147,38 @@
         };
     };
     alias("rPartial", "applyRight");
+
+    var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
+
+    var pluck = E.pluck = function(p) {return map(prop(p));};
+    // var pluck = E.pluck = map(prop); // TODO: shouldn't this work? // ANS: Duh, requires compose
+
+    var contains = E.contains = _(function(a, arr) {
+        var h = head(arr), t = tail(arr);
+        if (emptyList(arr)) { return false; }
+        if (isAtom(h)) { return h === a || contains(a, t); }
+        else { return contains(a, h) || contains(a, t); }
+    });
+
+    var uniq = E.uniq = function(arr) {
+        var h = head(arr), t = tail(arr);
+        return (emptyList(arr)) ? [] : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+    };
+
+    var take = E.take = _(function(n, arr) {
+        return (emptyList(arr) || !(n > 0)) ? [] : prepend(head(arr), take(n -1, tail(arr)));
+    });
+
+    var skip = E.skip = _(function(n, arr) {
+        return emptyList(arr) ? [] : (n > 0) ? skip(n - 1, tail(arr)) : arr;
+    });
+    alias('skip', 'drop');
+
+    var xprodWith = E.xprodWith = _(function(fn, a, b) {
+        return (emptyList(a) || emptyList(b)) ? [] : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
+    });
+
+    var xprod = E.xprod = xprodWith(function(x, y) {return [x, y];});
 
     var contains = E.contains = _(function(a, arr) {
         var h = head(arr), t = tail(arr);

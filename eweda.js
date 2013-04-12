@@ -78,7 +78,7 @@
     });
     alias("foldl", "reduce");
 
-    var fold11 = E.fold11 = _(function (fn, arr) {
+    var foldl1 = E.foldl1 = _(function (fn, arr) {
         if (emptyList(arr)) {
             throw new Error("foldl1 does not work on empty lists");
         }
@@ -113,19 +113,6 @@
     var map = E.map = _(function(fn, arr) {
         return (emptyList(arr)) ? [] : prepend(fn(head(arr)), map(fn, tail(arr)));
     });
-
-//    I think this was built around the wrong notion that all([]) => false... ask Mike
-//    var all = E.all = _(function(fn, arr) {
-//        function allAcc(list, acc) {
-//            return (emptyList(list)) ? acc : allAcc(tail(list), fn(head(list)) && acc);
-//        }
-//        return (emptyList(arr)) ? false : allAcc(arr, true);
-//    });
-
-//    elegant but doesn't short-circuit in our non-lazy language...
-//    var all = E.all = _(function (fn, arr) {
-//        return foldl(and, true, map(fn, arr));
-//    });
 
     var all = E.all = _(function (fn, arr) {
         return (emptyList(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
@@ -186,6 +173,12 @@
         return emptyList(arr) ? [] : (n > 0) ? skip(n - 1, tail(arr)) : arr;
     });
     alias('skip', 'drop');
+
+    var xprodWith = E.xprodWith = _(function(fn, a, b) {
+        return (emptyList(a) || emptyList(b)) ? [] : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
+    });
+
+    var xprod = E.xprod = xprodWith(function(x, y) {return [x, y];});
 
     return E;
 }));

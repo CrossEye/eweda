@@ -75,7 +75,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * flatten
   * zip
   * zipWith
-  * (cartesian product -- what's a good name?)
+  * ✓ xprod / xprodWith (cartesian product)
   * ✓ first (head)
   * ✓ rest (tail)
   * ✓ take

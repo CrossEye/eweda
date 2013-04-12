@@ -34,27 +34,27 @@ describe('foldl', function() {
 });
 
 describe('foldl1', function() {
-    var fold11 = eweda.fold11;
+    var foldl1 = eweda.foldl1;
     var add = function(a, b) {return a + b;};
     var mult = function(a, b) {return a * b;};
 
     it('should fold simple functions over arrays without an accumulator', function() {
-        assert.equal(fold11(add, [1, 2, 3, 4]), 10);
-        assert.equal(fold11(mult, [1, 2, 3, 4]), 24);
+        assert.equal(foldl1(add, [1, 2, 3, 4]), 10);
+        assert.equal(foldl1(mult, [1, 2, 3, 4]), 24);
     });
 
     it('should throw an error with an empty array', function() {
-        assert.throws(function() {fold11(add, [])}, Error);
+        assert.throws(function() {foldl1(add, [])}, Error);
     });
 
     it('should be automatically curried', function() {
-        var sum = fold11(add);
+        var sum = foldl1(add);
         assert.equal(sum([1, 2, 3, 4]), 10);
     });
 
     // TODO:  do we need to use a function constructor version of curry to make this work?
     it.skip('should correctly report the arity of curried versions', function() {
-        var sum = fold11(add);
+        var sum = foldl1(add);
         assert.equal(sum.length, 1);
     });
 });

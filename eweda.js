@@ -178,7 +178,14 @@
         return (emptyList(a) || emptyList(b)) ? [] : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
     });
 
-    var xprod = E.xprod = xprodWith(function(x, y) {return [x, y];});
+    var xprod = E.xprod = xprodWith(prepend);
+
+    var zipWith = E.zipWith = _(function(fn, a, b) {
+        if (emptyList(a) || emptyList(b)) return [];
+        return prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
+    });
+
+    var zip = E.zip = zipWith(prepend);
 
     return E;
 }));

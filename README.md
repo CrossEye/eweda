@@ -67,12 +67,12 @@ to use the most common names for these, possibly using multiple aliases for thos
   * ✓ foldl/foldr (reduce/reduceRight)
   * ✓ filter
   * ✓ reject
-  * find
+  * ✓ find
   * ✓ all (every)
   * ✓ any (some)
   * ✓ contains
   * ✓ pluck
-  * flatten
+  * ✓ flatten
   * ✓ zip
   * ✓ zipWith
   * ✓ xprod / xprodWith (cartesian product)
@@ -93,7 +93,7 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Objects ###
 
-  * tap
+  * ✓ tap
   * ✓ prop (Ex: `var bday = prop("dob"), day1 = bday(fred), day2 = bday(wilma);`)
   * props ? (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
   * identity (along with some utility versions such as alwaysTrue, alwaysFalse, alwaysZero, etc.)

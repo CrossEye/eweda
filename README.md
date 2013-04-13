@@ -73,8 +73,8 @@ to use the most common names for these, possibly using multiple aliases for thos
   * ✓ contains
   * ✓ pluck
   * flatten
-  * zip
-  * zipWith
+  * ✓ zip
+  * ✓ zipWith
   * ✓ xprod / xprodWith (cartesian product)
   * ✓ first (head)
   * ✓ rest (tail)

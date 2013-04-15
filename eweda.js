@@ -233,7 +233,7 @@
     var maybe = E.maybe = function(fn) {
         return function() {
             var undef, args = slice.call(arguments);
-            return (isEmpty(args)) ? undef : some(function(a) { a === null }, args) ? undef : fn.apply(this, args);
+            return (args.length < fn.length) ? undef : fn.apply(this, args);
         };
     };
 

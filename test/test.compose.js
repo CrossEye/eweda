@@ -3,10 +3,10 @@ var eweda = require("./../eweda");
 
 describe('compose', function() {
     var compose = eweda.compose;
-    function a(x) { return "A" + x; }
-    function b(x) { return "B" + x; }
-    function c(x) { return "C" + x; }
-    function d(x) { return "D" + x; }
+    function a(x) {return x + "A";}
+    function b(x) {return x + "B";}
+    function c(x) {return x + "C";}
+    function d(x) {return x + "D";}
 
     it("executes its passed in functions in order from right to left", function() {
         assert.equal(compose(a, b, c, d)(""), "DCBA");
@@ -15,10 +15,10 @@ describe('compose', function() {
 
 describe('pipe', function() {
     var pipe = eweda.pipe;
-    function a(x) { return "A" + x; }
-    function b(x) { return "B" + x; }
-    function c(x) { return "C" + x; }
-    function d(x) { return "D" + x; }
+    function a(x) {return x + "A";}
+    function b(x) {return x + "B";}
+    function c(x) {return x + "C";}
+    function d(x) {return x + "D";}
     it("executes its passed in functions in order from left to right", function() {
         assert.equal(pipe(a, b, c, d)(""), "ABCD");
     });

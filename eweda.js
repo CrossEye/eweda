@@ -3,6 +3,7 @@
     var E = {};
 
     var EMPTY = [];
+    var undef = (function(){})();
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
@@ -232,9 +233,25 @@
 
     var maybe = E.maybe = function(fn) {
         return function() {
-            var undef, args = slice.call(arguments);
+            var args = slice.call(arguments);
             return (args.length < fn.length) ? undef : fn.apply(this, args);
         };
+    };
+
+    var compose = E.compose = function() {  // TODO: typecheck of arguments?
+        if (arguments.length === 1) {return arguments[1];}
+        var fns = slice.call(arguments);
+        return function() {
+            var args = slice.call(arguments), i = fns.length;
+            while (i--) {
+                args = [fns[i].apply(this, args)];
+            }
+            return args[0];
+        }
+    };
+
+    var pipe = E.pipe = function() {
+        return compose.apply(this, slice.call(arguments).reverse());
     };
 
     return E;

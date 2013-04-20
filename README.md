@@ -83,7 +83,7 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Functions ###
 
-  * compose (but standard ordering seems wrong)
+  * ✓ compose (but standard ordering seems wrong)
   * ✓ flip
   * ✓ Partial/rPartial (applyLeft/applyRight)
   * memoize

@@ -77,15 +77,15 @@
     // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
 
     var andFn = E.andFn = _(function(f, g) { // TODO: arity?
-       return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));}
+       return function() { return !!(f.apply(this, arguments) && g.apply(this, arguments)); };
     });
 
     var orFn = E.orFn = _(function(f, g) { // TODO: arity?
-       return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));}
+       return function() { return !!(f.apply(this, arguments) || g.apply(this, arguments)); };
     });
 
     var notFn = E.notFn = function (f) {
-        return function() {return !f.apply(this, arguments)};
+        return function() { return !f.apply(this, arguments); };
     };
 
     var foldl = E.foldl = _(function(fn, acc, arr) {
@@ -174,7 +174,7 @@
     };
 
     var take = E.take = _(function(n, arr) {
-        return (isEmpty(arr) || !(n > 0)) ? EMPTY : prepend(head(arr), take(n -1, tail(arr)));
+        return (isEmpty(arr) || n < 1) ? EMPTY : prepend(head(arr), take(n -1, tail(arr)));
     });
 
     var skip = E.skip = _(function(n, arr) {
@@ -193,20 +193,6 @@
     });
 
     var zip = E.zip = zipWith(prepend);
-
-    var compose = E.compose = function() {
-        var args = slice.call(arguments);
-        return function(x) {
-              // do cool stuff here
-        };
-    };
-    alias("compose", "fog");
-
-    var pipe = E.pipe = function() {
-        var args = reverse(slice.call(arguments));
-        return compose.apply(args);
-    };
-    alias("pipe", "sequence");
 
     var flatten = E.flatten = function(list) {
         var h = head(list), t = tail(list);
@@ -254,7 +240,7 @@
                 args = [fns[i].apply(this, args)];
             }
             return args[0];
-        }
+        };
     };
 
     var pipe = E.pipe = function() { // TODO: type check of arguments?
@@ -262,7 +248,7 @@
     };
 
     var identity = E.identity = function(val) {
-        return function() {return val;}
+        return function() {return val;};
     };
 
     E.alwaysZero = identity(0);
@@ -270,7 +256,7 @@
     E.alwaysTrue = identity(true);
 
     var props = E.props = function(obj) {
-        return function(prop) {return obj && obj[prop];}
+        return function(prop) {return obj && obj[prop]; };
     };
 
     var wrap = E.wrap = function(fn, wrapper) {

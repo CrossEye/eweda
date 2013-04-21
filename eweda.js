@@ -238,7 +238,7 @@
         };
     };
 
-    var compose = E.compose = function() {  // TODO: typecheck of arguments?
+    var compose = E.compose = function() {  // TODO: type check of arguments?
         if (arguments.length === 1) {return arguments[1];}
         var fns = slice.call(arguments);
         return function() {
@@ -250,9 +250,17 @@
         }
     };
 
-    var pipe = E.pipe = function() {
+    var pipe = E.pipe = function() { // TODO: type check of arguments?
         return compose.apply(this, slice.call(arguments).reverse());
     };
+
+    var identity = E.identity = function(val) {
+        return function() {return val;}
+    };
+
+    E.alwaysZero = identity(0);
+    E.alwaysFalse = identity(false);
+    E.alwaysTrue = identity(true);
 
     return E;
 }));

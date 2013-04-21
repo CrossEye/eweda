@@ -88,7 +88,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * ✓ Partial/rPartial (applyLeft/applyRight)
   * memoize
   * once
-  * wrap
+  * ✓ wrap
   * ✓ not
 
 ### Objects ###

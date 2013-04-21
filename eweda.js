@@ -273,5 +273,11 @@
         return function(prop) {return obj && obj[prop];}
     };
 
+    var wrap = E.wrap = function(fn, wrapper) {
+        return function() {
+            return wrapper.apply(this, [fn].concat(slice.call(arguments)));
+        };
+    };
+
     return E;
 }));

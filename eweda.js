@@ -1,4 +1,5 @@
 (function (root, factory) {if (typeof exports === 'object') {module.exports = factory();} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory();}}(this, function () { // see https://github.com/umdjs/umd/blob/master/returnExports.js
+    // TODO: remove var statements from `var xyz = E.xyz = /* ... */` if local xyz is not used.
 
     var E = {};
 
@@ -9,6 +10,11 @@
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
     var alias = function(oldName, newName) {
         E[newName] = E[oldName];
+    };
+    var expand = function(a, len) {
+        var arr = a ? isArray(a) ? a : slice.call(a) : [];
+        while(arr.length < len) {arr[arr.length] = undef;}
+        return arr;
     };
 
     var _ = function(fn) {
@@ -231,10 +237,11 @@
     });
     alias("tap", "K");
 
-    var maybe = E.maybe = function(fn) {
-        return function() {
-            var args = slice.call(arguments);
-            return (args.length < fn.length) ? undef : fn.apply(this, args);
+    var anyBlanks = some(function(val) {return val === null || val === undef;});
+
+    var maybe = E.maybe = function (fn) {
+        return function () {
+            return (arguments.length === 0 || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(this, arguments);
         };
     };
 
@@ -261,6 +268,10 @@
     E.alwaysZero = identity(0);
     E.alwaysFalse = identity(false);
     E.alwaysTrue = identity(true);
+
+    var props = E.props = function(obj) {
+        return function(prop) {return obj && obj[prop];}
+    };
 
     return E;
 }));

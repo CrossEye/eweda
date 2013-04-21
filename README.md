@@ -95,9 +95,9 @@ to use the most common names for these, possibly using multiple aliases for thos
 
   * ✓ tap
   * ✓ prop (Ex: `var bday = prop("dob"), day1 = bday(fred), day2 = bday(wilma);`)
-  * props ? (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
+  * ✓ props ? (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
   * ✓ identity (along with some utility versions such as alwaysTrue, alwaysFalse, alwaysZero, etc.)
-  * ? maybe
+  * ✓ maybe
 
 
 

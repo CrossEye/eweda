@@ -8,9 +8,11 @@
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
-    var alias = function(oldName, newName) {
-        E[newName] = E[oldName];
+    var aliasFor = function(oldName) {
+        var fn = function(newName) {E[newName] = E[oldName]; return fn;};
+        return (fn.is = fn.are = fn.and = fn);
     };
+
     var expand = function(a, len) {
         var arr = a ? isArray(a) ? a : slice.call(a) : [];
         while(arr.length < len) {arr[arr.length] = undef;}
@@ -40,19 +42,19 @@
     var prepend = E.prepend = function(el, arr) {
         return [el].concat(arr);
     };
-    alias("prepend", "cons");
+    aliasFor("prepend").is("cons");
 
     var head = E.head = function(arr) {
         arr = arr || EMPTY;
         return (arr.length) ? arr[0] : EMPTY;
     };
-    alias("head", "car");
+    aliasFor("head").is("car");
 
     var tail = E.tail = function(arr) {
         arr = arr || EMPTY;
         return (arr.length > 1) ? arr.slice(1) : EMPTY;
     };
-    alias("tail", "cdr");
+    aliasFor("tail").is("cdr");
 
     var isAtom = E.isAtom = function(x) {
         return (x !== null) && (x !== undefined) && !isArray(x);
@@ -91,7 +93,7 @@
     var foldl = E.foldl = _(function(fn, acc, arr) {
         return (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
     });
-    alias("foldl", "reduce");
+    aliasFor("foldl").is("reduce");
 
     var foldl1 = E.foldl1 = _(function (fn, arr) {
         if (isEmpty(arr)) {
@@ -103,7 +105,7 @@
     var foldr = E.foldr =_(function(fn, acc, arr) {
         return (isEmpty(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
     });
-    alias("foldr", "reduceRight");
+    aliasFor("foldr").is("reduceRight");
 
     var foldr1 = E.foldr1 = _(function (fn, arr) {
         if (isEmpty(arr)) {
@@ -132,12 +134,12 @@
     var all = E.all = _(function (fn, arr) {
         return (isEmpty(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
     });
-    alias("all", "every");
+    aliasFor("all").is("every");
 
     var some = E.some = _(function(fn, arr) {
         return (isEmpty(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
     });
-    alias("some", "any");
+    aliasFor("some").is("any").and("atLeastOne"); // TODO: remove superfluous alias used for testing `and`
 
     var filter = E.filter = _(function(fn, arr) {
         return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
@@ -153,7 +155,7 @@
             return fn.apply(this, args.concat([].slice.call(arguments)));
         };
     };
-    alias("lPartial", "applyLeft");
+    aliasFor("lPartial").is("applyLeft");
 
     var rPartial = E.rPartial =function (fn) {
         var args = [].slice.call(arguments, 1);
@@ -161,7 +163,7 @@
             return fn.apply(this, [].slice.call(arguments).concat(args));
         };
     };
-    alias("rPartial", "applyRight");
+    aliasFor("rPartial").is("applyRight");
 
     var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
 
@@ -180,7 +182,7 @@
     var skip = E.skip = _(function(n, arr) {
         return isEmpty(arr) ? EMPTY : (n > 0) ? skip(n - 1, tail(arr)) : arr;
     });
-    alias('skip', 'drop');
+    aliasFor('skip').is('drop');
 
     var xprodWith = E.xprodWith = _(function(fn, a, b) {
         return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
@@ -200,13 +202,13 @@
               // do cool stuff here
         };
     };
-    alias("compose", "fog");
+    aliasFor("compose").is("fog");
 
     var pipe = E.pipe = function() {
         var args = reverse(slice.call(arguments));
         return compose.apply(args);
     };
-    alias("pipe", "sequence");
+    aliasFor("pipe").is("sequence");
 
     var flatten = E.flatten = function(list) {
         var h = head(list), t = tail(list);
@@ -235,7 +237,7 @@
         }
         return x;
     });
-    alias("tap", "K");
+    aliasFor("tap").is("K");
 
     var anyBlanks = some(function(val) {return val === null || val === undef;});
 

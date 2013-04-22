@@ -281,5 +281,15 @@
         };
     };
 
+    // note: not really pure.  Meant to keep side-effects from repeating.
+    var once = E.once = function(fn) {
+        var called = false, result;
+        return function() {
+            if (called) {return result;}
+            called = true;
+            return (result = fn.apply(this, arguments));
+        }
+    };
+
     return E;
 }));

@@ -11,12 +11,13 @@ describe('prop', function() {
         assert.equal(nm(fred), 'Fred');
     });
 
-    it.skip('should be aliased by `get`', function() {
+    it.skip('should be aliased by `get`', function() { // TODO: should it?
         assert.equal(eweda.get('age')(fred), 23);
         assert.strictEqual(eweda.get, prop);
     });
 });
 
+// TODO: This needs a better home than objectBasics
 describe('pluck', function() {
     var pluck = eweda.pluck;
     var people = [{name: 'Fred', age: 23}, {name: 'Wilma', age: 21} , {name: 'Pebbles', age: 2}];

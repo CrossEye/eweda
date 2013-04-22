@@ -87,7 +87,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * ✓ flip
   * ✓ Partial/rPartial (applyLeft/applyRight)
   * memoize
-  * once
+  * ✓ once
   * ✓ wrap
   * ✓ not
 

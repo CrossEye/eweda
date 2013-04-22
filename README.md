@@ -57,7 +57,7 @@ Functions included
 We want to include the basic functions that will help a Javscript programmer work with objects and arrays.  We will try
 to use the most common names for these, possibly using multiple aliases for those that are most debated.
 
-(**Note** a ` ✓ ` means that the function has at least minimal unit tests written.)
+**Note** that a ` ✓ ` means that the function has at least minimal unit tests written.
 
 
 ### Collections ###

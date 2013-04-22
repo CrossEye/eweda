@@ -115,12 +115,11 @@
         return foldr(fn, head(rev), reverse(tail(rev)));
     });
 
-    var flip = function(fn) {
+    var flip = E.flip = function(fn) {
         return function(a, b) {
-            return fn.call(this, b, a);
+            return fn.apply(this, [b, a].concat(slice.call(arguments, 2)));
         };
     };
-
     var append = E.append = _(function(arr1, arr2) {
         return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), append(tail(arr1), arr2));
     });
@@ -202,13 +201,7 @@
               // do cool stuff here
         };
     };
-    aliasFor("compose").is("fog");
-
-    var pipe = E.pipe = function() {
-        var args = reverse(slice.call(arguments));
-        return compose.apply(args);
-    };
-    aliasFor("pipe").is("sequence");
+    aliasFor("compose").is("fog"); // TODO: really?
 
     var flatten = E.flatten = function(list) {
         var h = head(list), t = tail(list);
@@ -262,6 +255,7 @@
     var pipe = E.pipe = function() { // TODO: type check of arguments?
         return compose.apply(this, slice.call(arguments).reverse());
     };
+    aliasFor("pipe").is("sequence");
 
     var identity = E.identity = function(val) {
         return function() {return val;}
@@ -289,6 +283,17 @@
             called = true;
             return (result = fn.apply(this, arguments));
         }
+    };
+
+    // note: really only handles string and number parameters
+    var memoize = E.memoize = function(fn) {
+        var cache = {};
+        return function() {
+            var position = foldl(function(cache, arg) {return cache[arg] || (cache[arg] = {});}, cache,
+                    slice.call(arguments, 0, arguments.length - 1));
+            var arg = arguments[arguments.length - 1];
+            return (position[arg] || (position[arg] = fn.apply(this, arguments)));
+        };
     };
 
     return E;

@@ -6,6 +6,7 @@
   <script>function require(str) {return this[str.substring(str.lastIndexOf("/") +1)];}</script>
 </head>
 <body>
+  <h1>Tests for eweda</h1>
   <div id="mocha"></div>
   <script src="../lib/test/jquery.js"></script>
   <script src="../lib/test/expect.js"></script>
@@ -33,6 +34,7 @@
   <script src="test.compose.js"></script>
   <script src="test.identity.js"></script>
   <script src="test.wrap.js"></script>
+  <script src="test.functionBasics.js"></script>
   <script>
     mocha.checkLeaks();
     mocha.globals(['jQuery']);

@@ -8,9 +8,11 @@
     var slice = Array.prototype.slice;
     var toString = Object.prototype.toString;
     var isArray = function(val) {return toString.call(val) === "[object Array]";};
-    var alias = function(oldName, newName) {
-        E[newName] = E[oldName];
+    var aliasFor = function(oldName) {
+        var fn = function(newName) {E[newName] = E[oldName]; return fn;};
+        return (fn.is = fn.are = fn.and = fn);
     };
+
     var expand = function(a, len) {
         var arr = a ? isArray(a) ? a : slice.call(a) : [];
         while(arr.length < len) {arr[arr.length] = undef;}
@@ -40,19 +42,19 @@
     var prepend = E.prepend = function(el, arr) {
         return [el].concat(arr);
     };
-    alias("prepend", "cons");
+    aliasFor("prepend").is("cons");
 
     var head = E.head = function(arr) {
         arr = arr || EMPTY;
         return (arr.length) ? arr[0] : EMPTY;
     };
-    alias("head", "car");
+    aliasFor("head").is("car");
 
     var tail = E.tail = function(arr) {
         arr = arr || EMPTY;
         return (arr.length > 1) ? arr.slice(1) : EMPTY;
     };
-    alias("tail", "cdr");
+    aliasFor("tail").is("cdr");
 
     var isAtom = E.isAtom = function(x) {
         return (x !== null) && (x !== undefined) && !isArray(x);
@@ -91,7 +93,7 @@
     var foldl = E.foldl = _(function(fn, acc, arr) {
         return (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
     });
-    alias("foldl", "reduce");
+    aliasFor("foldl").is("reduce");
 
     var foldl1 = E.foldl1 = _(function (fn, arr) {
         if (isEmpty(arr)) {
@@ -103,7 +105,7 @@
     var foldr = E.foldr =_(function(fn, acc, arr) {
         return (isEmpty(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
     });
-    alias("foldr", "reduceRight");
+    aliasFor("foldr").is("reduceRight");
 
     var foldr1 = E.foldr1 = _(function (fn, arr) {
         if (isEmpty(arr)) {
@@ -113,12 +115,11 @@
         return foldr(fn, head(rev), reverse(tail(rev)));
     });
 
-    var flip = function(fn) {
+    var flip = E.flip = function(fn) {
         return function(a, b) {
-            return fn.call(this, b, a);
+            return fn.apply(this, [b, a].concat(slice.call(arguments, 2)));
         };
     };
-
     var append = E.append = _(function(arr1, arr2) {
         return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), append(tail(arr1), arr2));
     });
@@ -132,12 +133,12 @@
     var all = E.all = _(function (fn, arr) {
         return (isEmpty(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
     });
-    alias("all", "every");
+    aliasFor("all").is("every");
 
     var some = E.some = _(function(fn, arr) {
         return (isEmpty(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
     });
-    alias("some", "any");
+    aliasFor("some").is("any").and("atLeastOne"); // TODO: remove superfluous alias used for testing `and`
 
     var filter = E.filter = _(function(fn, arr) {
         return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
@@ -153,7 +154,7 @@
             return fn.apply(this, args.concat([].slice.call(arguments)));
         };
     };
-    alias("lPartial", "applyLeft");
+    aliasFor("lPartial").is("applyLeft");
 
     var rPartial = E.rPartial =function (fn) {
         var args = [].slice.call(arguments, 1);
@@ -161,7 +162,7 @@
             return fn.apply(this, [].slice.call(arguments).concat(args));
         };
     };
-    alias("rPartial", "applyRight");
+    aliasFor("rPartial").is("applyRight");
 
     var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
 
@@ -180,7 +181,7 @@
     var skip = E.skip = _(function(n, arr) {
         return isEmpty(arr) ? EMPTY : (n > 0) ? skip(n - 1, tail(arr)) : arr;
     });
-    alias('skip', 'drop');
+    aliasFor('skip').is('drop');
 
     var xprodWith = E.xprodWith = _(function(fn, a, b) {
         return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
@@ -221,7 +222,7 @@
         }
         return x;
     });
-    alias("tap", "K");
+    aliasFor("tap").is("K");
 
     var anyBlanks = some(function(val) {return val === null || val === undef;});
 
@@ -246,6 +247,7 @@
     var pipe = E.pipe = function() { // TODO: type check of arguments?
         return compose.apply(this, slice.call(arguments).reverse());
     };
+    aliasFor("pipe").is("sequence");
 
     var identity = E.identity = function(val) {
         return function() {return val;};
@@ -262,6 +264,27 @@
     var wrap = E.wrap = function(fn, wrapper) {
         return function() {
             return wrapper.apply(this, [fn].concat(slice.call(arguments)));
+        };
+    };
+
+    // note: not really pure.  Meant to keep side-effects from repeating.
+    var once = E.once = function(fn) {
+        var called = false, result;
+        return function() {
+            if (called) {return result;}
+            called = true;
+            return (result = fn.apply(this, arguments));
+        }
+    };
+
+    // note: really only handles string and number parameters
+    var memoize = E.memoize = function(fn) {
+        var cache = {};
+        return function() {
+            var position = foldl(function(cache, arg) {return cache[arg] || (cache[arg] = {});}, cache,
+                    slice.call(arguments, 0, arguments.length - 1));
+            var arg = arguments[arguments.length - 1];
+            return (position[arg] || (position[arg] = fn.apply(this, arguments)));
         };
     };
 

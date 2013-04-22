@@ -49,106 +49,77 @@ we could just do this:
      var sum = foldl(add, 0);
      var total = sum([1, 2, 3, 4]);
 
-**Question**: Is this really a good idea?  Is this convenience worth the implementation complexity, and would users
-really find it that helpful?  It is part of what makes functional languages like Haskell so clean, but they are very
-different languages.
 
 
-Functions to include
---------------------
+Functions included
+-------------------
 
 We want to include the basic functions that will help a Javscript programmer work with objects and arrays.  We will try
 to use the most common names for these, possibly using multiple aliases for those that are most debated.
 
+**Note** that a ` ✓ ` means that the function has at least minimal unit tests written.
 
-### Arrays ###
+
+### Collections ###
 
   * ✓ map
-  * ✓ foldl/foldr (reduce/reduceRight)
+  * ✓ foldl (reduce)
+  * ✓ foldl1
+  * ✓ foldr (reduceRight)
+  * ✓ foldr1
   * ✓ filter
   * ✓ reject
+  * ✓ take
+  * ✓ skip (drop)
   * ✓ find
   * ✓ all (every)
-  * ✓ any (some)
+  * ✓ some (any)
   * ✓ contains
+  * ✓ uniq
   * ✓ pluck
   * ✓ flatten
   * ✓ zip
   * ✓ zipWith
-  * ✓ xprod / xprodWith (cartesian product)
-  * ✓ first (head)
-  * ✓ rest (tail)
-  * ✓ take
-  * ✓ skip (drop)
+  * ✓ xprod (i.e. cartesian product)
+  * ✓ xprodWith (i.e. cartesian product with function)
+  * ✓ reverse
 
 ### Functions ###
 
-  * ✓ compose (but standard ordering seems wrong)
+  * ✓ compose (fog)
+  * ✓ pipe (sequence) (i.e., like compose but in reverse order)
   * ✓ flip
-  * ✓ Partial/rPartial (applyLeft/applyRight)
-  * memoize
-  * once
+  * ✓ partial (applyLeft)
+  * ✓ rPartial (applyRight)
+  * ✓ memoize
+  * ✓ once
   * ✓ wrap
-  * ✓ not
 
 ### Objects ###
 
   * ✓ tap
+  * ✓ eq
   * ✓ prop (Ex: `var bday = prop("dob"), day1 = bday(fred), day2 = bday(wilma);`)
-  * ✓ props ? (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
-  * ✓ identity (along with some utility versions such as alwaysTrue, alwaysFalse, alwaysZero, etc.)
+  * ✓ props  (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
+  * ✓ identity (K)
+  * ✓ alwaysTrue
+  * ✓ alwaysFalse
+  * ✓ alwaysZero
   * ✓ maybe
 
+### Logic ###
 
+  * and
+  * or
+  * not
+  * andFn
+  * orFn
+  * notFn
 
-To-Do
------
+### Internals (perhaps should not be exposed?) ###
 
-Obviously the most important thing is to get started on the code.  But there are several other things we would like to
-make sure are done.
-
-  * Replace `emptyList()` with `isEmpty()`.  Create a constant (`EMTPY` ?) to use in place of all the `[]` instances.
-    (Probably should also rename all the `arr` variables to `list` too.)  Then make sure that everything else is
-    bootstrapped from just `prepend`, `head`, `tail`, `isEmpty`, and `EMPTY`.  This could make it very clean to change the
-    basic underlying data structure without breaking any functionality.
-  * <del>This should come with a good set of unit tests right from the beginning.  We have to choose the test
-    framework.</del> *Done*: Using Mocha, at least for now, with a custom wrapper to let it run in both Node and
-    in the browser.  We'll see if that wrapper holds up to more than casual use.
-  * <del>By default this should probably be built with a wrapper that lets it run with browser globals, with an AMD
-    loader or in the Common.js loader.</del>  *Done*.  But we should provide a mechanism that allows the user
-    instead to choose the target environment.  This is probably to include a grunt script along with the code, and
-    possibly to push several outputs up with each change.
-  * At the moment, this looks small enough that it may not matter, but if this grows, it would also be nice to offer
-    the ability to generate modular builds, which would require us to track dependencies.  It might be worth finding
-    a way to do that from the start.
-
-
-Open Question
--------------
-
-It might be possible to extend the [cons, car, cdr][cons] notion [buzzdecafe][mike] has been leading to work with actual
-arrays rather than the CONsed pairs.  Is it worth doing this?  There would certainly make for cleaner, more elegant
-code, with the difference between this:
-
-     var foldl = function(fn, acc, arr) {
-         var total = acc;
-         for (var i = 0, len = arr.length; i <len; i++) {
-             total = fn(total, arr[i]);
-         }
-         return total;
-     };
-
-and this:
-
-     var foldl = function(fn, acc, list) {
-         return (isEmpty(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
-     }
-
-The question is how big a performance hit such code would introduce.  Obviously the original CONsed list wouldn't do,
-but if we had a list implementation that worked similarly but was actually backed by an array, using native array
-operations underneath when necessary, and just fiddling with indices for things like `tail,` this might not be too
-costly and might therefore be worth considering.
-
-
-  [cons]: https://gist.github.com/buzzdecafe/5272249
-  [mike]: https://github.com/buzzdecafe
+  * first (head, car)
+  * rest (tail, cdr)
+  * prepend (cons)
+  * isAtom
+  * append

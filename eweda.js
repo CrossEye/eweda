@@ -233,7 +233,7 @@
     };
 
     var compose = E.compose = function() {  // TODO: type check of arguments?
-        if (arguments.length === 1) {return arguments[1];}
+        if (arguments.length === 1) {return arguments[0];}
         var fns = slice.call(arguments);
         return function() {
             var args = slice.call(arguments), i = fns.length;

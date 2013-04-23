@@ -10,10 +10,10 @@
         return (fn.is = fn.are = fn.and = fn);
     };
     var bind = function(fn, context) {
-   		var args = Array.prototype.slice.call(arguments, 2);
-   		return function() {
-   			return fn.apply(context || this, args.concat(Array.prototype.slice.call(arguments)));
-   		};
+        var args = Array.prototype.slice.call(arguments, 2);
+        return function() {
+   	        return fn.apply(context || this, args.concat(Array.prototype.slice.call(arguments)));
+   	    };
    	};
     var slice = bind(Function.prototype.call, Array.prototype.slice);
     var toString = bind(Function.prototype.call, Object.prototype.toString);

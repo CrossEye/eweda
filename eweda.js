@@ -15,6 +15,7 @@
    	        return fn.apply(context || this, args.concat(Array.prototype.slice.call(arguments)));
    	    };
    	};
+
     var slice = bind(Function.prototype.call, Array.prototype.slice);
     var toString = bind(Function.prototype.call, Object.prototype.toString);
     var isArray = function(val) {return toString(val) === "[object Array]";};

@@ -5,16 +5,23 @@
 
     var EMPTY = [];
     var undef = (function(){})();
-    var slice = Array.prototype.slice;
-    var toString = Object.prototype.toString;
-    var isArray = function(val) {return toString.call(val) === "[object Array]";};
     var aliasFor = function(oldName) {
         var fn = function(newName) {E[newName] = E[oldName]; return fn;};
         return (fn.is = fn.are = fn.and = fn);
     };
+    var bind = function(fn, context) {
+   		var args = Array.prototype.slice.call(arguments, 2);
+   		return function() {
+   			return fn.apply(context || this, args.concat(Array.prototype.slice.call(arguments)));
+   		};
+   	};
+    var slice = bind(Function.prototype.call, Array.prototype.slice);
+    var toString = bind(Function.prototype.call, Object.prototype.toString);
+    var isArray = function(val) {return toString(val) === "[object Array]";};
+
 
     var expand = function(a, len) {
-        var arr = a ? isArray(a) ? a : slice.call(a) : [];
+        var arr = a ? isArray(a) ? a : slice(a) : [];
         while(arr.length < len) {arr[arr.length] = undef;}
         return arr;
     };
@@ -23,7 +30,7 @@
         var arity = fn.length;
         var f = function(args) {
             return function () {
-                var newArgs = args.concat(slice.call(arguments, 0));
+                var newArgs = args.concat(slice(arguments, 0));
                 if (newArgs.length >= arity) {
                     return fn.apply(this, newArgs);
                 }
@@ -117,7 +124,7 @@
 
     var flip = E.flip = function(fn) {
         return function(a, b) {
-            return fn.apply(this, [b, a].concat(slice.call(arguments, 2)));
+            return fn.apply(this, [b, a].concat(slice(arguments, 2)));
         };
     };
     var append = E.append = _(function(arr1, arr2) {
@@ -149,17 +156,17 @@
     });
 
     var lPartial = E.lPartial = function (fn) {
-        var args = [].slice.call(arguments, 1);
+        var args = slice(arguments, 1);
         return function() {
-            return fn.apply(this, args.concat([].slice.call(arguments)));
+            return fn.apply(this, args.concat(slice(arguments)));
         };
     };
     aliasFor("lPartial").is("applyLeft");
 
     var rPartial = E.rPartial =function (fn) {
-        var args = [].slice.call(arguments, 1);
+        var args = slice(arguments, 1);
         return function() {
-            return fn.apply(this, [].slice.call(arguments).concat(args));
+            return fn.apply(this, slice(arguments).concat(args));
         };
     };
     aliasFor("rPartial").is("applyRight");
@@ -233,15 +240,15 @@
     };
 
     var compose = E.compose = function() {  // TODO: type check of arguments?
-        var fns = slice.call(arguments);
+        var fns = slice(arguments);
         return function() {
-            return foldr(function(fn, args) {return [fn.apply(this, args)];}, slice.call(arguments), fns)[0];
+            return foldr(function(fn, args) {return [fn.apply(this, args)];}, slice(arguments), fns)[0];
         }
     };
     aliasFor("compose").is("fog"); // TODO: really?
 
     var pipe = E.pipe = function() { // TODO: type check of arguments?
-        return compose.apply(this, slice.call(arguments).reverse());
+        return compose.apply(this, slice(arguments).reverse());
     };
     aliasFor("pipe").is("sequence");
 
@@ -259,7 +266,7 @@
 
     var wrap = E.wrap = function(fn, wrapper) {
         return function() {
-            return wrapper.apply(this, [fn].concat(slice.call(arguments)));
+            return wrapper.apply(this, [fn].concat(slice(arguments)));
         };
     };
 
@@ -278,7 +285,7 @@
         var cache = {};
         return function() {
             var position = foldl(function(cache, arg) {return cache[arg] || (cache[arg] = {});}, cache,
-                    slice.call(arguments, 0, arguments.length - 1));
+                    slice(arguments, 0, arguments.length - 1));
             var arg = arguments[arguments.length - 1];
             return (position[arg] || (position[arg] = fn.apply(this, arguments)));
         };

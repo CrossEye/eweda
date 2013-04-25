@@ -4,6 +4,7 @@ var eweda = require("./../eweda");
 describe('or', function() {
     var or = eweda.or;
 
+
     it('should match the Javascript `||`', function() {
         assert.equal(or(false, true), true);
         assert.equal(or(false, false), false);
@@ -17,6 +18,7 @@ describe('or', function() {
         assert.equal(or({}, false), true);
         assert.equal(or([], "abc"), true);
     });
+
 });
 
 describe('and', function() {
@@ -76,6 +78,14 @@ describe('orFn', function() {
         assert.equal(f(12, 2, 6), true);
         assert.equal(f(7, 5, 1), false);
     });
+
+    it("does not evaluate the second expression if the first one is true", function() {
+        var T = function() { return true; };
+        var Z = function() { effect = "Z got evaluated"; };
+        var effect = "not evaluated";
+        orFn(T, Z);
+        assert.equal(effect, "not evaluated");
+    });
 });
 
 describe('andFn', function() {
@@ -97,6 +107,14 @@ describe('andFn', function() {
         assert.equal(f(4, 5, 11), true);
         assert.equal(f(12, 2, 6), false);
         assert.equal(f(5, 6, 15), false);
+    });
+
+    it("does not evaluate the second expression if the first one is false", function() {
+        var F = function() { return false; };
+        var Z = function() { effect = "Z got evaluated"; };
+        var effect = "not evaluated";
+        andFn(F, Z);
+        assert.equal(effect, "not evaluated");
     });
 });
 

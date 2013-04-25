@@ -109,12 +109,12 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Logic ###
 
-  * and
-  * or
-  * not
-  * andFn
-  * orFn
-  * notFn
+  * ✓ and
+  * ✓ or
+  * ✓ not
+  * ✓ andFn
+  * ✓ orFn
+  * ✓ notFn
 
 ### Internals (perhaps should not be exposed?) ###
 

@@ -174,6 +174,8 @@
 
     var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
 
+    var func = E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
+
     var pluck = E.pluck = function(p) {return map(prop(p));};
     // var pluck = E.pluck = map(prop); // TODO: shouldn't this work? // ANS: Duh, requires compose
 

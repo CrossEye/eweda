@@ -17,6 +17,29 @@ describe('prop', function() {
     });
 });
 
+describe('func', function() {
+    var func = eweda.func;
+
+    it('should return a function that applies the appropriate function to the supplied object', function() {
+        var fred = {first: 'Fred', last: 'Flintstone', getName: function() {return this.first + ' ' + this.last;}};
+        var barney = {first: 'Barney', last: 'Rubble', getName: function() {return this.first + ' ' + this.last;}};
+        var gName = func('getName');
+        assert.equal(typeof gName, 'function');
+        assert.equal(gName(fred), 'Fred Flintstone');
+        assert.equal(gName(barney), 'Barney Rubble');
+    });
+
+    it('should apply additional arguments to the function', function() {
+        var Point = function(x, y) {this.x = x; this.y = y;};
+        Point.prototype.moveBy = function(dx, dy) {this.x += dx; this.y += dy;};
+        var p1 = new Point(10, 20);
+        var moveBy = func('moveBy');
+        moveBy(p1, 5, 7);
+        assert.equal(p1.x, 15);
+        assert.equal(p1.y, 27);
+    });
+});
+
 // TODO: This needs a better home than objectBasics
 describe('pluck', function() {
     var pluck = eweda.pluck;

@@ -99,8 +99,9 @@ to use the most common names for these, possibly using multiple aliases for thos
 
   * ✓ tap
   * ✓ eq
-  * ✓ prop (Ex: `var bday = prop("dob"), day1 = bday(fred), day2 = bday(wilma);`)
-  * ✓ props  (Ex: `var p = props(person), var birthday = p("dob"), name = p("name");`)
+  * ✓ prop
+  * ✓ func
+  * ✓ props
   * ✓ identity (K)
   * ✓ alwaysTrue
   * ✓ alwaysFalse
@@ -109,12 +110,12 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Logic ###
 
-  * and
-  * or
-  * not
-  * andFn
-  * orFn
-  * notFn
+  * ✓ and
+  * ✓ or
+  * ✓ not
+  * ✓ andFn
+  * ✓ orFn
+  * ✓ notFn
 
 ### Internals (perhaps should not be exposed?) ###
 

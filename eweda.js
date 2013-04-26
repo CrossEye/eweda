@@ -1,7 +1,7 @@
 (function (root, factory) {if (typeof exports === 'object') {module.exports = factory();} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory();}}(this, function () { // see https://github.com/umdjs/umd/blob/master/returnExports.js
     // TODO: remove var statements from `var xyz = E.xyz = /* ... */` if local xyz is not used.
-    return (function(bootstrap) {
-        var E = {};
+    var lib = function(bootstrap) {
+        var E = function() {return lib.apply(this, arguments);};
         var undef = (function(){})();
         var aliasFor = function(oldName) {
             var fn = function(newName) {E[newName] = E[oldName]; return fn;};
@@ -277,7 +277,9 @@
         };
 
         return E;
-    }(function() {
+    };
+
+    return lib(function() {
         var EMPTY = [];
         return {
             EMPTY: EMPTY,
@@ -299,5 +301,5 @@
                 return (x !== null) && (x !== undefined) && Object.prototype.toString.call(x) !== "[object Array]";
             }
         };
-    }()));
+    }());
 }));

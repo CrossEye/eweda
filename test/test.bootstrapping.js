@@ -2,7 +2,7 @@ var assert = require('assert');
 var eweda = require('./../eweda');
 
 describe('eweda bootstrapping', function() {
-    it('runs with our bootstrapped configuration', function() {
+    it('runs with copy of bootstrap configuration, awithout affecting original version', function() {
         var headCtr = 0, tailCtr = 0;
         var ramda = eweda(function() {
             var EMPTY = [];
@@ -28,7 +28,13 @@ describe('eweda bootstrapping', function() {
         assert.deepEqual(map(times2, [1, 2, 3, 4]), [2, 4, 6, 8]);
         assert(headCtr > 0);
         assert(tailCtr > 0);
-    });
 
+        var storedHeadCtr = headCtr, storedTailCtr = tailCtr;
+        var map2 = eweda.map;
+        assert.deepEqual(map2(times2, [1, 2, 3, 4]), [2, 4, 6, 8]);
+        assert.equal(storedHeadCtr, headCtr);
+        assert.equal(storedTailCtr, tailCtr);
+
+    });
 });
 

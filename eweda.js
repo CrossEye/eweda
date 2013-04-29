@@ -1,5 +1,4 @@
 (function (root, factory) {if (typeof exports === 'object') {module.exports = factory(root);} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory(root);}}(this, function (global) { // see https://github.com/umdjs/umd/blob/master/returnExports.js
-    // TODO: remove var statements from `var xyz = E.xyz = /* ... */` if local xyz is not used.
     var lib = function(bootstrap) {
         var E = function() {return lib.apply(this, arguments);};
         var undef = (function(){})();
@@ -9,7 +8,7 @@
         };
 
         var EMPTY = bootstrap.EMPTY;
-        var isEmpty = bootstrap.isEmpty;
+        var isEmpty = E.isEmpty = bootstrap.isEmpty;
         var prepend = E.prepend = bootstrap.prepend;
         aliasFor("prepend").is("cons");
         var head = E.head = bootstrap.head;
@@ -79,7 +78,6 @@
         });
 
         // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
-
         E.andFn = _(function(f, g) { // TODO: arity?
            return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));};
         });
@@ -123,7 +121,7 @@
             };
         };
 
-        var append = E.append = function(el, arr) {
+        E.append = function(el, arr) {
             return reverse(prepend(el, reverse(arr)));
         };
 
@@ -145,7 +143,7 @@
         var some = E.some = _(function(fn, arr) {
             return (isEmpty(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
         });
-        aliasFor("some").is("any").and("atLeastOne"); // TODO: remove superfluous alias used for testing `and`
+        aliasFor("some").is("any");
 
         var filter = E.filter = _(function(fn, arr) {
             return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));

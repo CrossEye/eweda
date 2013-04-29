@@ -57,70 +57,68 @@ Functions included
 We want to include the basic functions that will help a Javscript programmer work with objects and arrays.  We will try
 to use the most common names for these, possibly using multiple aliases for those that are most debated.
 
-**Note** that a ` ✓ ` means that the function has at least minimal unit tests written.
+### Core ###
 
+  * isEmpty
+  * prepend
+  * append
+  * merge
+  * head
+  * tail
 
 ### Collections ###
 
-  * ✓ map
-  * ✓ foldl (reduce)
-  * ✓ foldl1
-  * ✓ foldr (reduceRight)
-  * ✓ foldr1
-  * ✓ filter
-  * ✓ reject
-  * ✓ take
-  * ✓ skip (drop)
-  * ✓ find
-  * ✓ all (every)
-  * ✓ some (any)
-  * ✓ contains
-  * ✓ uniq
-  * ✓ pluck
-  * ✓ flatten
-  * ✓ zip
-  * ✓ zipWith
-  * ✓ xprod (i.e. cartesian product)
-  * ✓ xprodWith (i.e. cartesian product with function)
-  * ✓ reverse
+  * map
+  * foldl (reduce)
+  * foldl1
+  * foldr (reduceRight)
+  * foldr1
+  * filter
+  * reject
+  * take
+  * skip (drop)
+  * find
+  * all (every)
+  * some (any)
+  * contains
+  * uniq
+  * pluck
+  * flatten
+  * zip
+  * zipWith
+  * xprod (i.e. cartesian product)
+  * xprodWith (i.e. cartesian product with function)
+  * reverse
 
 ### Functions ###
 
-  * ✓ compose (fog)
-  * ✓ pipe (sequence) (i.e., like compose but in reverse order)
-  * ✓ flip
-  * ✓ partial (applyLeft)
-  * ✓ rPartial (applyRight)
-  * ✓ memoize
-  * ✓ once
-  * ✓ wrap
+  * compose (fog)
+  * pipe (sequence) (i.e., like compose but in reverse order)
+  * flip
+  * partial (applyLeft)
+  * rPartial (applyRight)
+  * memoize
+  * once
+  * wrap
 
 ### Objects ###
 
-  * ✓ tap
-  * ✓ eq
-  * ✓ prop
-  * ✓ func
-  * ✓ props
-  * ✓ identity (K)
-  * ✓ alwaysTrue
-  * ✓ alwaysFalse
-  * ✓ alwaysZero
-  * ✓ maybe
+  * tap
+  * eq
+  * prop
+  * func
+  * props
+  * identity (K)
+  * alwaysTrue
+  * alwaysFalse
+  * alwaysZero
+  * maybe
 
 ### Logic ###
 
-  * ✓ and
-  * ✓ or
-  * ✓ not
-  * ✓ andFn
-  * ✓ orFn
-  * ✓ notFn
-
-### Internals (perhaps should not be exposed?) ###
-
-  * first (head, car)
-  * rest (tail, cdr)
-  * prepend (cons)
-  * isAtom
-  * append
+  * and
+  * or
+  * not
+  * andFn
+  * orFn
+  * notFn

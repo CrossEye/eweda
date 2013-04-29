@@ -61,11 +61,5 @@ describe("some", function() {
         assert.equal(eweda.any(odd, [2, 4, 6, 8, 10, 11, 12]), true);
         assert.strictEqual(eweda.any, some);
     });
-
-    // TODO: remove superfluous alias used for testing `and`
-    it('should be aliased by `atLeastOne`', function() {
-        assert.equal(eweda.atLeastOne(odd, [2, 4, 6, 8, 10, 11, 12]), true);
-        assert.strictEqual(eweda.atLeastOne, some);
-    });
 });
 

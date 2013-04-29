@@ -27,12 +27,15 @@
         var slice = bind(Function.prototype.call, Array.prototype.slice);
         var toString = bind(Function.prototype.call, Object.prototype.toString);
         var isArray = function(val) {return toString(val) === "[object Array]";};
-        var keys = function(obj) {
+        var keys = E.keys = function(obj) {
             var results = [];
             for (var name in obj) {if (obj.hasOwnProperty(name)) {
                 results.push(name);
             }}
             return results;
+        };
+        E.values = function(obj) {
+            return map(function(x) { return obj[x]; }, keys(obj));
         };
         var each = function(arr, fn) {
             for (var i = 0, len = arr.length; i < len; i++) {
@@ -225,14 +228,6 @@
         });
         aliasFor("tap").is("K");
 
-        var keys = E.keys = function(obj) {
-            return Object.keys(obj);
-        };
-
-        var values = E.values = function(obj) {
-            return map(function(x) { return obj[x]; }, keys(obj));
-        };
-
         var anyBlanks = some(function(val) {return val === null || val === undef;});
 
         E.maybe = function (fn) {
@@ -293,7 +288,7 @@
             };
         };
 
-        E.expose = function(obj) {
+        E.inContext = function(obj) {
             each(keys(E), function(key) {
                 (obj || global)[key] = E[key];
             });

@@ -10,11 +10,11 @@
         var EMPTY = bootstrap.EMPTY;
         var isEmpty = E.isEmpty = bootstrap.isEmpty;
         var prepend = E.prepend = bootstrap.prepend;
-        aliasFor("prepend").is("cons");
+        aliasFor("prepend").is("cons"); // TODO: really?
         var head = E.head = bootstrap.head;
-        aliasFor("head").is("car");  // TODO: really? sure!
+        aliasFor("head").is("car");  // TODO: really? sure! positively?
         var tail = E.tail = bootstrap.tail;
-        aliasFor("tail").is("cdr");  // TODO: really? absolutely!
+        aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
         var isAtom = E.isAtom = bootstrap.isAtom;
 
         var bind = function(fn, context) {
@@ -37,12 +37,6 @@
         E.values = function(obj) {
             return map(function(x) { return obj[x]; }, keys(obj));
         };
-        var each = function(arr, fn) {
-            for (var i = 0, len = arr.length; i < len; i++) {
-                fn(arr[i]);
-            }
-        };
-
 
         var expand = function(a, len) {
             var arr = a ? isArray(a) ? a : slice(a) : [];
@@ -63,6 +57,11 @@
             };
             return f(EMPTY);
         };
+        var each = _(function(fn, arr) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                fn(arr[i]);
+            }
+        });
 
         E.and = _(function (a, b) {
             return !!(a && b);
@@ -289,9 +288,9 @@
         };
 
         E.inContext = function(obj) {
-            each(keys(E), function(key) {
+            each(function(key) {
                 (obj || global)[key] = E[key];
-            });
+            })(keys(E));
         };
 
         return E;

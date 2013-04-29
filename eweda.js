@@ -13,9 +13,9 @@
         var prepend = E.prepend = bootstrap.prepend;
         aliasFor("prepend").is("cons");
         var head = E.head = bootstrap.head;
-        aliasFor("head").is("car");  // TODO: really?
+        aliasFor("head").is("car");  // TODO: really? sure!
         var tail = E.tail = bootstrap.tail;
-        aliasFor("tail").is("cdr");  // TODO: really?
+        aliasFor("tail").is("cdr");  // TODO: really? absolutely!
         var isAtom = E.isAtom = bootstrap.isAtom;
 
         var bind = function(fn, context) {
@@ -209,19 +209,14 @@
         };
 
         // would be nice to have a find for objects as well
-        var find = E.find = _(function(fn, arr) {
-            var h = head(arr), t = tail(arr);
-            if (isEmpty(arr)) { return false; }
-            if (isAtom(h)) { return fn(h) ? h : find(fn, t); }
-            else { return find(fn, h) || find(fn, t); }
+        var find = E.find = _(function(fn, lat) {
+            var h = head(lat);
+            return (isEmpty(lat)) ? false : fn(h) ? h : find(fn, tail(lat));
         });
 
         // express contains in terms of find?
-        var contains = E.contains = _(function(a, arr) {
-            var h = head(arr), t = tail(arr);
-            if (isEmpty(arr)) { return false; }
-            if (isAtom(h)) { return h === a || contains(a, t); }
-            else { return contains(a, h) || contains(a, t); }
+        var contains = E.contains = _(function(a, lat) {
+            return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
         });
 
         var tap = E.tap = _(function(x, y) {
@@ -231,6 +226,14 @@
             return x;
         });
         aliasFor("tap").is("K");
+
+        var keys = E.keys = function(obj) {
+            return Object.keys(obj);
+        };
+
+        var values = E.values = function(obj) {
+            return map(function(x) { return obj[x]; }, keys(obj));
+        };
 
         var anyBlanks = some(function(val) {return val === null || val === undef;});
 

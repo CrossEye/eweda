@@ -1,4 +1,4 @@
-(function (root, factory) {if (typeof exports === 'object') {module.exports = factory();} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory();}}(this, function () { // see https://github.com/umdjs/umd/blob/master/returnExports.js
+(function (root, factory) {if (typeof exports === 'object') {module.exports = factory(root);} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory(root);}}(this, function (global) { // see https://github.com/umdjs/umd/blob/master/returnExports.js
     // TODO: remove var statements from `var xyz = E.xyz = /* ... */` if local xyz is not used.
     var lib = function(bootstrap) {
         var E = function() {return lib.apply(this, arguments);};
@@ -28,6 +28,18 @@
         var slice = bind(Function.prototype.call, Array.prototype.slice);
         var toString = bind(Function.prototype.call, Object.prototype.toString);
         var isArray = function(val) {return toString(val) === "[object Array]";};
+        var keys = function(obj) {
+            var results = [];
+            for (var name in obj) {if (obj.hasOwnProperty(name)) {
+                results.push(name);
+            }}
+            return results;
+        };
+        var each = function(arr, fn) {
+            for (var i = 0, len = arr.length; i < len; i++) {
+                fn(arr[i]);
+            }
+        };
 
 
         var expand = function(a, len) {
@@ -50,29 +62,29 @@
             return f(EMPTY);
         };
 
-        var and = E.and = _(function (a, b) {
+        E.and = _(function (a, b) {
             return !!(a && b);
         });
 
-        var or = E.or = _(function (a, b) {
+        E.or = _(function (a, b) {
             return !!(a || b);
         });
 
-        var not = E.not = function (a) {
+        E.not = function (a) {
             return !a;
         };
 
-        var eq = E.eq = _(function(a, b) {
+        E.eq = _(function(a, b) {
             return a === b;
         });
 
         // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
 
-        var andFn = E.andFn = _(function(f, g) { // TODO: arity?
+        E.andFn = _(function(f, g) { // TODO: arity?
            return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));};
         });
 
-        var orFn = E.orFn = _(function(f, g) { // TODO: arity?
+        E.orFn = _(function(f, g) { // TODO: arity?
            return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));};
         });
 
@@ -110,8 +122,13 @@
                 return fn.apply(this, [b, a].concat(slice(arguments, 2)));
             };
         };
-        var append = E.append = _(function(arr1, arr2) {
-            return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), append(tail(arr1), arr2));
+
+        var append = E.append = function(el, arr) {
+            return reverse(prepend(el, reverse(arr)));
+        };
+
+        var merge = E.merge = _(function(arr1, arr2) {
+            return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
         });
 
         var reverse = E.reverse = foldl(flip(prepend), EMPTY);
@@ -134,7 +151,7 @@
             return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
         });
 
-        var reject = E.reject = _(function(fn, arr) {
+        E.reject = _(function(fn, arr) {
             return filter(notFn(fn), arr);
         });
 
@@ -156,10 +173,9 @@
 
         var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
 
-        var func = E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
+        E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
 
-        var pluck = E.pluck = function(p) {return map(prop(p));};
-        // var pluck = E.pluck = map(prop); // TODO: shouldn't this work? // ANS: Duh, requires compose
+        E.pluck = function(p) {return map(prop(p));};
 
         var uniq = E.uniq = function(arr) {
             var h = head(arr), t = tail(arr);
@@ -176,20 +192,20 @@
         aliasFor('skip').is('drop');
 
         var xprodWith = E.xprodWith = _(function(fn, a, b) {
-            return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(append, map(function(z) {return map(_(fn)(z), b);}, a));
+            return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(function(z) {return map(_(fn)(z), b);}, a));
         });
 
-        var xprod = E.xprod = xprodWith(prepend);
+        E.xprod = xprodWith(prepend);
 
         var zipWith = E.zipWith = _(function(fn, a, b) {
             return (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
         });
 
-        var zip = E.zip = zipWith(prepend);
+        E.zip = zipWith(prepend);
 
         var flatten = E.flatten = function(list) {
             var h = head(list), t = tail(list);
-            return isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : append(flatten(h), flatten(t));
+            return isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
         };
 
         // would be nice to have a find for objects as well
@@ -218,7 +234,7 @@
 
         var anyBlanks = some(function(val) {return val === null || val === undef;});
 
-        var maybe = E.maybe = function (fn) {
+        E.maybe = function (fn) {
             return function () {
                 return (arguments.length === 0 || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(this, arguments);
             };
@@ -245,18 +261,18 @@
         E.alwaysFalse = identity(false);
         E.alwaysTrue = identity(true);
 
-        var props = E.props = function(obj) {
+        E.props = function(obj) {
             return function(prop) {return obj && obj[prop];};
         };
 
-        var wrap = E.wrap = function(fn, wrapper) {
+        E.wrap = function(fn, wrapper) {
             return function() {
                 return wrapper.apply(this, [fn].concat(slice(arguments)));
             };
         };
 
         // note: not really pure.  Meant to keep side-effects from repeating.
-        var once = E.once = function(fn) {
+        E.once = function(fn) {
             var called = false, result;
             return function() {
                 if (called) {return result;}
@@ -266,7 +282,7 @@
         };
 
         // note: really only handles string and number parameters
-        var memoize = E.memoize = function(fn) {
+        E.memoize = function(fn) {
             var cache = {};
             return function() {
                 var position = foldl(function(cache, arg) {return cache[arg] || (cache[arg] = {});}, cache,
@@ -274,6 +290,12 @@
                 var arg = arguments[arguments.length - 1];
                 return (position[arg] || (position[arg] = fn.apply(this, arguments)));
             };
+        };
+
+        E.expose = function(obj) {
+            each(keys(E), function(key) {
+                (obj || global)[key] = E[key];
+            });
         };
 
         return E;

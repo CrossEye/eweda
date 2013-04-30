@@ -9,6 +9,12 @@ describe('flip', function() {
         assert.equal(f('a', 'b', 'c'), 'a b c');
         assert.equal(g('a', 'b', 'c'), 'b a c');
     });
+
+    it('should return a curried function', function() {
+        var f = function(a, b, c) {return a + ' ' + b + ' ' + c;};
+        var g = flip(f)('a');
+        assert.equal(g('b', 'c'), 'b a c');
+    });
 });
 
 describe('once', function() {

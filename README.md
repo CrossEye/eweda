@@ -124,3 +124,10 @@ to use the most common names for these, possibly using multiple aliases for thos
   * andFn
   * orFn
   * notFn
+
+### Arithmetic ###
+
+  * sum
+  * prod
+  * diff
+  * quotient

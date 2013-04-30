@@ -35,7 +35,7 @@
             return results;
         };
         E.values = function(obj) {
-            return map(function(x) { return obj[x]; }, keys(obj));
+            return map(props(obj), keys(obj));
         };
 
         var expand = function(a, len) {
@@ -55,6 +55,7 @@
                     else {return f(newArgs);}
                 };
             };
+
             return f(EMPTY);
         };
         var each = _(function(fn, arr) {
@@ -118,9 +119,9 @@
         });
 
         var flip = E.flip = function(fn) {
-            return function(a, b) {
+            return _(function(a, b) {
                 return fn.apply(this, [b, a].concat(slice(arguments, 2)));
-            };
+            });
         };
 
         E.append = function(el, arr) {
@@ -256,7 +257,7 @@
         E.alwaysFalse = identity(false);
         E.alwaysTrue = identity(true);
 
-        E.props = function(obj) {
+        var props = E.props = function(obj) {
             return function(prop) {return obj && obj[prop];};
         };
 
@@ -292,6 +293,11 @@
                 (obj || global)[key] = E[key];
             })(keys(E));
         };
+
+        E.sum = _(function(a, b) {return a + b;});
+        E.prod = _(function(a, b) {return a * b;});
+        E.diff = _(function(a, b) {return a - b;});
+        E.quotient = _(function(a, b) {return a / b;});
 
         return E;
     };

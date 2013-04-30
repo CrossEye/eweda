@@ -113,6 +113,8 @@ to use the most common names for these, possibly using multiple aliases for thos
   * alwaysFalse
   * alwaysZero
   * maybe
+  * keys
+  * values
 
 ### Logic ###
 

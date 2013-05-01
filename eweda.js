@@ -39,6 +39,8 @@
 
         // Internal Functions and Properties
         // ---------------------------------
+
+		// ### Initial internal Functions ###
         var undef = (function(){})();
 
         // Makes an alias for one of the public functions:
@@ -47,6 +49,7 @@
             return (fn.is = fn.are = fn.and = fn);
         };
 
+		// ### Core Functions Supplied ###
         // Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
         // public.
         var EMPTY = bootstrap.EMPTY;
@@ -59,6 +62,7 @@
         aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
         var isAtom = E.isAtom = bootstrap.isAtom;
 
+		// ### More internal Functions ###
         // Partial replacement for native `bind`.
         var bind = function(fn, context) {
             var args = Array.prototype.slice.call(arguments, 2);
@@ -99,6 +103,15 @@
             for (var i = 0, len = arr.length; i < len; i++) {
                 fn(arr[i]);
             }
+        });
+		
+		// ### Core Functions Derived ###
+        E.append = function(el, arr) {
+            return reverse(prepend(el, reverse(arr)));
+        };
+
+        var merge = E.merge = _(function(arr1, arr2) {
+            return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
         });
 
         // Function functions :-)
@@ -183,36 +196,9 @@
         // List Functions
         // --------------
 
-        // To do
-
-        E.and = _(function (a, b) {
-            return !!(a && b);
+        var map = E.map = _(function(fn, arr) {
+            return (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
         });
-
-        E.or = _(function (a, b) {
-            return !!(a || b);
-        });
-
-        E.not = function (a) {
-            return !a;
-        };
-
-        E.eq = _(function(a, b) {
-            return a === b;
-        });
-
-        // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
-        E.andFn = _(function(f, g) { // TODO: arity?
-           return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));};
-        });
-
-        E.orFn = _(function(f, g) { // TODO: arity?
-           return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));};
-        });
-
-        var notFn = E.notFn = function (f) {
-            return function() {return !f.apply(this, arguments);};
-        };
 
         var foldl = E.foldl = _(function(fn, acc, arr) {
             return (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
@@ -239,18 +225,27 @@
             return foldr(fn, head(rev), reverse(tail(rev)));
         });
 
-        E.append = function(el, arr) {
-            return reverse(prepend(el, reverse(arr)));
-        };
-
-        var merge = E.merge = _(function(arr1, arr2) {
-            return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
+        var filter = E.filter = _(function(fn, arr) {
+            return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
         });
 
-        var reverse = E.reverse = foldl(flip(prepend), EMPTY);
+        E.reject = _(function(fn, arr) {
+            return filter(notFn(fn), arr);
+        });
 
-        var map = E.map = _(function(fn, arr) {
-            return (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
+        var take = E.take = _(function(n, arr) {
+            return (isEmpty(arr) || !(n > 0)) ? EMPTY : prepend(head(arr), take(n - 1, tail(arr)));
+        });
+
+        var skip = E.skip = _(function(n, arr) {
+            return isEmpty(arr) ? EMPTY : (n > 0) ? skip(n - 1, tail(arr)) : arr;
+        });
+        aliasFor('skip').is('drop');
+
+        // would be nice to have a find for objects as well
+        var find = E.find = _(function(fn, lat) {
+            var h = head(lat);
+            return (isEmpty(lat)) ? false : fn(h) ? h : find(fn, tail(lat));
         });
 
         var all = E.all = _(function (fn, arr) {
@@ -263,61 +258,40 @@
         });
         aliasFor("any").is("some");
 
-        var filter = E.filter = _(function(fn, arr) {
-            return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
+        // express contains in terms of find?
+        var contains = E.contains = _(function(a, lat) {
+            return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
         });
-
-        E.reject = _(function(fn, arr) {
-            return filter(notFn(fn), arr);
-        });
-
-        var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
-
-        E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
-
-        E.pluck = function(p) {return map(prop(p));};
 
         var uniq = E.uniq = function(arr) {
             var h = head(arr), t = tail(arr);
             return (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
         };
 
-        var take = E.take = _(function(n, arr) {
-            return (isEmpty(arr) || !(n > 0)) ? EMPTY : prepend(head(arr), take(n - 1, tail(arr)));
-        });
-
-        var skip = E.skip = _(function(n, arr) {
-            return isEmpty(arr) ? EMPTY : (n > 0) ? skip(n - 1, tail(arr)) : arr;
-        });
-        aliasFor('skip').is('drop');
-
-        var xprodWith = E.xprodWith = _(function(fn, a, b) {
-            return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(function(z) {return map(_(fn)(z), b);}, a));
-        });
-
-        E.xprod = xprodWith(prepend);
-
-        var zipWith = E.zipWith = _(function(fn, a, b) {
-            return (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
-        });
-
-        E.zip = zipWith(prepend);
+        E.pluck = function(p) {return map(prop(p));};
 
         var flatten = E.flatten = function(list) {
             var h = head(list), t = tail(list);
             return isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
         };
 
-        // would be nice to have a find for objects as well
-        var find = E.find = _(function(fn, lat) {
-            var h = head(lat);
-            return (isEmpty(lat)) ? false : fn(h) ? h : find(fn, tail(lat));
+        var zipWith = E.zipWith = _(function(fn, a, b) {
+            return (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
         });
 
-        // express contains in terms of find?
-        var contains = E.contains = _(function(a, lat) {
-            return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
+        E.zip = zipWith(prepend);
+		
+        var xprodWith = E.xprodWith = _(function(fn, a, b) {
+            return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(function(z) {return map(_(fn)(z), b);}, a));
         });
+
+        E.xprod = xprodWith(prepend);
+
+        var reverse = E.reverse = foldl(flip(prepend), EMPTY);
+
+		
+		// Object Functions
+		// ----------------
 
         var tap = E.tap = _(function(x, y) {
             if (typeof y === "function") {
@@ -327,12 +301,16 @@
         });
         aliasFor("tap").is("K");
 
-        var anyBlanks = any(function(val) {return val === null || val === undef;});
+        E.eq = _(function(a, b) {
+            return a === b;
+        });
 
-        E.maybe = function (fn) {
-            return function () {
-                return (arguments.length === 0 || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(this, arguments);
-            };
+	    var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
+        
+		E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
+
+        var props = E.props = function(obj) {
+            return function(prop) {return obj && obj[prop];};
         };
 
         var identity = E.identity = function(val) {
@@ -343,10 +321,14 @@
         E.alwaysFalse = identity(false);
         E.alwaysTrue = identity(true);
 
-        var props = E.props = function(obj) {
-            return function(prop) {return obj && obj[prop];};
-        };
+        var anyBlanks = any(function(val) {return val === null || val === undef;});
 
+        E.maybe = function (fn) {
+            return function () {
+                return (arguments.length === 0 || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(this, arguments);
+            };
+        };
+		
         var keys = E.keys = function(obj) {
             var results = [];
             for (var name in obj) {if (obj.hasOwnProperty(name)) {
@@ -357,19 +339,56 @@
         E.values = function(obj) {
             return map(props(obj), keys(obj));
         };
+		
+		// Logic Functions
+		// ---------------
+		
+        E.and = _(function (a, b) {
+            return !!(a && b);
+        });
 
-        E.inContext = function(obj) {
-            each(function(key) {
-                (obj || global)[key] = E[key];
-            })(keys(E));
+        E.or = _(function (a, b) {
+            return !!(a || b);
+        });
+
+        E.not = function (a) {
+            return !a;
         };
 
+        // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
+        E.andFn = _(function(f, g) { // TODO: arity?
+           return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));};
+        });
+
+        E.orFn = _(function(f, g) { // TODO: arity?
+           return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));};
+        });
+
+        var notFn = E.notFn = function (f) {
+            return function() {return !f.apply(this, arguments);};
+        };
+		
+		
+		// Arithmetic Functions
+		// --------------------
+		
         var add = E.add = _(function(a, b) {return a + b;});
         var multiply = E.multiply = _(function(a, b) {return a * b;});
         E.subtract = _(function(a, b) {return a - b;});
         E.divide = _(function(a, b) {return a / b;});
         E.sum = foldl(add, 0);
         E.product = foldl(multiply, 1);
+
+		
+		// Miscellaneous Functions
+		// -----------------------
+		
+        E.inContext = function(obj) {
+            each(function(key) {
+                (obj || global)[key] = E[key];
+            })(keys(E));
+        };
+
         return E;
     };
 

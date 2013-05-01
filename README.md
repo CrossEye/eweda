@@ -66,7 +66,18 @@ to use the most common names for these, possibly using multiple aliases for thos
   * head
   * tail
 
-### Collections ###
+### Functions ###
+
+  * compose (fog)
+  * pipe (sequence) (i.e., like compose but in reverse order)
+  * flip
+  * partial (applyLeft)
+  * rPartial (applyRight)
+  * memoize
+  * once
+  * wrap
+
+### Lists ###
 
   * map
   * foldl (reduce)
@@ -89,17 +100,6 @@ to use the most common names for these, possibly using multiple aliases for thos
   * xprod (i.e. cartesian product)
   * xprodWith (i.e. cartesian product with function)
   * reverse
-
-### Functions ###
-
-  * compose (fog)
-  * pipe (sequence) (i.e., like compose but in reverse order)
-  * flip
-  * partial (applyLeft)
-  * rPartial (applyRight)
-  * memoize
-  * once
-  * wrap
 
 ### Objects ###
 

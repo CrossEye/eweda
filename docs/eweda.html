@@ -113,16 +113,29 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> undef = (<span class="keyword">function</span>(){})();</pre></div></div>
-            
         </li>
         
         
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h3">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3>Initial internal Functions</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> undef = (<span class="keyword">function</span>(){})();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Makes an alias for one of the public functions:</p>
 
@@ -136,13 +149,14 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+              <h3>Core Functions Supplied</h3>
+<p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
 public.</p>
 
             </div>
@@ -160,13 +174,14 @@ public.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Partial replacement for native <code>bind</code>.</p>
+              <h3>More internal Functions</h3>
+<p>Partial replacement for native <code>bind</code>.</p>
 
             </div>
             
@@ -180,11 +195,11 @@ public.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Standard Array and Object methods implemented as pure functions</p>
 
@@ -197,11 +212,11 @@ public.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Fills out an array to the specified length</p>
 
@@ -216,11 +231,11 @@ public.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Local version of partial application.</p>
 
@@ -244,11 +259,11 @@ public.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Internal version of <code>forEach</code>.  Possibly to be exposed later.</p>
 
@@ -263,11 +278,32 @@ public.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3>Core Functions Derived</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.append = <span class="keyword">function</span>(el, arr) {
+            <span class="keyword">return</span> reverse(prepend(el, reverse(arr)));
+        };
+
+        <span class="keyword">var</span> merge = E.merge = _(<span class="keyword">function</span>(arr1, arr2) {
+            <span class="keyword">return</span> (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <h2>Function functions :-)</h2>
 
@@ -276,11 +312,11 @@ public.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Creates a new function that runs each of the functions supplied as parameters in turn, passing the output
 of each one to the next one, starting with whatever arguments were passed to the initial invocation.
@@ -299,11 +335,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Similar to <code>compose</code>, but processes the functions in the reverse order so that if if <code>var h = pipe(f, g)</code>,
 <code>h(x)</code> calls <code>f(x)</code> first, passing the result of that to <code>g()</code>.</p>
@@ -318,11 +354,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Returns a new function much like the supplied one except that the first two arguments are inverted.</p>
 
@@ -337,11 +373,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the left-most parameters are
 pre-filled.</p>
@@ -359,11 +395,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the right-most parameters are
 pre-filled.</p>
@@ -381,11 +417,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Creates a new function that stores the results of running the supplied function and returns those
 stored value when the same request is made.  <strong>Note</strong>: this really only handles string and number parameters.</p>
@@ -405,11 +441,11 @@ stored value when the same request is made.  <strong>Note</strong>: this really 
         </li>
         
         
-        <li id="section-20">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Wraps a function up in one that will only call the internal one once, no matter how many times the outer one
 is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly meant to keep side-effects from repeating.</p>
@@ -428,11 +464,11 @@ is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly mea
         </li>
         
         
-        <li id="section-21">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Wrap a function inside another to allow you to make adjustments to the parameters or do other processing
 either before the internal function is called or with its results.</p>
@@ -448,70 +484,20 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <h2>List Functions</h2>
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-23">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
-              </div>
-              <p>To do</p>
-
-            </div>
-            
             <div class="content"><div class='highlight'><pre>
-        E.and = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
-            <span class="keyword">return</span> !!(a &amp;&amp; b);
+        <span class="keyword">var</span> map = E.map = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
         });
-
-        E.or = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
-            <span class="keyword">return</span> !!(a || b);
-        });
-
-        E.not = <span class="function"><span class="keyword">function</span> <span class="params">(a)</span> {</span>
-            <span class="keyword">return</span> !a;
-        };
-
-        E.eq = _(<span class="keyword">function</span>(a, b) {
-            <span class="keyword">return</span> a === b;
-        });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-24">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
-              </div>
-              <p>Still not particularly happy with the names <code>andFn</code>, <code>orFn</code>, <code>notFn</code>, but at least Oliver Twist can pronounce one...</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        E.andFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
-           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) &amp;&amp; g.apply(<span class="keyword">this</span>, arguments));};
-        });
-
-        E.orFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
-           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) || g.apply(<span class="keyword">this</span>, arguments));};
-        });
-
-        <span class="keyword">var</span> notFn = E.notFn = <span class="function"><span class="keyword">function</span> <span class="params">(f)</span> {</span>
-            <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !f.apply(<span class="keyword">this</span>, arguments);};
-        };
 
         <span class="keyword">var</span> foldl = E.foldl = _(<span class="keyword">function</span>(fn, acc, arr) {
             <span class="keyword">return</span> (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
@@ -538,30 +524,6 @@ either before the internal function is called or with its results.</p>
             <span class="keyword">return</span> foldr(fn, head(rev), reverse(tail(rev)));
         });
 
-        E.append = <span class="keyword">function</span>(el, arr) {
-            <span class="keyword">return</span> reverse(prepend(el, reverse(arr)));
-        };
-
-        <span class="keyword">var</span> merge = E.merge = _(<span class="keyword">function</span>(arr1, arr2) {
-            <span class="keyword">return</span> (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
-        });
-
-        <span class="keyword">var</span> reverse = E.reverse = foldl(flip(prepend), EMPTY);
-
-        <span class="keyword">var</span> map = E.map = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
-        });
-
-        <span class="keyword">var</span> all = E.all = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
-            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">true</span> : fn(head(arr)) &amp;&amp; all(fn, tail(arr));
-        });
-        aliasFor(<span class="string">"all"</span>).is(<span class="string">"every"</span>);
-
-        <span class="keyword">var</span> any = E.any = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">false</span> : fn(head(arr)) || any(fn, tail(arr));
-        });
-        aliasFor(<span class="string">"any"</span>).is(<span class="string">"some"</span>);
-
         <span class="keyword">var</span> filter = E.filter = _(<span class="keyword">function</span>(fn, arr) {
             <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
         });
@@ -570,17 +532,6 @@ either before the internal function is called or with its results.</p>
             <span class="keyword">return</span> filter(notFn(fn), arr);
         });
 
-        <span class="keyword">var</span> prop = E.prop = <span class="keyword">function</span>(p) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[p];};};
-
-        E.func = <span class="keyword">function</span>(n) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[n].apply(obj, slice(arguments, <span class="number">1</span>));};};
-
-        E.pluck = <span class="keyword">function</span>(p) {<span class="keyword">return</span> map(prop(p));};
-
-        <span class="keyword">var</span> uniq = E.uniq = <span class="keyword">function</span>(arr) {
-            <span class="keyword">var</span> h = head(arr), t = tail(arr);
-            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
-        };
-
         <span class="keyword">var</span> take = E.take = _(<span class="keyword">function</span>(n, arr) {
             <span class="keyword">return</span> (isEmpty(arr) || !(n &gt; <span class="number">0</span>)) ? EMPTY : prepend(head(arr), take(n - <span class="number">1</span>, tail(arr)));
         });
@@ -588,24 +539,7 @@ either before the internal function is called or with its results.</p>
         <span class="keyword">var</span> skip = E.skip = _(<span class="keyword">function</span>(n, arr) {
             <span class="keyword">return</span> isEmpty(arr) ? EMPTY : (n &gt; <span class="number">0</span>) ? skip(n - <span class="number">1</span>, tail(arr)) : arr;
         });
-        aliasFor(<span class="string">'skip'</span>).is(<span class="string">'drop'</span>);
-
-        <span class="keyword">var</span> xprodWith = E.xprodWith = _(<span class="keyword">function</span>(fn, a, b) {
-            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(<span class="keyword">function</span>(z) {<span class="keyword">return</span> map(_(fn)(z), b);}, a));
-        });
-
-        E.xprod = xprodWith(prepend);
-
-        <span class="keyword">var</span> zipWith = E.zipWith = _(<span class="keyword">function</span>(fn, a, b) {
-            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
-        });
-
-        E.zip = zipWith(prepend);
-
-        <span class="keyword">var</span> flatten = E.flatten = <span class="keyword">function</span>(list) {
-            <span class="keyword">var</span> h = head(list), t = tail(list);
-            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
-        };</pre></div></div>
+        aliasFor(<span class="string">'skip'</span>).is(<span class="string">'drop'</span>);</pre></div></div>
             
         </li>
         
@@ -623,7 +557,17 @@ either before the internal function is called or with its results.</p>
             <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> find = E.find = _(<span class="keyword">function</span>(fn, lat) {
             <span class="keyword">var</span> h = head(lat);
             <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : fn(h) ? h : find(fn, tail(lat));
-        });</pre></div></div>
+        });
+
+        <span class="keyword">var</span> all = E.all = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
+            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">true</span> : fn(head(arr)) &amp;&amp; all(fn, tail(arr));
+        });
+        aliasFor(<span class="string">"all"</span>).is(<span class="string">"every"</span>);
+
+        <span class="keyword">var</span> any = E.any = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">false</span> : fn(head(arr)) || any(fn, tail(arr));
+        });
+        aliasFor(<span class="string">"any"</span>).is(<span class="string">"some"</span>);</pre></div></div>
             
         </li>
         
@@ -642,6 +586,46 @@ either before the internal function is called or with its results.</p>
             <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : head(lat) === a || contains(a, tail(lat));
         });
 
+        <span class="keyword">var</span> uniq = E.uniq = <span class="keyword">function</span>(arr) {
+            <span class="keyword">var</span> h = head(arr), t = tail(arr);
+            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+        };
+
+        E.pluck = <span class="keyword">function</span>(p) {<span class="keyword">return</span> map(prop(p));};
+
+        <span class="keyword">var</span> flatten = E.flatten = <span class="keyword">function</span>(list) {
+            <span class="keyword">var</span> h = head(list), t = tail(list);
+            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
+        };
+
+        <span class="keyword">var</span> zipWith = E.zipWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
+        });
+
+        E.zip = zipWith(prepend);
+		
+        <span class="keyword">var</span> xprodWith = E.xprodWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(<span class="keyword">function</span>(z) {<span class="keyword">return</span> map(_(fn)(z), b);}, a));
+        });
+
+        E.xprod = xprodWith(prepend);
+
+        <span class="keyword">var</span> reverse = E.reverse = foldl(flip(prepend), EMPTY);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h2>Object Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
         <span class="keyword">var</span> tap = E.tap = _(<span class="keyword">function</span>(x, y) {
             <span class="keyword">if</span> (<span class="keyword">typeof</span> y === <span class="string">"function"</span>) {
                 y(x);
@@ -650,12 +634,16 @@ either before the internal function is called or with its results.</p>
         });
         aliasFor(<span class="string">"tap"</span>).is(<span class="string">"K"</span>);
 
-        <span class="keyword">var</span> anyBlanks = any(<span class="keyword">function</span>(val) {<span class="keyword">return</span> val === <span class="literal">null</span> || val === undef;});
+        E.eq = _(<span class="keyword">function</span>(a, b) {
+            <span class="keyword">return</span> a === b;
+        });
 
-        E.maybe = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
-            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-                <span class="keyword">return</span> (arguments.length === <span class="number">0</span> || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(<span class="keyword">this</span>, arguments);
-            };
+	    <span class="keyword">var</span> prop = E.prop = <span class="keyword">function</span>(p) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[p];};};
+        
+		E.func = <span class="keyword">function</span>(n) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[n].apply(obj, slice(arguments, <span class="number">1</span>));};};
+
+        <span class="keyword">var</span> props = E.props = <span class="keyword">function</span>(obj) {
+            <span class="keyword">return</span> <span class="keyword">function</span>(prop) {<span class="keyword">return</span> obj &amp;&amp; obj[prop];};
         };
 
         <span class="keyword">var</span> identity = E.identity = <span class="keyword">function</span>(val) {
@@ -666,10 +654,14 @@ either before the internal function is called or with its results.</p>
         E.alwaysFalse = identity(<span class="literal">false</span>);
         E.alwaysTrue = identity(<span class="literal">true</span>);
 
-        <span class="keyword">var</span> props = E.props = <span class="keyword">function</span>(obj) {
-            <span class="keyword">return</span> <span class="keyword">function</span>(prop) {<span class="keyword">return</span> obj &amp;&amp; obj[prop];};
-        };
+        <span class="keyword">var</span> anyBlanks = any(<span class="keyword">function</span>(val) {<span class="keyword">return</span> val === <span class="literal">null</span> || val === undef;});
 
+        E.maybe = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                <span class="keyword">return</span> (arguments.length === <span class="number">0</span> || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(<span class="keyword">this</span>, arguments);
+            };
+        };
+		
         <span class="keyword">var</span> keys = E.keys = <span class="keyword">function</span>(obj) {
             <span class="keyword">var</span> results = [];
             <span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> obj) {<span class="keyword">if</span> (obj.hasOwnProperty(name)) {
@@ -679,20 +671,100 @@ either before the internal function is called or with its results.</p>
         };
         E.values = <span class="keyword">function</span>(obj) {
             <span class="keyword">return</span> map(props(obj), keys(obj));
-        };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h2>Logic Functions</h2>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        E.and = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+            <span class="keyword">return</span> !!(a &amp;&amp; b);
+        });
+
+        E.or = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+            <span class="keyword">return</span> !!(a || b);
+        });
+
+        E.not = <span class="function"><span class="keyword">function</span> <span class="params">(a)</span> {</span>
+            <span class="keyword">return</span> !a;
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Still not particularly happy with the names <code>andFn</code>, <code>orFn</code>, <code>notFn</code>, but at least Oliver Twist can pronounce one...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.andFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
+           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) &amp;&amp; g.apply(<span class="keyword">this</span>, arguments));};
+        });
+
+        E.orFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
+           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) || g.apply(<span class="keyword">this</span>, arguments));};
+        });
+
+        <span class="keyword">var</span> notFn = E.notFn = <span class="function"><span class="keyword">function</span> <span class="params">(f)</span> {</span>
+            <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !f.apply(<span class="keyword">this</span>, arguments);};
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h2>Arithmetic Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        <span class="keyword">var</span> add = E.add = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a + b;});
+        <span class="keyword">var</span> multiply = E.multiply = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a * b;});
+        E.subtract = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a - b;});
+        E.divide = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a / b;});
+        E.sum = foldl(add, <span class="number">0</span>);
+        E.product = foldl(multiply, <span class="number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h2>Miscellaneous Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
         E.inContext = <span class="keyword">function</span>(obj) {
             each(<span class="keyword">function</span>(key) {
                 (obj || global)[key] = E[key];
             })(keys(E));
         };
 
-        <span class="keyword">var</span> add = E.add = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a + b;});
-        <span class="keyword">var</span> multiply = E.multiply = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a * b;});
-        E.subtract = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a - b;});
-        E.divide = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a / b;});
-        E.sum = foldl(add, <span class="number">0</span>);
-        E.product = foldl(multiply, <span class="number">1</span>);
         <span class="keyword">return</span> E;
     };
 

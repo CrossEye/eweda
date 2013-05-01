@@ -127,7 +127,9 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Arithmetic ###
 
+  * add
+  * multiply
+  * subtract
+  * divide
   * sum
-  * prod
-  * diff
-  * quotient
+  * product

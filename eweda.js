@@ -294,11 +294,12 @@
             })(keys(E));
         };
 
-        E.sum = _(function(a, b) {return a + b;});
-        E.prod = _(function(a, b) {return a * b;});
-        E.diff = _(function(a, b) {return a - b;});
-        E.quotient = _(function(a, b) {return a / b;});
-
+        var add = E.add = _(function(a, b) {return a + b;});
+        var multiply = E.multiply = _(function(a, b) {return a * b;});
+        E.subtract = _(function(a, b) {return a - b;});
+        E.divide = _(function(a, b) {return a / b;});
+        E.sum = foldl(add, 0);
+        E.product = foldl(multiply, 1);
         return E;
     };
 

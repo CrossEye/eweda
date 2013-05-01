@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>eweda.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>eweda.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>eweda.js 0.0.1
+https://github.com/CrossEye/eweda
+(c) 2013 Scott Sauyet and Michael Hurley
+Underscore may be freely distributed under the MIT license.</code></pre>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Basic Setup</h2>
+<p>Uses a technique from the <a href="https://github.com/umdjs/umd/blob/master/returnExports.js">Universal Module Definition</a> to wrap this up for use in Node.js or in the browser,
+with or without an AMD-style loader.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+(<span class="function"><span class="keyword">function</span> <span class="params">(root, factory)</span> {</span><span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">'object'</span>) {module.exports = factory(root);} <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">'function'</span> &amp;&amp; define.amd) {define(factory);} <span class="keyword">else</span> {root.eweda = factory(root);}}(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> <span class="params">(global)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>The basic implementation of lists is replaceable.  A default one base on arrays is supplied below.
+<code>bootstrap</code> represents that implementation, which must contain:</p>
+<ul>
+<li><code>EMPTY</code>: prototypical (or only) empty list</li>
+<li><code>isAtom</code>: boolean function which is <code>true</code> for non-list, <code>false</code> for a list</li>
+<li><code>isEmpty</code>: boolean function which reports whether a list is empty</li>
+<li><code>prepend</code>: function which returns a new list with the new element at the front, and the existing elements following</li>
+<li><code>head</code>: function which returns the first element of a list</li>
+<li><code>tail</code>: function which returns the rest of the list after the first element</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="keyword">var</span> lib = <span class="keyword">function</span>(bootstrap) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This function is what is actually returned, with all the functions attached as properties.  That allows</p>
+<pre><code>var myLib = eweda({
+    EMPTY: /* ... */,
+    isAtom: /* ... */,
+    /* ... */
+});
+var result = myLib.map(someFunction, someCollection);</code></pre>
+<p>where <code>someCollection</code> is built to match the style of collection described by the parameter to the first call.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="keyword">var</span> E = <span class="keyword">function</span>() {<span class="keyword">return</span> lib.apply(<span class="keyword">this</span>, arguments);};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2>Internal Functions and Properties</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="keyword">var</span> undef = (<span class="keyword">function</span>(){})(), EMPTY;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Makes an alias for one of the public functions:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> aliasFor = <span class="keyword">function</span>(oldName) {
+            <span class="keyword">var</span> fn = <span class="keyword">function</span>(newName) {E[newName] = E[oldName]; <span class="keyword">return</span> fn;};
+            <span class="keyword">return</span> (fn.is = fn.are = fn.and = fn);
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Partial replacement for native <code>bind</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> bind = <span class="keyword">function</span>(fn, context) {
+            <span class="keyword">var</span> args = Array.prototype.slice.call(arguments, <span class="number">2</span>);
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">return</span> fn.apply(context || <span class="keyword">this</span>, args.concat(Array.prototype.slice.call(arguments)));
+            };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Standard Array and Object methods implemented as pure functions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> slice = bind(Function.prototype.call, Array.prototype.slice);
+        <span class="keyword">var</span> toString = bind(Function.prototype.call, Object.prototype.toString);
+        <span class="keyword">var</span> isArray = <span class="keyword">function</span>(val) {<span class="keyword">return</span> toString(val) === <span class="string">"[object Array]"</span>;};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Fills out an array to the specified length</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> expand = <span class="keyword">function</span>(a, len) {
+            <span class="keyword">var</span> arr = a ? isArray(a) ? a : slice(a) : [];
+            <span class="keyword">while</span>(arr.length &lt; len) {arr[arr.length] = undef;}
+            <span class="keyword">return</span> arr;
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Local version of partial application.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> _ = <span class="keyword">function</span>(fn) {
+            <span class="keyword">var</span> arity = fn.length;
+            <span class="keyword">var</span> f = <span class="keyword">function</span>(args) {
+                <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    <span class="keyword">var</span> newArgs = (args || []).concat(slice(arguments, <span class="number">0</span>));
+                    <span class="keyword">if</span> (newArgs.length &gt;= arity) {
+                        <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, newArgs);
+                    }
+                    <span class="keyword">else</span> {<span class="keyword">return</span> f(newArgs);}
+                };
+            };
+
+            <span class="keyword">return</span> f(EMPTY);
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Internal version of <code>forEach</code>.  Possibly to be exposed later.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> each = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = arr.length; i &lt; len; i++) {
+                fn(arr[i]);
+            }
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2>Core Functions Supplied</h2>
+<p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+public.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        EMPTY = bootstrap.EMPTY;
+        <span class="keyword">var</span> isEmpty = E.isEmpty = bootstrap.isEmpty;
+        <span class="keyword">var</span> prepend = E.prepend = bootstrap.prepend;
+        aliasFor(<span class="string">"prepend"</span>).is(<span class="string">"cons"</span>); <span class="comment">// TODO: really?</span>
+        <span class="keyword">var</span> head = E.head = bootstrap.head;
+        aliasFor(<span class="string">"head"</span>).is(<span class="string">"car"</span>);  <span class="comment">// TODO: really? sure! positively?</span>
+        <span class="keyword">var</span> tail = E.tail = bootstrap.tail;
+        aliasFor(<span class="string">"tail"</span>).is(<span class="string">"cdr"</span>);  <span class="comment">// TODO: really? absolutely! without doubt?</span>
+        <span class="keyword">var</span> isAtom = E.isAtom = bootstrap.isAtom;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2>Core Functions Derived</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.append = <span class="keyword">function</span>(el, arr) {
+            <span class="keyword">return</span> reverse(prepend(el, reverse(arr)));
+        };
+
+        <span class="keyword">var</span> merge = E.merge = _(<span class="keyword">function</span>(arr1, arr2) {
+            <span class="keyword">return</span> (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2>Function functions :-)</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Creates a new function that runs each of the functions supplied as parameters in turn, passing the output
+of each one to the next one, starting with whatever arguments were passed to the initial invocation.
+Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g(x)</code> first, passing the result of that to <code>f()</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> compose = E.compose = <span class="keyword">function</span>() {  <span class="comment">// TODO: type check of arguments?</span>
+            <span class="keyword">var</span> fns = slice(arguments);
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">return</span> foldr(<span class="keyword">function</span>(fn, args) {<span class="keyword">return</span> [fn.apply(<span class="keyword">this</span>, args)];}, slice(arguments), fns)[<span class="number">0</span>];
+            }
+        };
+        aliasFor(<span class="string">"compose"</span>).is(<span class="string">"fog"</span>); <span class="comment">// TODO: really?</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Similar to <code>compose</code>, but processes the functions in the reverse order so that if if <code>var h = pipe(f, g)</code>,
+<code>h(x)</code> calls <code>f(x)</code> first, passing the result of that to <code>g()</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> pipe = E.pipe = <span class="keyword">function</span>() { <span class="comment">// TODO: type check of arguments?</span>
+            <span class="keyword">return</span> compose.apply(<span class="keyword">this</span>, slice(arguments).reverse());
+        };
+        aliasFor(<span class="string">"pipe"</span>).is(<span class="string">"sequence"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Returns a new function much like the supplied one except that the first two arguments are inverted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> flip = E.flip = <span class="keyword">function</span>(fn) {
+            <span class="keyword">return</span> _(<span class="keyword">function</span>(a, b) {
+                <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, [b, a].concat(slice(arguments, <span class="number">2</span>)));
+            });
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Creates a new function that acts like the supplied function except that the left-most parameters are
+pre-filled.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> lPartial = E.lPartial = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+            <span class="keyword">var</span> args = slice(arguments, <span class="number">1</span>);
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, args.concat(slice(arguments)));
+            };
+        };
+        aliasFor(<span class="string">"lPartial"</span>).is(<span class="string">"applyLeft"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Creates a new function that acts like the supplied function except that the right-most parameters are
+pre-filled.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> rPartial = E.rPartial =<span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+            <span class="keyword">var</span> args = slice(arguments, <span class="number">1</span>);
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, slice(arguments).concat(args));
+            };
+        };
+        aliasFor(<span class="string">"rPartial"</span>).is(<span class="string">"applyRight"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Creates a new function that stores the results of running the supplied function and returns those
+stored value when the same request is made.  <strong>Note</strong>: this really only handles string and number parameters.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.memoize = <span class="keyword">function</span>(fn) {
+            <span class="keyword">var</span> cache = {};
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">var</span> position = foldl(<span class="keyword">function</span>(cache, arg) {<span class="keyword">return</span> cache[arg] || (cache[arg] = {});}, cache,
+                        slice(arguments, <span class="number">0</span>, arguments.length - <span class="number">1</span>));
+                <span class="keyword">var</span> arg = arguments[arguments.length - <span class="number">1</span>];
+                <span class="keyword">return</span> (position[arg] || (position[arg] = fn.apply(<span class="keyword">this</span>, arguments)));
+            };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Wraps a function up in one that will only call the internal one once, no matter how many times the outer one
+is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly meant to keep side-effects from repeating.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.once = <span class="keyword">function</span>(fn) {
+            <span class="keyword">var</span> called = <span class="literal">false</span>, result;
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">if</span> (called) {<span class="keyword">return</span> result;}
+                called = <span class="literal">true</span>;
+                <span class="keyword">return</span> (result = fn.apply(<span class="keyword">this</span>, arguments));
+            }
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Wrap a function inside another to allow you to make adjustments to the parameters or do other processing
+either before the internal function is called or with its results.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.wrap = <span class="keyword">function</span>(fn, wrapper) {
+            <span class="keyword">return</span> <span class="keyword">function</span>() {
+                <span class="keyword">return</span> wrapper.apply(<span class="keyword">this</span>, [fn].concat(slice(arguments)));
+            };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h2>List Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="keyword">var</span> map = E.map = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
+        });
+
+        <span class="keyword">var</span> foldl = E.foldl = _(<span class="keyword">function</span>(fn, acc, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
+        });
+        aliasFor(<span class="string">"foldl"</span>).is(<span class="string">"reduce"</span>);
+
+        <span class="keyword">var</span> foldl1 = E.foldl1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
+            <span class="keyword">if</span> (isEmpty(arr)) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"foldl1 does not work on empty lists"</span>);
+            }
+            <span class="keyword">return</span> foldl(fn, head(arr), tail(arr));
+        });
+
+        <span class="keyword">var</span> foldr = E.foldr =_(<span class="keyword">function</span>(fn, acc, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
+        });
+        aliasFor(<span class="string">"foldr"</span>).is(<span class="string">"reduceRight"</span>);
+
+        <span class="keyword">var</span> foldr1 = E.foldr1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
+            <span class="keyword">if</span> (isEmpty(arr)) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"foldr1 does not work on empty lists"</span>);
+            }
+            <span class="keyword">var</span> rev = reverse(arr);
+            <span class="keyword">return</span> foldr(fn, head(rev), reverse(tail(rev)));
+        });
+
+        <span class="keyword">var</span> filter = E.filter = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
+        });
+
+        E.reject = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> filter(notFn(fn), arr);
+        });
+
+        <span class="keyword">var</span> take = E.take = _(<span class="keyword">function</span>(n, arr) {
+            <span class="keyword">return</span> (isEmpty(arr) || !(n &gt; <span class="number">0</span>)) ? EMPTY : prepend(head(arr), take(n - <span class="number">1</span>, tail(arr)));
+        });
+
+        <span class="keyword">var</span> skip = E.skip = _(<span class="keyword">function</span>(n, arr) {
+            <span class="keyword">return</span> isEmpty(arr) ? EMPTY : (n &gt; <span class="number">0</span>) ? skip(n - <span class="number">1</span>, tail(arr)) : arr;
+        });
+        aliasFor(<span class="string">'skip'</span>).is(<span class="string">'drop'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>would be nice to have a find for objects as well</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> find = E.find = _(<span class="keyword">function</span>(fn, lat) {
+            <span class="keyword">var</span> h = head(lat);
+            <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : fn(h) ? h : find(fn, tail(lat));
+        });
+
+        <span class="keyword">var</span> all = E.all = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
+            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">true</span> : fn(head(arr)) &amp;&amp; all(fn, tail(arr));
+        });
+        aliasFor(<span class="string">"all"</span>).is(<span class="string">"every"</span>);
+
+        <span class="keyword">var</span> any = E.any = _(<span class="keyword">function</span>(fn, arr) {
+            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">false</span> : fn(head(arr)) || any(fn, tail(arr));
+        });
+        aliasFor(<span class="string">"any"</span>).is(<span class="string">"some"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>express contains in terms of find?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> contains = E.contains = _(<span class="keyword">function</span>(a, lat) {
+            <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : head(lat) === a || contains(a, tail(lat));
+        });
+
+        <span class="keyword">var</span> uniq = E.uniq = <span class="keyword">function</span>(arr) {
+            <span class="keyword">var</span> h = head(arr), t = tail(arr);
+            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+        };
+
+        E.pluck = <span class="keyword">function</span>(p) {<span class="keyword">return</span> map(prop(p));};
+
+        <span class="keyword">var</span> flatten = E.flatten = <span class="keyword">function</span>(list) {
+            <span class="keyword">var</span> h = head(list), t = tail(list);
+            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
+        };
+
+        <span class="keyword">var</span> zipWith = E.zipWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
+        });
+
+        E.zip = zipWith(prepend);
+		
+        <span class="keyword">var</span> xprodWith = E.xprodWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(<span class="keyword">function</span>(z) {<span class="keyword">return</span> map(_(fn)(z), b);}, a));
+        });
+
+        E.xprod = xprodWith(prepend);
+
+        <span class="keyword">var</span> reverse = E.reverse = foldl(flip(prepend), EMPTY);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h2>Object Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        <span class="keyword">var</span> tap = E.tap = _(<span class="keyword">function</span>(x, y) {
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> y === <span class="string">"function"</span>) {
+                y(x);
+            }
+            <span class="keyword">return</span> x;
+        });
+        aliasFor(<span class="string">"tap"</span>).is(<span class="string">"K"</span>);
+
+        E.eq = _(<span class="keyword">function</span>(a, b) {
+            <span class="keyword">return</span> a === b;
+        });
+
+	    <span class="keyword">var</span> prop = E.prop = <span class="keyword">function</span>(p) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[p];};};
+        
+		E.func = <span class="keyword">function</span>(n) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[n].apply(obj, slice(arguments, <span class="number">1</span>));};};
+
+        <span class="keyword">var</span> props = E.props = <span class="keyword">function</span>(obj) {
+            <span class="keyword">return</span> <span class="keyword">function</span>(prop) {<span class="keyword">return</span> obj &amp;&amp; obj[prop];};
+        };
+
+        <span class="keyword">var</span> identity = E.identity = <span class="keyword">function</span>(val) {
+            <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> val;};
+        };
+
+        E.alwaysZero = identity(<span class="number">0</span>);
+        E.alwaysFalse = identity(<span class="literal">false</span>);
+        E.alwaysTrue = identity(<span class="literal">true</span>);
+
+        <span class="keyword">var</span> anyBlanks = any(<span class="keyword">function</span>(val) {<span class="keyword">return</span> val === <span class="literal">null</span> || val === undef;});
+
+        E.maybe = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                <span class="keyword">return</span> (arguments.length === <span class="number">0</span> || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(<span class="keyword">this</span>, arguments);
+            };
+        };
+		
+        <span class="keyword">var</span> keys = E.keys = <span class="keyword">function</span>(obj) {
+            <span class="keyword">var</span> results = [];
+            <span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> obj) {<span class="keyword">if</span> (obj.hasOwnProperty(name)) {
+                results.push(name);
+            }}
+            <span class="keyword">return</span> results;
+        };
+        E.values = <span class="keyword">function</span>(obj) {
+            <span class="keyword">return</span> map(props(obj), keys(obj));
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h2>Logic Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        E.and = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+            <span class="keyword">return</span> !!(a &amp;&amp; b);
+        });
+
+        E.or = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+            <span class="keyword">return</span> !!(a || b);
+        });
+
+        E.not = <span class="function"><span class="keyword">function</span> <span class="params">(a)</span> {</span>
+            <span class="keyword">return</span> !a;
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Still not particularly happy with the names <code>andFn</code>, <code>orFn</code>, <code>notFn</code>, but at least Oliver Twist can pronounce one...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.andFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
+           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) &amp;&amp; g.apply(<span class="keyword">this</span>, arguments));};
+        });
+
+        E.orFn = _(<span class="keyword">function</span>(f, g) { <span class="comment">// TODO: arity?</span>
+           <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !!(f.apply(<span class="keyword">this</span>, arguments) || g.apply(<span class="keyword">this</span>, arguments));};
+        });
+
+        <span class="keyword">var</span> notFn = E.notFn = <span class="function"><span class="keyword">function</span> <span class="params">(f)</span> {</span>
+            <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> !f.apply(<span class="keyword">this</span>, arguments);};
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h2>Arithmetic Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        <span class="keyword">var</span> add = E.add = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a + b;});
+        <span class="keyword">var</span> multiply = E.multiply = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a * b;});
+        E.subtract = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a - b;});
+        E.divide = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a / b;});
+        E.sum = foldl(add, <span class="number">0</span>);
+        E.product = foldl(multiply, <span class="number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h2>Miscellaneous Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        E.inContext = <span class="keyword">function</span>(obj) {
+            each(<span class="keyword">function</span>(key) {
+                (obj || global)[key] = E[key];
+            })(keys(E));
+        };
+
+        <span class="keyword">return</span> E;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h2>Default Core Functions</h2>
+<p>The default core uses simple arrays for its lists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> lib(<span class="keyword">function</span>() {
+        <span class="keyword">var</span> EMPTY = [];
+        <span class="keyword">return</span> {
+            EMPTY: EMPTY,
+            isEmpty: <span class="keyword">function</span>(arr) {
+                <span class="keyword">return</span> !arr || !arr.length;
+            },
+            prepend: <span class="keyword">function</span>(el, arr) {
+                <span class="keyword">return</span> [el].concat(arr);
+            },
+            head: <span class="keyword">function</span>(arr) {
+                arr = arr || EMPTY;
+                <span class="keyword">return</span> (arr.length) ? arr[<span class="number">0</span>] : EMPTY;
+            },
+            tail: <span class="keyword">function</span>(arr) {
+                arr = arr || EMPTY;
+                <span class="keyword">return</span> (arr.length &gt; <span class="number">1</span>) ? arr.slice(<span class="number">1</span>) : EMPTY;
+            },
+            isAtom: <span class="keyword">function</span>(x) {
+                <span class="keyword">return</span> (x !== <span class="literal">null</span>) &amp;&amp; (x !== <span class="literal">undefined</span>) &amp;&amp; Object.prototype.toString.call(x) !== <span class="string">"[object Array]"</span>;
+            }
+        };
+    }());
+}));</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

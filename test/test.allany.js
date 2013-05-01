@@ -32,34 +32,34 @@ describe('all', function() {
     });
 });
 
-describe("some", function() {
-    var some = eweda.some;
+describe("any", function() {
+    var any = eweda.any;
     var odd = function(n) {return n % 2 === 1;};
     var T = function() {return true;};
 
     it('returns true if any element satisfies the predicate', function() {
-        assert.equal(some(odd, [2, 4, 6, 8, 10, 11, 12]), true);
+        assert.equal(any(odd, [2, 4, 6, 8, 10, 11, 12]), true);
     });
 
     it('returns false if all elements fails to satisfy the predicate', function() {
-        assert.equal(some(odd, [2, 4, 6, 8, 10, 12]), false);
+        assert.equal(any(odd, [2, 4, 6, 8, 10, 12]), false);
     });
 
     it('returns false for an empty list', function() {
-        assert.equal(some(T, []), false);
+        assert.equal(any(T, []), false);
     });
 
     it('should short-circuit on first true value', function() {
         var count = 0;
         var test = function(n) {count++; return odd(n);};
-        var result = some(test, [2, 4, 6, 7, 8, 10]);
+        var result = any(test, [2, 4, 6, 7, 8, 10]);
         assert(result);
         assert.equal(count, 4);
     });
 
-    it('should be aliased by `any`', function() {
-        assert.equal(eweda.any(odd, [2, 4, 6, 8, 10, 11, 12]), true);
-        assert.strictEqual(eweda.any, some);
+    it('should be aliased by `some`', function() {
+        assert.equal(eweda.some(odd, [2, 4, 6, 8, 10, 11, 12]), true);
+        assert.strictEqual(eweda.some, any);
     });
 });
 

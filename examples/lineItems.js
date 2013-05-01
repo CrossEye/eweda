@@ -51,7 +51,7 @@ var buildLineItem = function(line) {
 //      lineItems: [
 //          {
 //              item: "rubber ball",
-//              price: 1,
+//              price: 1.00,
 //              qty: 3,
 //              cost: 3.00
 //          },

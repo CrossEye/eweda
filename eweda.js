@@ -143,10 +143,10 @@
         });
         aliasFor("all").is("every");
 
-        var some = E.some = _(function(fn, arr) {
-            return (isEmpty(arr)) ? false : fn(head(arr)) || some(fn, tail(arr));
+        var any = E.any = _(function(fn, arr) {
+            return (isEmpty(arr)) ? false : fn(head(arr)) || any(fn, tail(arr));
         });
-        aliasFor("some").is("any");
+        aliasFor("any").is("some");
 
         var filter = E.filter = _(function(fn, arr) {
             return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));

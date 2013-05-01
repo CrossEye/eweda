@@ -79,7 +79,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * skip (drop)
   * find
   * all (every)
-  * some (any)
+  * any (some)
   * contains
   * uniq
   * pluck

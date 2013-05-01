@@ -228,7 +228,7 @@
         });
         aliasFor("tap").is("K");
 
-        var anyBlanks = some(function(val) {return val === null || val === undef;});
+        var anyBlanks = any(function(val) {return val === null || val === undef;});
 
         E.maybe = function (fn) {
             return function () {

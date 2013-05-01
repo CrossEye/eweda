@@ -113,29 +113,17 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
 
             </div>
             
+            <div class="content"><div class='highlight'><pre>
+        <span class="keyword">var</span> undef = (<span class="keyword">function</span>(){})(), EMPTY;</pre></div></div>
+            
         </li>
         
         
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <h3>Initial internal Functions</h3>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> undef = (<span class="keyword">function</span>(){})();</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Makes an alias for one of the public functions:</p>
 
@@ -149,39 +137,13 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h3>Core Functions Supplied</h3>
-<p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
-public.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> EMPTY = bootstrap.EMPTY;
-        <span class="keyword">var</span> isEmpty = E.isEmpty = bootstrap.isEmpty;
-        <span class="keyword">var</span> prepend = E.prepend = bootstrap.prepend;
-        aliasFor(<span class="string">"prepend"</span>).is(<span class="string">"cons"</span>); <span class="comment">// TODO: really?</span>
-        <span class="keyword">var</span> head = E.head = bootstrap.head;
-        aliasFor(<span class="string">"head"</span>).is(<span class="string">"car"</span>);  <span class="comment">// TODO: really? sure! positively?</span>
-        <span class="keyword">var</span> tail = E.tail = bootstrap.tail;
-        aliasFor(<span class="string">"tail"</span>).is(<span class="string">"cdr"</span>);  <span class="comment">// TODO: really? absolutely! without doubt?</span>
-        <span class="keyword">var</span> isAtom = E.isAtom = bootstrap.isAtom;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <h3>More internal Functions</h3>
-<p>Partial replacement for native <code>bind</code>.</p>
+              <p>Partial replacement for native <code>bind</code>.</p>
 
             </div>
             
@@ -195,11 +157,11 @@ public.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Standard Array and Object methods implemented as pure functions</p>
 
@@ -212,11 +174,11 @@ public.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Fills out an array to the specified length</p>
 
@@ -231,11 +193,11 @@ public.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Local version of partial application.</p>
 
@@ -245,7 +207,7 @@ public.</p>
             <span class="keyword">var</span> arity = fn.length;
             <span class="keyword">var</span> f = <span class="keyword">function</span>(args) {
                 <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-                    <span class="keyword">var</span> newArgs = args.concat(slice(arguments, <span class="number">0</span>));
+                    <span class="keyword">var</span> newArgs = (args || []).concat(slice(arguments, <span class="number">0</span>));
                     <span class="keyword">if</span> (newArgs.length &gt;= arity) {
                         <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, newArgs);
                     }
@@ -259,11 +221,11 @@ public.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Internal version of <code>forEach</code>.  Possibly to be exposed later.</p>
 
@@ -278,11 +240,36 @@ public.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3>Core Functions Supplied</h3>
+<p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+public.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        EMPTY = bootstrap.EMPTY;
+        <span class="keyword">var</span> isEmpty = E.isEmpty = bootstrap.isEmpty;
+        <span class="keyword">var</span> prepend = E.prepend = bootstrap.prepend;
+        aliasFor(<span class="string">"prepend"</span>).is(<span class="string">"cons"</span>); <span class="comment">// TODO: really?</span>
+        <span class="keyword">var</span> head = E.head = bootstrap.head;
+        aliasFor(<span class="string">"head"</span>).is(<span class="string">"car"</span>);  <span class="comment">// TODO: really? sure! positively?</span>
+        <span class="keyword">var</span> tail = E.tail = bootstrap.tail;
+        aliasFor(<span class="string">"tail"</span>).is(<span class="string">"cdr"</span>);  <span class="comment">// TODO: really? absolutely! without doubt?</span>
+        <span class="keyword">var</span> isAtom = E.isAtom = bootstrap.isAtom;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <h3>Core Functions Derived</h3>
 
@@ -299,11 +286,11 @@ public.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <h2>Function functions :-)</h2>
 
@@ -312,11 +299,11 @@ public.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Creates a new function that runs each of the functions supplied as parameters in turn, passing the output
 of each one to the next one, starting with whatever arguments were passed to the initial invocation.
@@ -335,11 +322,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-17">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Similar to <code>compose</code>, but processes the functions in the reverse order so that if if <code>var h = pipe(f, g)</code>,
 <code>h(x)</code> calls <code>f(x)</code> first, passing the result of that to <code>g()</code>.</p>
@@ -354,11 +341,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-18">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Returns a new function much like the supplied one except that the first two arguments are inverted.</p>
 
@@ -373,11 +360,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-19">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the left-most parameters are
 pre-filled.</p>
@@ -395,11 +382,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the right-most parameters are
 pre-filled.</p>
@@ -417,11 +404,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Creates a new function that stores the results of running the supplied function and returns those
 stored value when the same request is made.  <strong>Note</strong>: this really only handles string and number parameters.</p>
@@ -441,11 +428,11 @@ stored value when the same request is made.  <strong>Note</strong>: this really 
         </li>
         
         
-        <li id="section-22">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Wraps a function up in one that will only call the internal one once, no matter how many times the outer one
 is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly meant to keep side-effects from repeating.</p>
@@ -464,11 +451,11 @@ is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly mea
         </li>
         
         
-        <li id="section-23">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Wrap a function inside another to allow you to make adjustments to the parameters or do other processing
 either before the internal function is called or with its results.</p>
@@ -484,11 +471,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <h2>List Functions</h2>
 
@@ -544,11 +531,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>would be nice to have a find for objects as well</p>
 
@@ -572,11 +559,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>express contains in terms of find?</p>
 
@@ -615,11 +602,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <h2>Object Functions</h2>
 
@@ -676,11 +663,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <h2>Logic Functions</h2>
 
@@ -702,11 +689,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Still not particularly happy with the names <code>andFn</code>, <code>orFn</code>, <code>notFn</code>, but at least Oliver Twist can pronounce one...</p>
 
@@ -727,11 +714,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <h2>Arithmetic Functions</h2>
 
@@ -748,11 +735,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <h2>Miscellaneous Functions</h2>
 

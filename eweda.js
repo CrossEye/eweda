@@ -40,29 +40,13 @@
         // Internal Functions and Properties
         // ---------------------------------
 
-		// ### Initial internal Functions ###
-        var undef = (function(){})();
+        var undef = (function(){})(), EMPTY;
 
         // Makes an alias for one of the public functions:
         var aliasFor = function(oldName) {
             var fn = function(newName) {E[newName] = E[oldName]; return fn;};
             return (fn.is = fn.are = fn.and = fn);
         };
-
-		// ### Core Functions Supplied ###
-        // Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
-        // public.
-        var EMPTY = bootstrap.EMPTY;
-        var isEmpty = E.isEmpty = bootstrap.isEmpty;
-        var prepend = E.prepend = bootstrap.prepend;
-        aliasFor("prepend").is("cons"); // TODO: really?
-        var head = E.head = bootstrap.head;
-        aliasFor("head").is("car");  // TODO: really? sure! positively?
-        var tail = E.tail = bootstrap.tail;
-        aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
-        var isAtom = E.isAtom = bootstrap.isAtom;
-
-		// ### More internal Functions ###
         // Partial replacement for native `bind`.
         var bind = function(fn, context) {
             var args = Array.prototype.slice.call(arguments, 2);
@@ -87,7 +71,7 @@
             var arity = fn.length;
             var f = function(args) {
                 return function () {
-                    var newArgs = args.concat(slice(arguments, 0));
+                    var newArgs = (args || []).concat(slice(arguments, 0));
                     if (newArgs.length >= arity) {
                         return fn.apply(this, newArgs);
                     }
@@ -105,6 +89,20 @@
             }
         });
 		
+
+		// ### Core Functions Supplied ###
+        // Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+        // public.
+        EMPTY = bootstrap.EMPTY;
+        var isEmpty = E.isEmpty = bootstrap.isEmpty;
+        var prepend = E.prepend = bootstrap.prepend;
+        aliasFor("prepend").is("cons"); // TODO: really?
+        var head = E.head = bootstrap.head;
+        aliasFor("head").is("car");  // TODO: really? sure! positively?
+        var tail = E.tail = bootstrap.tail;
+        aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
+        var isAtom = E.isAtom = bootstrap.isAtom;
+
 		// ### Core Functions Derived ###
         E.append = function(el, arr) {
             return reverse(prepend(el, reverse(arr)));

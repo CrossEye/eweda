@@ -90,9 +90,9 @@
         });
 		
 
-		// Core Functions Supplied
-		// -----------------------
-		//
+        // Core Functions Supplied
+        // -----------------------
+        //
         // Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
         // public.
         EMPTY = bootstrap.EMPTY;
@@ -105,9 +105,9 @@
         aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
         var isAtom = E.isAtom = bootstrap.isAtom;
 
-		// Core Functions Derived
-		// ----------------------
-		//
+        // Core Functions Derived
+        // ----------------------
+        //		
         E.append = function(el, arr) {
             return reverse(prepend(el, reverse(arr)));
         };
@@ -292,8 +292,8 @@
         var reverse = E.reverse = foldl(flip(prepend), EMPTY);
 
 		
-		// Object Functions
-		// ----------------
+        // Object Functions
+        // ----------------
 
         var tap = E.tap = _(function(x, y) {
             if (typeof y === "function") {
@@ -342,8 +342,8 @@
             return map(props(obj), keys(obj));
         };
 		
-		// Logic Functions
-		// ---------------
+        // Logic Functions
+        // ---------------
 		
         E.and = _(function (a, b) {
             return !!(a && b);
@@ -371,8 +371,8 @@
         };
 		
 		
-		// Arithmetic Functions
-		// --------------------
+        // Arithmetic Functions
+        // --------------------
 		
         var add = E.add = _(function(a, b) {return a + b;});
         var multiply = E.multiply = _(function(a, b) {return a * b;});
@@ -382,8 +382,8 @@
         E.product = foldl(multiply, 1);
 
 		
-		// Miscellaneous Functions
-		// -----------------------
+        // Miscellaneous Functions
+        // -----------------------
 		
         E.inContext = function(obj) {
             each(function(key) {
@@ -394,10 +394,10 @@
         return E;
     };
 
-	// Default Core Functions
-	// ----------------------
-	//
-	// The default core uses simple arrays for its lists
+    // Default Core Functions
+    // ----------------------
+    //
+    // The default core uses simple arrays for its lists
     return lib(function() {
         var EMPTY = [];
         return {

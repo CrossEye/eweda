@@ -61,16 +61,9 @@ with or without an AMD-style loader.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>The basic implementation of lists is replaceable.  A default one base on arrays is supplied below.
-<code>bootstrap</code> represents that implementation, which must contain:</p>
-<ul>
-<li><code>EMPTY</code>: prototypical (or only) empty list</li>
-<li><code>isAtom</code>: boolean function which is <code>true</code> for non-list, <code>false</code> for a list</li>
-<li><code>isEmpty</code>: boolean function which reports whether a list is empty</li>
-<li><code>prepend</code>: function which returns a new list with the new element at the front, and the existing elements following</li>
-<li><code>head</code>: function which returns the first element of a list</li>
-<li><code>tail</code>: function which returns the rest of the list after the first element</li>
-</ul>
+              <p>The basic implementation of lists is replaceable.  A default one based on arrays is supplied at the bottom.
+<code>bootstrap</code> represents that implementation.  Descriptions of the required functions are in the Core Functions
+section.</p>
 
             </div>
             
@@ -125,7 +118,7 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Makes an alias for one of the public functions:</p>
+              <p>Makes a public alias for one of the public functions:</p>
 
             </div>
             
@@ -247,20 +240,10 @@ var result = myLib.map(someFunction, someCollection);</code></pre>
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <h2>Core Functions Supplied</h2>
-<p>Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+<p>Local copies of the basic list functions supplied in the initial parameter.  Almost all of these become
 public.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>        EMPTY = bootstrap.EMPTY;
-        <span class="keyword">var</span> isEmpty = E.isEmpty = bootstrap.isEmpty;
-        <span class="keyword">var</span> prepend = E.prepend = bootstrap.prepend;
-        aliasFor(<span class="string">"prepend"</span>).is(<span class="string">"cons"</span>); <span class="comment">// TODO: really?</span>
-        <span class="keyword">var</span> head = E.head = bootstrap.head;
-        aliasFor(<span class="string">"head"</span>).is(<span class="string">"car"</span>);  <span class="comment">// TODO: really? sure! positively?</span>
-        <span class="keyword">var</span> tail = E.tail = bootstrap.tail;
-        aliasFor(<span class="string">"tail"</span>).is(<span class="string">"cdr"</span>);  <span class="comment">// TODO: really? absolutely! without doubt?</span>
-        <span class="keyword">var</span> isAtom = E.isAtom = bootstrap.isAtom;</pre></div></div>
             
         </li>
         
@@ -268,20 +251,14 @@ public.</p>
         <li id="section-13">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <h2>Core Functions Derived</h2>
+              <p>  Prototypical (or only) empty list</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        E.append = <span class="keyword">function</span>(el, arr) {
-            <span class="keyword">return</span> reverse(prepend(el, reverse(arr)));
-        };
-
-        <span class="keyword">var</span> merge = E.merge = _(<span class="keyword">function</span>(arr1, arr2) {
-            <span class="keyword">return</span> (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
-        });</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        EMPTY = bootstrap.EMPTY;</pre></div></div>
             
         </li>
         
@@ -289,12 +266,14 @@ public.</p>
         <li id="section-14">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <h2>Function functions :-)</h2>
+              <p>Boolean function which reports whether a list is empty.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> isEmpty = E.isEmpty = bootstrap.isEmpty;</pre></div></div>
             
         </li>
         
@@ -304,6 +283,131 @@ public.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Returns a new list with the new element at the front and the existing elements following</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> prepend = E.prepend = bootstrap.prepend;
+        aliasFor(<span class="string">"prepend"</span>).is(<span class="string">"cons"</span>); <span class="comment">// TODO: really?</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p> Returns the first element of a list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> head = E.head = bootstrap.head;
+        aliasFor(<span class="string">"head"</span>).is(<span class="string">"car"</span>);  <span class="comment">// TODO: really? sure! positively?</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Returns the rest of the list after the first element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> tail = E.tail = bootstrap.tail;
+        aliasFor(<span class="string">"tail"</span>).is(<span class="string">"cdr"</span>);  <span class="comment">// TODO: really? absolutely! without doubt?</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>  Boolean function which is <code>true</code> for non-list, <code>false</code> for a list.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> isAtom = E.isAtom = bootstrap.isAtom;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h2>Core Functions Derived</h2>
+<p>These functions are also considered part of the core, but are derived from the supplied ones.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Returns a new list with the new element at the end of a list following all the existing ones.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.append = <span class="keyword">function</span>(el, list) {
+            <span class="keyword">return</span> reverse(prepend(el, reverse(list)));
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Returns a new list consisting of the elements of the first list followed by the elements of the second.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> merge = E.merge = _(<span class="keyword">function</span>(list1, list2) {
+            <span class="keyword">return</span> (isEmpty(list1)) ? list2 :  prepend(head(list1), merge(tail(list1), list2));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h2>Function functions :-)</h2>
+<p>These functions make new functions out of old ones.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Creates a new function that runs each of the functions supplied as parameters in turn, passing the output
 of each one to the next one, starting with whatever arguments were passed to the initial invocation.
@@ -322,11 +426,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-16">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Similar to <code>compose</code>, but processes the functions in the reverse order so that if if <code>var h = pipe(f, g)</code>,
 <code>h(x)</code> calls <code>f(x)</code> first, passing the result of that to <code>g()</code>.</p>
@@ -341,11 +445,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-17">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Returns a new function much like the supplied one except that the first two arguments are inverted.</p>
 
@@ -360,11 +464,11 @@ Note that if <code>var h = compose(f, g)</code>, <code>h(x)</code> calls <code>g
         </li>
         
         
-        <li id="section-18">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the left-most parameters are
 pre-filled.</p>
@@ -382,11 +486,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Creates a new function that acts like the supplied function except that the right-most parameters are
 pre-filled.</p>
@@ -404,11 +508,11 @@ pre-filled.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Creates a new function that stores the results of running the supplied function and returns those
 stored value when the same request is made.  <strong>Note</strong>: this really only handles string and number parameters.</p>
@@ -428,11 +532,11 @@ stored value when the same request is made.  <strong>Note</strong>: this really 
         </li>
         
         
-        <li id="section-21">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Wraps a function up in one that will only call the internal one once, no matter how many times the outer one
 is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly meant to keep side-effects from repeating.</p>
@@ -451,11 +555,11 @@ is called.  <strong> Note</strong>: this is not really pure; it&#39;s mostly mea
         </li>
         
         
-        <li id="section-22">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Wrap a function inside another to allow you to make adjustments to the parameters or do other processing
 either before the internal function is called or with its results.</p>
@@ -471,209 +575,647 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <h2>List Functions</h2>
+<p>These functions operate on lists.  The implementation of lists is not specified here, although a default
+implementation based on arrays is supplied at the bottom.  Almost all of these are curried, and the list
+parameter comes last, so you can create a new function by supplying the preceding arguments, leaving the
+list parameter off.  For instance:</p>
+<pre><code>// skip third parameter
+var checkAllPredicates = reduce(andFn, alwaysTrue);
+// ... given suitable definitions of odd, lt20, gt5
+var test = checkAllPredicates([odd, lt20, gt5]);
+// test(7) =&gt; true, test(9) =&gt; true, test(10) =&gt; false,
+// test(3) =&gt; false, test(21) =&gt; false,</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-        <span class="keyword">var</span> map = E.map = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
-        });
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Returns a new list constructed by applying the function to every element of the list supplied.</p>
 
-        <span class="keyword">var</span> foldl = E.foldl = _(<span class="keyword">function</span>(fn, acc, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
-        });
-        aliasFor(<span class="string">"foldl"</span>).is(<span class="string">"reduce"</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> map = E.map = _(<span class="keyword">function</span>(fn, list) {
+            <span class="keyword">return</span> (isEmpty(list)) ? EMPTY : prepend(fn(head(list)), map(fn, tail(list)));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Returns a single item, by successively calling the function with the current element and the the next
+element of the list, passing the result to the next call.  We start with the <code>acc</code> parameter to get
+things going.  The function supplied should accept this running value and the latest element of the list,
+and return an updated value.</p>
 
-        <span class="keyword">var</span> foldl1 = E.foldl1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
-            <span class="keyword">if</span> (isEmpty(arr)) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> foldl = E.foldl = _(<span class="keyword">function</span>(fn, acc, list) {
+            <span class="keyword">return</span> (isEmpty(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
+        });
+        aliasFor(<span class="string">"foldl"</span>).is(<span class="string">"reduce"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Much like <code>foldl</code>/<code>reduce</code>, except that this takes as its starting value the first element in the list.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> foldl1 = E.foldl1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, list)</span> {</span>
+            <span class="keyword">if</span> (isEmpty(list)) {
                 <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"foldl1 does not work on empty lists"</span>);
             }
-            <span class="keyword">return</span> foldl(fn, head(arr), tail(arr));
-        });
+            <span class="keyword">return</span> foldl(fn, head(list), tail(list));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Similar to <code>foldl</code>/<code>reduce</code> except that it moves from right to left on the list.</p>
 
-        <span class="keyword">var</span> foldr = E.foldr =_(<span class="keyword">function</span>(fn, acc, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> foldr = E.foldr =_(<span class="keyword">function</span>(fn, acc, list) {
+            <span class="keyword">return</span> (isEmpty(list)) ? acc : fn(head(list), foldr(fn, acc, tail(list)));
         });
-        aliasFor(<span class="string">"foldr"</span>).is(<span class="string">"reduceRight"</span>);
+        aliasFor(<span class="string">"foldr"</span>).is(<span class="string">"reduceRight"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Much like <code>foldr</code>/<code>reduceRight</code>, except that this takes as its starting value the last element in the list.</p>
 
-        <span class="keyword">var</span> foldr1 = E.foldr1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
-            <span class="keyword">if</span> (isEmpty(arr)) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> foldr1 = E.foldr1 = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, list)</span> {</span>
+            <span class="keyword">if</span> (isEmpty(list)) {
                 <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"foldr1 does not work on empty lists"</span>);
             }
-            <span class="keyword">var</span> rev = reverse(arr);
+            <span class="keyword">var</span> rev = reverse(list);
             <span class="keyword">return</span> foldr(fn, head(rev), reverse(tail(rev)));
-        });
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Returns a new list containing only those items that match a given predicate function.</p>
 
-        <span class="keyword">var</span> filter = E.filter = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
-        });
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> filter = E.filter = _(<span class="keyword">function</span>(fn, list) {
+            <span class="keyword">return</span> (isEmpty(list)) ? EMPTY : (fn(head(list))) ? prepend(head(list), filter(fn, tail(list))) : filter(fn, tail(list));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Similar to <code>filter</code>, except that it keeps only those that <strong>don&#39;t</strong> match the given predicate functions.</p>
 
-        E.reject = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> filter(notFn(fn), arr);
-        });
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.reject = _(<span class="keyword">function</span>(fn, list) {
+            <span class="keyword">return</span> filter(notFn(fn), list);
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Returns a new list containing the first <code>n</code> elements of the given list.</p>
 
-        <span class="keyword">var</span> take = E.take = _(<span class="keyword">function</span>(n, arr) {
-            <span class="keyword">return</span> (isEmpty(arr) || !(n &gt; <span class="number">0</span>)) ? EMPTY : prepend(head(arr), take(n - <span class="number">1</span>, tail(arr)));
-        });
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> take = E.take = _(<span class="keyword">function</span>(n, list) {
+            <span class="keyword">return</span> (isEmpty(list) || !(n &gt; <span class="number">0</span>)) ? EMPTY : prepend(head(list), take(n - <span class="number">1</span>, tail(list)));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Returns a new list containing all <strong>but</strong> the first <code>n</code> elements of the given list.</p>
 
-        <span class="keyword">var</span> skip = E.skip = _(<span class="keyword">function</span>(n, arr) {
-            <span class="keyword">return</span> isEmpty(arr) ? EMPTY : (n &gt; <span class="number">0</span>) ? skip(n - <span class="number">1</span>, tail(arr)) : arr;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> skip = E.skip = _(<span class="keyword">function</span>(n, list) {
+            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (n &gt; <span class="number">0</span>) ? skip(n - <span class="number">1</span>, tail(list)) : list;
         });
         aliasFor(<span class="string">'skip'</span>).is(<span class="string">'drop'</span>);</pre></div></div>
             
         </li>
         
         
-        <li id="section-24">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
-              <p>would be nice to have a find for objects as well</p>
+              <p>Returns the first element of the list which matches the predicate, or <code>false</code> if no element matches.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> find = E.find = _(<span class="keyword">function</span>(fn, lat) {
-            <span class="keyword">var</span> h = head(lat);
-            <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : fn(h) ? h : find(fn, tail(lat));
-        });
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> find = E.find = _(<span class="keyword">function</span>(fn, list) {
+            <span class="keyword">var</span> h = head(list);
+            <span class="keyword">return</span> (isEmpty(list)) ? <span class="literal">false</span> : fn(h) ? h : find(fn, tail(list));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Returns <code>true</code> if all elements of the list match the predicate, <code>false</code> if there are any that don&#39;t.</p>
 
-        <span class="keyword">var</span> all = E.all = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, arr)</span> {</span>
-            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">true</span> : fn(head(arr)) &amp;&amp; all(fn, tail(arr));
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> all = E.all = _(<span class="function"><span class="keyword">function</span> <span class="params">(fn, list)</span> {</span>
+            <span class="keyword">return</span> (isEmpty(list)) ? <span class="literal">true</span> : fn(head(list)) &amp;&amp; all(fn, tail(list));
         });
-        aliasFor(<span class="string">"all"</span>).is(<span class="string">"every"</span>);
+        aliasFor(<span class="string">"all"</span>).is(<span class="string">"every"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>Returns <code>true</code> if any elements of the list match the predicate, <code>false</code> if none do.</p>
 
-        <span class="keyword">var</span> any = E.any = _(<span class="keyword">function</span>(fn, arr) {
-            <span class="keyword">return</span> (isEmpty(arr)) ? <span class="literal">false</span> : fn(head(arr)) || any(fn, tail(arr));
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> any = E.any = _(<span class="keyword">function</span>(fn, list) {
+            <span class="keyword">return</span> (isEmpty(list)) ? <span class="literal">false</span> : fn(head(list)) || any(fn, tail(list));
         });
         aliasFor(<span class="string">"any"</span>).is(<span class="string">"some"</span>);</pre></div></div>
             
         </li>
         
         
-        <li id="section-25">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
-              <p>express contains in terms of find?</p>
+              <p>Returns <code>true</code> if the list contains the sought element, <code>false</code> if it does not.  Equality is strict here,
+meaning reference equality for objects and non-coercing equality for primitives.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> contains = E.contains = _(<span class="keyword">function</span>(a, lat) {
             <span class="keyword">return</span> (isEmpty(lat)) ? <span class="literal">false</span> : head(lat) === a || contains(a, tail(lat));
-        });
-
-        <span class="keyword">var</span> uniq = E.uniq = <span class="keyword">function</span>(arr) {
-            <span class="keyword">var</span> h = head(arr), t = tail(arr);
-            <span class="keyword">return</span> (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
-        };
-
-        E.pluck = <span class="keyword">function</span>(p) {<span class="keyword">return</span> map(prop(p));};
-
-        <span class="keyword">var</span> flatten = E.flatten = <span class="keyword">function</span>(list) {
-            <span class="keyword">var</span> h = head(list), t = tail(list);
-            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
-        };
-
-        <span class="keyword">var</span> zipWith = E.zipWith = _(<span class="keyword">function</span>(fn, a, b) {
-            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
-        });
-
-        E.zip = zipWith(prepend);
-		
-        <span class="keyword">var</span> xprodWith = E.xprodWith = _(<span class="keyword">function</span>(fn, a, b) {
-            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(<span class="keyword">function</span>(z) {<span class="keyword">return</span> map(_(fn)(z), b);}, a));
-        });
-
-        E.xprod = xprodWith(prepend);
-
-        <span class="keyword">var</span> reverse = E.reverse = foldl(flip(prepend), EMPTY);</pre></div></div>
+        });</pre></div></div>
             
         </li>
         
         
-        <li id="section-26">
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Returns a new list containing only one copy of each element in the original list.  Equality is strict here,
+meaning reference equality for objects and non-coercing equality for primitives.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> uniq = E.uniq = <span class="keyword">function</span>(list) {
+            <span class="keyword">var</span> h = head(list), t = tail(list);
+            <span class="keyword">return</span> (isEmpty(list)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Returns a new list by plucking the same named property off all objects in the list supplied.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.pluck = <span class="keyword">function</span>(p) {<span class="keyword">return</span> map(prop(p));};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Returns a list that contains a flattened version of the supplied list.  For example:</p>
+<pre><code>flatten([1, 2, [3, 4], 5, [6, [7, 8, [9, [10, 11], 12]]]]);
+// =&gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> flatten = E.flatten = <span class="keyword">function</span>(list) {
+            <span class="keyword">var</span> h = head(list), t = tail(list);
+            <span class="keyword">return</span> isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Creates a new list out of the two supplied by applying the function to each equally-positioned pair in the
+lists.  For example,</p>
+<pre><code>zipWith(f, [1, 2, 3], [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])
+//    =&gt; [f(1, &#39;a&#39;), f(2, &#39;b&#39;), f(3, &#39;c&#39;)];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> zipWith = E.zipWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>Creates a new list out of the two supplied by yielding the pair of each equally-positioned pair in the
+lists.  For example,</p>
+<pre><code>zip([1, 2, 3], [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])
+//    =&gt; [[1, &#39;a&#39;], [2, &#39;b&#39;], [3, &#39;c&#39;]];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.zip = zipWith(prepend);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>Creates a new list out of the two supplied by applying the function to each possible pair in the lists.
+ For example,</p>
+<pre><code>xProdWith(f, [1, 2], [&#39;a&#39;, &#39;b&#39;])
+//    =&gt; [f(1, &#39;a&#39;), f(1, &#39;b&#39;), f(2, &#39;a&#39;), f(2, &#39;b&#39;)];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> xprodWith = E.xprodWith = _(<span class="keyword">function</span>(fn, a, b) {
+            <span class="keyword">return</span> (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(<span class="keyword">function</span>(z) {<span class="keyword">return</span> map(_(fn)(z), b);}, a));
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Creates a new list out of the two supplied by yielding the pair of each possible pair in the lists.
+For example,</p>
+<pre><code>xProd([1, 2], [&#39;a&#39;, &#39;b&#39;])
+//    =&gt; [[1, &#39;a&#39;], [1, &#39;b&#39;)], [2, &#39;a&#39;], [2, &#39;b&#39;]];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.xprod = xprodWith(prepend);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Returns a new list with the same elements as the original list, just in the reverse order.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> reverse = E.reverse = foldl(flip(prepend), EMPTY);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
               <h2>Object Functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-        <span class="keyword">var</span> tap = E.tap = _(<span class="keyword">function</span>(x, y) {
-            <span class="keyword">if</span> (<span class="keyword">typeof</span> y === <span class="string">"function"</span>) {
-                y(x);
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Runs the given function with the supplied object, then returns the object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> tap = E.tap = _(<span class="keyword">function</span>(x, fn) {
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> fn === <span class="string">"function"</span>) {
+                fn(x);
             }
             <span class="keyword">return</span> x;
         });
-        aliasFor(<span class="string">"tap"</span>).is(<span class="string">"K"</span>);
-
-        E.eq = _(<span class="keyword">function</span>(a, b) {
-            <span class="keyword">return</span> a === b;
-        });
-
-	    <span class="keyword">var</span> prop = E.prop = <span class="keyword">function</span>(p) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[p];};};
+        aliasFor(<span class="string">"tap"</span>).is(<span class="string">"K"</span>); <span class="comment">// TODO: are we sure?</span></pre></div></div>
+            
+        </li>
         
-		E.func = <span class="keyword">function</span>(n) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[n].apply(obj, slice(arguments, <span class="number">1</span>));};};
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>Tests if two items are equal.  Equality is strict here, meaning reference equality for objects and
+non-coercing equality for primitives.</p>
 
-        <span class="keyword">var</span> props = E.props = <span class="keyword">function</span>(obj) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.eq = _(<span class="keyword">function</span>(a, b) {
+            <span class="keyword">return</span> a === b;
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>Returns a function that when supplied an object returns the indicated property of that object, if it exists.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> prop = E.prop = <span class="keyword">function</span>(p) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[p];};};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Returns a function that when supplied an object returns the result of running the indicated function on
+that object, if it has such a function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.func = <span class="keyword">function</span>(n) {<span class="keyword">return</span> <span class="keyword">function</span>(obj) {<span class="keyword">return</span> obj[n].apply(obj, slice(arguments, <span class="number">1</span>));};};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>Returns a function that when supplied a property name returns that property on the indicated object, if it
+exists.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> props = E.props = <span class="keyword">function</span>(obj) {
             <span class="keyword">return</span> <span class="keyword">function</span>(prop) {<span class="keyword">return</span> obj &amp;&amp; obj[prop];};
-        };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>Returns a function that always returns the given value.</p>
 
-        <span class="keyword">var</span> identity = E.identity = <span class="keyword">function</span>(val) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> identity = E.identity = <span class="keyword">function</span>(val) {
             <span class="keyword">return</span> <span class="keyword">function</span>() {<span class="keyword">return</span> val;};
-        };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>A function that always returns <code>0</code>.</p>
 
-        E.alwaysZero = identity(<span class="number">0</span>);
-        E.alwaysFalse = identity(<span class="literal">false</span>);
-        E.alwaysTrue = identity(<span class="literal">true</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.alwaysZero = identity(<span class="number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>A function that always returns <code>false</code>.</p>
 
-        <span class="keyword">var</span> anyBlanks = any(<span class="keyword">function</span>(val) {<span class="keyword">return</span> val === <span class="literal">null</span> || val === undef;});
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.alwaysFalse = identity(<span class="literal">false</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>A function that always returns <code>true</code>.</p>
 
-        E.maybe = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.alwaysTrue = identity(<span class="literal">true</span>);
+
+        <span class="keyword">var</span> anyBlanks = any(<span class="keyword">function</span>(val) {<span class="keyword">return</span> val === <span class="literal">null</span> || val === undef;});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>Returns a function that will only call the indicated function if the correct number of (defined, non-null)
+arguments are supplied, returning <code>undefined</code> otherwise.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.maybe = <span class="function"><span class="keyword">function</span> <span class="params">(fn)</span> {</span>
             <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
                 <span class="keyword">return</span> (arguments.length === <span class="number">0</span> || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(<span class="keyword">this</span>, arguments);
             };
-        };
-		
-        <span class="keyword">var</span> keys = E.keys = <span class="keyword">function</span>(obj) {
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>A functional version of <code>Object.keys</code>, returning a list containing the names of all the enumerable own
+properties of the supplied object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> keys = E.keys = <span class="keyword">function</span>(obj) {
             <span class="keyword">var</span> results = [];
             <span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> obj) {<span class="keyword">if</span> (obj.hasOwnProperty(name)) {
                 results.push(name);
             }}
             <span class="keyword">return</span> results;
-        };
-        E.values = <span class="keyword">function</span>(obj) {
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>Returns a list of all the enumerable own properties of the supplied object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.values = <span class="keyword">function</span>(obj) {
             <span class="keyword">return</span> map(props(obj), keys(obj));
         };</pre></div></div>
             
         </li>
         
         
-        <li id="section-27">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <h2>Logic Functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
+            <div class="content"><div class='highlight'><pre>
         E.and = _(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
             <span class="keyword">return</span> !!(a &amp;&amp; b);
         });
@@ -689,11 +1231,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p>Still not particularly happy with the names <code>andFn</code>, <code>orFn</code>, <code>notFn</code>, but at least Oliver Twist can pronounce one...</p>
 
@@ -714,17 +1256,17 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <h2>Arithmetic Functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
+            <div class="content"><div class='highlight'><pre>
         <span class="keyword">var</span> add = E.add = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a + b;});
         <span class="keyword">var</span> multiply = E.multiply = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a * b;});
         E.subtract = _(<span class="keyword">function</span>(a, b) {<span class="keyword">return</span> a - b;});
@@ -735,17 +1277,17 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <h2>Miscellaneous Functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
+            <div class="content"><div class='highlight'><pre>
         E.inContext = <span class="keyword">function</span>(obj) {
             each(<span class="keyword">function</span>(key) {
                 (obj || global)[key] = E[key];
@@ -758,11 +1300,11 @@ either before the internal function is called or with its results.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
               <h2>Default Core Functions</h2>
 <p>The default core uses simple arrays for its lists</p>

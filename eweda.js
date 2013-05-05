@@ -12,15 +12,9 @@
 
 (function (root, factory) {if (typeof exports === 'object') {module.exports = factory(root);} else if (typeof define === 'function' && define.amd) {define(factory);} else {root.eweda = factory(root);}}(this, function (global) {
 
-    // The basic implementation of lists is replaceable.  A default one base on arrays is supplied below.
-    // `bootstrap` represents that implementation, which must contain:
-    //
-    //   - `EMPTY`: prototypical (or only) empty list
-    //   - `isAtom`: boolean function which is `true` for non-list, `false` for a list
-    //   - `isEmpty`: boolean function which reports whether a list is empty
-    //   - `prepend`: function which returns a new list with the new element at the front, and the existing elements following
-    //   - `head`: function which returns the first element of a list
-    //   - `tail`: function which returns the rest of the list after the first element
+    // The basic implementation of lists is replaceable.  A default one based on arrays is supplied at the bottom.
+    // `bootstrap` represents that implementation.  Descriptions of the required functions are in the Core Functions
+    // section.
 
     var lib = function(bootstrap) {
 
@@ -42,7 +36,7 @@
 
         var undef = (function(){})(), EMPTY;
 
-        // Makes an alias for one of the public functions:
+        // Makes a public alias for one of the public functions:
         var aliasFor = function(oldName) {
             var fn = function(newName) {E[newName] = E[oldName]; return fn;};
             return (fn.is = fn.are = fn.and = fn);
@@ -88,36 +82,54 @@
                 fn(arr[i]);
             }
         });
-		
 
-		// Core Functions Supplied
-		// -----------------------
-		//
-        // Local copies of the basic list functions supplies in the initial parameter.  Almost all of these become
+
+        // Core Functions Supplied
+        // -----------------------
+        //
+        // Local copies of the basic list functions supplied in the initial parameter.  Almost all of these become
         // public.
+
+        //   Prototypical (or only) empty list
         EMPTY = bootstrap.EMPTY;
+
+        // Boolean function which reports whether a list is empty.
         var isEmpty = E.isEmpty = bootstrap.isEmpty;
+
+        // Returns a new list with the new element at the front and the existing elements following
         var prepend = E.prepend = bootstrap.prepend;
         aliasFor("prepend").is("cons"); // TODO: really?
+
+        //  Returns the first element of a list
         var head = E.head = bootstrap.head;
         aliasFor("head").is("car");  // TODO: really? sure! positively?
+
+        // Returns the rest of the list after the first element.
         var tail = E.tail = bootstrap.tail;
         aliasFor("tail").is("cdr");  // TODO: really? absolutely! without doubt?
+
+        //   Boolean function which is `true` for non-list, `false` for a list.
         var isAtom = E.isAtom = bootstrap.isAtom;
 
-		// Core Functions Derived
-		// ----------------------
-		//
-        E.append = function(el, arr) {
-            return reverse(prepend(el, reverse(arr)));
+        // Core Functions Derived
+        // ----------------------
+        //
+        // These functions are also considered part of the core, but are derived from the supplied ones.
+
+        // Returns a new list with the new element at the end of a list following all the existing ones.
+        E.append = function(el, list) {
+            return reverse(prepend(el, reverse(list)));
         };
 
-        var merge = E.merge = _(function(arr1, arr2) {
-            return (isEmpty(arr1)) ? arr2 :  prepend(head(arr1), merge(tail(arr1), arr2));
+        // Returns a new list consisting of the elements of the first list followed by the elements of the second.
+        var merge = E.merge = _(function(list1, list2) {
+            return (isEmpty(list1)) ? list2 :  prepend(head(list1), merge(tail(list1), list2));
         });
 
         // Function functions :-)
         // ----------------------
+        //
+        // These functions make new functions out of old ones.
 
         // Creates a new function that runs each of the functions supplied as parameters in turn, passing the output
         // of each one to the next one, starting with whatever arguments were passed to the initial invocation.
@@ -197,140 +209,216 @@
 
         // List Functions
         // --------------
+        //
+        // These functions operate on lists.  The implementation of lists is not specified here, although a default
+        // implementation based on arrays is supplied at the bottom.  Almost all of these are curried, and the list
+        // parameter comes last, so you can create a new function by supplying the preceding arguments, leaving the
+        // list parameter off.  For instance:
+        //
+        //     // skip third parameter
+        //     var checkAllPredicates = reduce(andFn, alwaysTrue);
+        //     // ... given suitable definitions of odd, lt20, gt5
+        //     var test = checkAllPredicates([odd, lt20, gt5]);
+        //     // test(7) => true, test(9) => true, test(10) => false,
+        //     // test(3) => false, test(21) => false,
 
-        var map = E.map = _(function(fn, arr) {
-            return (isEmpty(arr)) ? EMPTY : prepend(fn(head(arr)), map(fn, tail(arr)));
+        // Returns a new list constructed by applying the function to every element of the list supplied.
+        var map = E.map = _(function(fn, list) {
+            return (isEmpty(list)) ? EMPTY : prepend(fn(head(list)), map(fn, tail(list)));
         });
 
-        var foldl = E.foldl = _(function(fn, acc, arr) {
-            return (isEmpty(arr)) ? acc : foldl(fn, fn(acc, head(arr)), tail(arr));
+        // Returns a single item, by successively calling the function with the current element and the the next
+        // element of the list, passing the result to the next call.  We start with the `acc` parameter to get
+        // things going.  The function supplied should accept this running value and the latest element of the list,
+        // and return an updated value.
+        var foldl = E.foldl = _(function(fn, acc, list) {
+            return (isEmpty(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
         });
         aliasFor("foldl").is("reduce");
 
-        var foldl1 = E.foldl1 = _(function (fn, arr) {
-            if (isEmpty(arr)) {
+        // Much like `foldl`/`reduce`, except that this takes as its starting value the first element in the list.
+        var foldl1 = E.foldl1 = _(function (fn, list) {
+            if (isEmpty(list)) {
                 throw new Error("foldl1 does not work on empty lists");
             }
-            return foldl(fn, head(arr), tail(arr));
+            return foldl(fn, head(list), tail(list));
         });
 
-        var foldr = E.foldr =_(function(fn, acc, arr) {
-            return (isEmpty(arr)) ? acc : fn(head(arr), foldr(fn, acc, tail(arr)));
+        // Similar to `foldl`/`reduce` except that it moves from right to left on the list.
+        var foldr = E.foldr =_(function(fn, acc, list) {
+            return (isEmpty(list)) ? acc : fn(head(list), foldr(fn, acc, tail(list)));
         });
         aliasFor("foldr").is("reduceRight");
 
-        var foldr1 = E.foldr1 = _(function (fn, arr) {
-            if (isEmpty(arr)) {
+
+        // Much like `foldr`/`reduceRight`, except that this takes as its starting value the last element in the list.
+        var foldr1 = E.foldr1 = _(function (fn, list) {
+            if (isEmpty(list)) {
                 throw new Error("foldr1 does not work on empty lists");
             }
-            var rev = reverse(arr);
+            var rev = reverse(list);
             return foldr(fn, head(rev), reverse(tail(rev)));
         });
 
-        var filter = E.filter = _(function(fn, arr) {
-            return (isEmpty(arr)) ? EMPTY : (fn(head(arr))) ? prepend(head(arr), filter(fn, tail(arr))) : filter(fn, tail(arr));
+        // Returns a new list containing only those items that match a given predicate function.
+        var filter = E.filter = _(function(fn, list) {
+            return (isEmpty(list)) ? EMPTY : (fn(head(list))) ? prepend(head(list), filter(fn, tail(list))) : filter(fn, tail(list));
         });
 
-        E.reject = _(function(fn, arr) {
-            return filter(notFn(fn), arr);
+        // Similar to `filter`, except that it keeps only those that **don't** match the given predicate functions.
+        E.reject = _(function(fn, list) {
+            return filter(notFn(fn), list);
         });
 
-        var take = E.take = _(function(n, arr) {
-            return (isEmpty(arr) || !(n > 0)) ? EMPTY : prepend(head(arr), take(n - 1, tail(arr)));
+        // Returns a new list containing the first `n` elements of the given list.
+        var take = E.take = _(function(n, list) {
+            return (isEmpty(list) || !(n > 0)) ? EMPTY : prepend(head(list), take(n - 1, tail(list)));
         });
 
-        var skip = E.skip = _(function(n, arr) {
-            return isEmpty(arr) ? EMPTY : (n > 0) ? skip(n - 1, tail(arr)) : arr;
+        // Returns a new list containing all **but** the first `n` elements of the given list.
+        var skip = E.skip = _(function(n, list) {
+            return isEmpty(list) ? EMPTY : (n > 0) ? skip(n - 1, tail(list)) : list;
         });
         aliasFor('skip').is('drop');
 
-        // would be nice to have a find for objects as well
-        var find = E.find = _(function(fn, lat) {
-            var h = head(lat);
-            return (isEmpty(lat)) ? false : fn(h) ? h : find(fn, tail(lat));
+        // Returns the first element of the list which matches the predicate, or `false` if no element matches.
+        var find = E.find = _(function(fn, list) {
+            var h = head(list);
+            return (isEmpty(list)) ? false : fn(h) ? h : find(fn, tail(list));
         });
 
-        var all = E.all = _(function (fn, arr) {
-            return (isEmpty(arr)) ? true : fn(head(arr)) && all(fn, tail(arr));
+        // Returns `true` if all elements of the list match the predicate, `false` if there are any that don't.
+        var all = E.all = _(function (fn, list) {
+            return (isEmpty(list)) ? true : fn(head(list)) && all(fn, tail(list));
         });
         aliasFor("all").is("every");
 
-        var any = E.any = _(function(fn, arr) {
-            return (isEmpty(arr)) ? false : fn(head(arr)) || any(fn, tail(arr));
+
+        // Returns `true` if any elements of the list match the predicate, `false` if none do.
+        var any = E.any = _(function(fn, list) {
+            return (isEmpty(list)) ? false : fn(head(list)) || any(fn, tail(list));
         });
         aliasFor("any").is("some");
 
-        // express contains in terms of find?
+        // Returns `true` if the list contains the sought element, `false` if it does not.  Equality is strict here,
+        // meaning reference equality for objects and non-coercing equality for primitives.
         var contains = E.contains = _(function(a, lat) {
             return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
         });
 
-        var uniq = E.uniq = function(arr) {
-            var h = head(arr), t = tail(arr);
-            return (isEmpty(arr)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+        // Returns a new list containing only one copy of each element in the original list.  Equality is strict here,
+        // meaning reference equality for objects and non-coercing equality for primitives.
+        var uniq = E.uniq = function(list) {
+            var h = head(list), t = tail(list);
+            return (isEmpty(list)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
         };
 
+        // Returns a new list by plucking the same named property off all objects in the list supplied.
         E.pluck = function(p) {return map(prop(p));};
 
+        // Returns a list that contains a flattened version of the supplied list.  For example:
+        //
+        //     flatten([1, 2, [3, 4], 5, [6, [7, 8, [9, [10, 11], 12]]]]);
+        //     // => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         var flatten = E.flatten = function(list) {
             var h = head(list), t = tail(list);
             return isEmpty(list) ? EMPTY : (isAtom(h)) ? prepend(h, flatten(t)) : merge(flatten(h), flatten(t));
         };
 
+        // Creates a new list out of the two supplied by applying the function to each equally-positioned pair in the
+        // lists.  For example,
+        //
+        //     zipWith(f, [1, 2, 3], ['a', 'b', 'c'])
+        //     //    => [f(1, 'a'), f(2, 'b'), f(3, 'c')];
         var zipWith = E.zipWith = _(function(fn, a, b) {
             return (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
         });
 
+        // Creates a new list out of the two supplied by yielding the pair of each equally-positioned pair in the
+        // lists.  For example,
+        //
+        //     zip([1, 2, 3], ['a', 'b', 'c'])
+        //     //    => [[1, 'a'], [2, 'b'], [3, 'c']];
         E.zip = zipWith(prepend);
-		
+
+
+        // Creates a new list out of the two supplied by applying the function to each possible pair in the lists.
+        //  For example,
+        //
+        //     xProdWith(f, [1, 2], ['a', 'b'])
+        //     //    => [f(1, 'a'), f(1, 'b'), f(2, 'a'), f(2, 'b')];
         var xprodWith = E.xprodWith = _(function(fn, a, b) {
             return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(function(z) {return map(_(fn)(z), b);}, a));
         });
 
+        // Creates a new list out of the two supplied by yielding the pair of each possible pair in the lists.
+        // For example,
+        //
+        //     xProd([1, 2], ['a', 'b'])
+        //     //    => [[1, 'a'], [1, 'b')], [2, 'a'], [2, 'b']];
         E.xprod = xprodWith(prepend);
 
+        // Returns a new list with the same elements as the original list, just in the reverse order.
         var reverse = E.reverse = foldl(flip(prepend), EMPTY);
 
-		
-		// Object Functions
-		// ----------------
 
-        var tap = E.tap = _(function(x, y) {
-            if (typeof y === "function") {
-                y(x);
+        // Object Functions
+        // ----------------
+
+        // Runs the given function with the supplied object, then returns the object.
+        var tap = E.tap = _(function(x, fn) {
+            if (typeof fn === "function") {
+                fn(x);
             }
             return x;
         });
-        aliasFor("tap").is("K");
+        aliasFor("tap").is("K"); // TODO: are we sure?
 
+        // Tests if two items are equal.  Equality is strict here, meaning reference equality for objects and
+        // non-coercing equality for primitives.
         E.eq = _(function(a, b) {
             return a === b;
         });
 
-	    var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
-        
-		E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
+        // Returns a function that when supplied an object returns the indicated property of that object, if it exists.
+        var prop = E.prop = function(p) {return function(obj) {return obj[p];};};
 
+        // Returns a function that when supplied an object returns the result of running the indicated function on
+        // that object, if it has such a function.
+        E.func = function(n) {return function(obj) {return obj[n].apply(obj, slice(arguments, 1));};};
+
+        // Returns a function that when supplied a property name returns that property on the indicated object, if it
+        // exists.
         var props = E.props = function(obj) {
             return function(prop) {return obj && obj[prop];};
         };
 
+        // Returns a function that always returns the given value.
         var identity = E.identity = function(val) {
             return function() {return val;};
         };
 
+        // A function that always returns `0`.
         E.alwaysZero = identity(0);
+
+        // A function that always returns `false`.
         E.alwaysFalse = identity(false);
+
+        // A function that always returns `true`.
         E.alwaysTrue = identity(true);
 
         var anyBlanks = any(function(val) {return val === null || val === undef;});
 
+        // Returns a function that will only call the indicated function if the correct number of (defined, non-null)
+        // arguments are supplied, returning `undefined` otherwise.
         E.maybe = function (fn) {
             return function () {
                 return (arguments.length === 0 || anyBlanks(expand(arguments, fn.length))) ? undef : fn.apply(this, arguments);
             };
         };
-		
+
+        // A functional version of `Object.keys`, returning a list containing the names of all the enumerable own
+        // properties of the supplied object.
         var keys = E.keys = function(obj) {
             var results = [];
             for (var name in obj) {if (obj.hasOwnProperty(name)) {
@@ -338,13 +426,15 @@
             }}
             return results;
         };
+
+        // Returns a list of all the enumerable own properties of the supplied object.
         E.values = function(obj) {
             return map(props(obj), keys(obj));
         };
-		
-		// Logic Functions
-		// ---------------
-		
+
+        // Logic Functions
+        // ---------------
+
         E.and = _(function (a, b) {
             return !!(a && b);
         });
@@ -369,11 +459,11 @@
         var notFn = E.notFn = function (f) {
             return function() {return !f.apply(this, arguments);};
         };
-		
-		
-		// Arithmetic Functions
-		// --------------------
-		
+
+
+        // Arithmetic Functions
+        // --------------------
+
         var add = E.add = _(function(a, b) {return a + b;});
         var multiply = E.multiply = _(function(a, b) {return a * b;});
         E.subtract = _(function(a, b) {return a - b;});
@@ -381,10 +471,10 @@
         E.sum = foldl(add, 0);
         E.product = foldl(multiply, 1);
 
-		
-		// Miscellaneous Functions
-		// -----------------------
-		
+
+        // Miscellaneous Functions
+        // -----------------------
+
         E.inContext = function(obj) {
             each(function(key) {
                 (obj || global)[key] = E[key];
@@ -394,10 +484,10 @@
         return E;
     };
 
-	// Default Core Functions
-	// ----------------------
-	//
-	// The default core uses simple arrays for its lists
+    // Default Core Functions
+    // ----------------------
+    //
+    // The default core uses simple arrays for its lists
     return lib(function() {
         var EMPTY = [];
         return {

@@ -3,6 +3,12 @@
 //     (c) 2013 Scott Sauyet and Michael Hurley
 //     Underscore may be freely distributed under the MIT license.
 
+// Eweda
+// -----
+// A practical functional library for Javascript programmers.  This is a collection of tools to make it easier to
+// use Javascript as a functional programming language.  (The name is just a silly play on `lambda`, even though we're
+// not actually involved in lambda expressions.)
+
 // Basic Setup
 // -----------
 // Uses a technique from the [Universal Module Definition][umd] to wrap this up for use in Node.js or in the browser,
@@ -364,6 +370,10 @@
 
         // Object Functions
         // ----------------
+        //
+        // These functions operate on plain Javascript object, adding simple functions to test properties on these
+        // objects.  Many of these are of most use in conjunction with the list functions, operating on lists of
+        // objects.
 
         // Runs the given function with the supplied object, then returns the object.
         var tap = E.tap = _(function(x, fn) {
@@ -398,15 +408,6 @@
             return function() {return val;};
         };
 
-        // A function that always returns `0`.
-        E.alwaysZero = identity(0);
-
-        // A function that always returns `false`.
-        E.alwaysFalse = identity(false);
-
-        // A function that always returns `true`.
-        E.alwaysTrue = identity(true);
-
         var anyBlanks = any(function(val) {return val === null || val === undef;});
 
         // Returns a function that will only call the indicated function if the correct number of (defined, non-null)
@@ -420,11 +421,11 @@
         // A functional version of `Object.keys`, returning a list containing the names of all the enumerable own
         // properties of the supplied object.
         var keys = E.keys = function(obj) {
-            var results = [];
+            var results = EMPTY;
             for (var name in obj) {if (obj.hasOwnProperty(name)) {
-                results.push(name);
+                results = prepend(name, results);
             }}
-            return results;
+            return reverse(results);
         };
 
         // Returns a list of all the enumerable own properties of the supplied object.
@@ -434,28 +435,44 @@
 
         // Logic Functions
         // ---------------
+        //
+        // These functions are very simple wrappers around the built-in logical operators, useful in building up
+        // more complex functional forms.
 
+        // A function wrapping the boolean `&&` operator.  Note that unlike the underlying operator, though, it
+        // aways returns `true` or `false`.
         E.and = _(function (a, b) {
             return !!(a && b);
         });
 
+        // A function wrapping the boolean `||` operator.  Note that unlike the underlying operator, though, it
+        // aways returns `true` or `false`.
         E.or = _(function (a, b) {
             return !!(a || b);
         });
 
+        // A function wrapping the boolean `!` operator.  It returns `true` if the parameter is false-y and `false` if
+        // the parameter is truth-y
         E.not = function (a) {
             return !a;
         };
 
-        // Still not particularly happy with the names `andFn`, `orFn`, `notFn`, but at least Oliver Twist can pronounce one...
+        // A function wrapping calls to the two functions in an `&&` operation, returning `true` or `false`.  Note that
+        // this is short-circuited, meaning that the second function will not be invoked if the first returns a false-y
+        // value.
         E.andFn = _(function(f, g) { // TODO: arity?
            return function() {return !!(f.apply(this, arguments) && g.apply(this, arguments));};
         });
 
+        // A function wrapping calls to the two functions in an `||` operation, returning `true` or `false`.  Note that
+        // this is short-circuited, meaning that the second function will not be invoked if the first returns a truth-y
+        // value. (Note also that at least Oliver Twist can pronounce this one...)
         E.orFn = _(function(f, g) { // TODO: arity?
            return function() {return !!(f.apply(this, arguments) || g.apply(this, arguments));};
         });
 
+        // A function wrapping a call to the given function in a `!` operation.  It will return `true` when the
+        // underlying function would return a false-y value, and `false` when it would return a truth-y one.
         var notFn = E.notFn = function (f) {
             return function() {return !f.apply(this, arguments);};
         };
@@ -463,33 +480,88 @@
 
         // Arithmetic Functions
         // --------------------
+        //
+        // These functions wrap up the certain core arithmetic operators
 
+        // Adds two numbers.  Automatic curried:
+        //
+        //     var add7 = add(7);
+        //     add7(10); // => 17
         var add = E.add = _(function(a, b) {return a + b;});
+
+        // Multiplies two numbers.  Automatically curried:
+        //
+        //     var mult3 = multiply(3);
+        //     mult3(7); // => 21
         var multiply = E.multiply = _(function(a, b) {return a * b;});
-        E.subtract = _(function(a, b) {return a - b;});
-        E.divide = _(function(a, b) {return a / b;});
+
+        // Subtracts the second parameter from the first.  This is automatically curried, and while at times the curried
+        // version might be useful, often the curried version of `subtractN` might be what's wanted.
+        //
+        //     var hundredMinus = subtract(100);
+        //     hundredMinus(20) ; // => 80
+        var subtract = E.subtract = _(function(a, b) {return a - b;});
+
+        // Reversed version of `subtract`, where first parameter is subtracted from the second.  The curried version of
+        // this one might me more useful than that of `subtract`.  For instance:
+        //
+        //     var decrement = subtractN(1);
+        //     decrement(10); // => 9;
+        E.subtractN = flip(subtract);
+
+        // Divides the first parameter by the second.  This is automatically curried, and while at times the curried
+        // version might be useful, often the curried version of `divideBy` might be what's wanted.
+        var divide = E.divide = _(function(a, b) {return a / b;});
+
+        // Reversed version of `divide`, where the second parameter is divided by the first.  The curried version of
+        // this one might be more useful than that of `divide`.  For instance:
+        //
+        //     var half = divideBy(2);
+        //     half(42); // => 21
+        E.divideBy = flip(divide);
+
+        // Adds together all the elements of a list.
         E.sum = foldl(add, 0);
+
+        // Multiplies together all the elements of a list.
         E.product = foldl(multiply, 1);
 
 
         // Miscellaneous Functions
         // -----------------------
+        //
+        // A few functions in need of a good home.
 
+
+        // Expose the functions from eweda as properties on another object.  If this object is the global object, then
+        // it will be as though the eweda functions are global functions.
         E.inContext = function(obj) {
             each(function(key) {
                 (obj || global)[key] = E[key];
             })(keys(E));
         };
 
+        // A function that always returns `0`.
+        E.alwaysZero = identity(0);
+
+        // A function that always returns `false`.
+        E.alwaysFalse = identity(false);
+
+        // A function that always returns `true`.
+        E.alwaysTrue = identity(true);
+
+        // Concatenates together all the elements of a list.
+        E.join = foldl(add, '');
+
         return E;
     };
 
-    // Default Core Functions
-    // ----------------------
-    //
-    // The default core uses simple arrays for its lists
     return lib(function() {
         var EMPTY = [];
+        // Default Core Functions
+        // ----------------------
+        //
+        // The default core uses simple arrays for its lists
         return {
             EMPTY: EMPTY,
             isEmpty: function(arr) {
@@ -500,7 +572,7 @@
             },
             head: function(arr) {
                 arr = arr || EMPTY;
-                return (arr.length) ? arr[0] : EMPTY;
+                return (arr.length) ? arr[0] : EMPTY; // TODO: shouldn't head(EMPTY) return null?
             },
             tail: function(arr) {
                 arr = arr || EMPTY;

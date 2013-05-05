@@ -40,19 +40,43 @@ describe('subtract', function() {
     });
 });
 
+describe('subtractN', function() {
+    var subtractN = eweda.subtractN;
+
+    it('should subtract two numbers', function() {
+        assert.equal(15, subtractN(7,22));
+    });
+
+    it('should be automatically curried', function() {
+        var minus6 = subtractN(6);
+        assert.equal(3, minus6(9));
+    });
+});
+
 describe('divide', function() {
     var divide = eweda.divide;
 
-    it('should subtract two numbers', function() {
+    it('should divide two numbers', function() {
         assert.equal(4, divide(28, 7));
     });
 
     it('should be automatically curried', function() {
         var divideInto120 = divide(120);
         assert.equal(3, divideInto120(40));
+    });
+});
 
-        var half = eweda.flip(divide)(2);
-        assert.equal(10, half(20));
+describe('divideBy', function() {
+    var divideBy = eweda.divideBy;
+
+    it('should divide two numbers', function() {
+        assert.equal(4, divideBy(7, 28));
+    });
+
+    it('should be automatically curried', function() {
+        var half = divideBy(2);
+        assert.equal(20, half(40));
+
     });
 });
 
@@ -69,5 +93,14 @@ describe('product', function() {
 
     it('should multiply together the array of numbers supplied', function() {
         assert.equal(24, product([1, 2, 3, 4]));
+    });
+});
+
+// TODO: doesn't really belong with math, but where?
+describe('join', function() {
+    var join = eweda.join;
+
+    it('should concatenate the strings in a list', function() {
+        assert.equal('abcd', join(['a', 'b', 'c', 'd']));
     });
 });

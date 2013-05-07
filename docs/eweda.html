@@ -1174,6 +1174,12 @@ properties of the supplied object.</p>
             
             <div class="content"><div class='highlight'><pre>        E.values = <span class="keyword">function</span>(obj) {
             <span class="keyword">return</span> map(props(obj), keys(obj));
+        };
+
+        <span class="keyword">var</span> partialCopy = <span class="keyword">function</span>(test, obj) {
+            <span class="keyword">var</span> copy = {};
+            each(<span class="keyword">function</span>(key) {<span class="keyword">if</span> (test(key, obj)) {copy[key] = obj[key];}}, keys(obj));
+            <span class="keyword">return</span> copy;
         };</pre></div></div>
             
         </li>
@@ -1182,8 +1188,42 @@ properties of the supplied object.</p>
         <li id="section-64">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>Returns a partial copy of an object containing only the keys specified.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.pick = _(<span class="keyword">function</span>(names, obj) {
+            <span class="keyword">return</span> partialCopy(<span class="keyword">function</span>(key) {<span class="keyword">return</span> contains(key, names);}, obj);
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>Returns a partial copy of an object omitting the keys specified.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        E.omit = _(<span class="keyword">function</span>(names, obj) {
+            <span class="keyword">return</span> partialCopy(<span class="keyword">function</span>(key) {<span class="keyword">return</span> !contains(key, names);}, obj);
+        });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <h2>Logic Functions</h2>
 <p>These functions are very simple wrappers around the built-in logical operators, useful in building up
@@ -1194,11 +1234,11 @@ more complex functional forms.</p>
         </li>
         
         
-        <li id="section-65">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p>A function wrapping the boolean <code>&amp;&amp;</code> operator.  Note that unlike the underlying operator, though, it
 aways returns <code>true</code> or <code>false</code>.</p>
@@ -1212,11 +1252,11 @@ aways returns <code>true</code> or <code>false</code>.</p>
         </li>
         
         
-        <li id="section-66">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <p>A function wrapping the boolean <code>||</code> operator.  Note that unlike the underlying operator, though, it
 aways returns <code>true</code> or <code>false</code>.</p>
@@ -1230,11 +1270,11 @@ aways returns <code>true</code> or <code>false</code>.</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>A function wrapping the boolean <code>!</code> operator.  It returns <code>true</code> if the parameter is false-y and <code>false</code> if
 the parameter is truth-y</p>
@@ -1248,11 +1288,11 @@ the parameter is truth-y</p>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
               <p>A function wrapping calls to the two functions in an <code>&amp;&amp;</code> operation, returning <code>true</code> or <code>false</code>.  Note that
 this is short-circuited, meaning that the second function will not be invoked if the first returns a false-y
@@ -1267,11 +1307,11 @@ value.</p>
         </li>
         
         
-        <li id="section-69">
+        <li id="section-71">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
               <p>A function wrapping calls to the two functions in an <code>||</code> operation, returning <code>true</code> or <code>false</code>.  Note that
 this is short-circuited, meaning that the second function will not be invoked if the first returns a truth-y
@@ -1286,11 +1326,11 @@ value. (Note also that at least Oliver Twist can pronounce this one...)</p>
         </li>
         
         
-        <li id="section-70">
+        <li id="section-72">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-70">&#182;</a>
+                <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
               <p>A function wrapping a call to the given function in a <code>!</code> operation.  It will return <code>true</code> when the
 underlying function would return a false-y value, and <code>false</code> when it would return a truth-y one.</p>
@@ -1304,11 +1344,11 @@ underlying function would return a false-y value, and <code>false</code> when it
         </li>
         
         
-        <li id="section-71">
+        <li id="section-73">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-71">&#182;</a>
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
               <h2>Arithmetic Functions</h2>
 <p>These functions wrap up the certain core arithmetic operators</p>
@@ -1318,11 +1358,11 @@ underlying function would return a false-y value, and <code>false</code> when it
         </li>
         
         
-        <li id="section-72">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-72">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
               <p>Adds two numbers.  Automatic curried:</p>
 <pre><code>var add7 = add(7);
@@ -1335,11 +1375,11 @@ add7(10); // =&gt; 17</code></pre>
         </li>
         
         
-        <li id="section-73">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-73">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
               <p>Multiplies two numbers.  Automatically curried:</p>
 <pre><code>var mult3 = multiply(3);
@@ -1352,11 +1392,11 @@ mult3(7); // =&gt; 21</code></pre>
         </li>
         
         
-        <li id="section-74">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>Subtracts the second parameter from the first.  This is automatically curried, and while at times the curried
 version might be useful, often the curried version of <code>subtractN</code> might be what&#39;s wanted.</p>
@@ -1370,11 +1410,11 @@ hundredMinus(20) ; // =&gt; 80</code></pre>
         </li>
         
         
-        <li id="section-75">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-75">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
               <p>Reversed version of <code>subtract</code>, where first parameter is subtracted from the second.  The curried version of
 this one might me more useful than that of <code>subtract</code>.  For instance:</p>
@@ -1388,11 +1428,11 @@ decrement(10); // =&gt; 9;</code></pre>
         </li>
         
         
-        <li id="section-76">
+        <li id="section-78">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
+                <a class="pilcrow" href="#section-78">&#182;</a>
               </div>
               <p>Divides the first parameter by the second.  This is automatically curried, and while at times the curried
 version might be useful, often the curried version of <code>divideBy</code> might be what&#39;s wanted.</p>
@@ -1404,11 +1444,11 @@ version might be useful, often the curried version of <code>divideBy</code> migh
         </li>
         
         
-        <li id="section-77">
+        <li id="section-79">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
               <p>Reversed version of <code>divide</code>, where the second parameter is divided by the first.  The curried version of
 this one might be more useful than that of <code>divide</code>.  For instance:</p>
@@ -1422,11 +1462,11 @@ half(42); // =&gt; 21</code></pre>
         </li>
         
         
-        <li id="section-78">
+        <li id="section-80">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
+                <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
               <p>Adds together all the elements of a list.</p>
 
@@ -1437,11 +1477,11 @@ half(42); // =&gt; 21</code></pre>
         </li>
         
         
-        <li id="section-79">
+        <li id="section-81">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
+                <a class="pilcrow" href="#section-81">&#182;</a>
               </div>
               <p>Multiplies together all the elements of a list.</p>
 
@@ -1452,11 +1492,11 @@ half(42); // =&gt; 21</code></pre>
         </li>
         
         
-        <li id="section-80">
+        <li id="section-82">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-80">&#182;</a>
+                <a class="pilcrow" href="#section-82">&#182;</a>
               </div>
               <h2>Miscellaneous Functions</h2>
 <p>A few functions in need of a good home.</p>
@@ -1466,11 +1506,11 @@ half(42); // =&gt; 21</code></pre>
         </li>
         
         
-        <li id="section-81">
+        <li id="section-83">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-81">&#182;</a>
+                <a class="pilcrow" href="#section-83">&#182;</a>
               </div>
               <p>Expose the functions from eweda as properties on another object.  If this object is the global object, then
 it will be as though the eweda functions are global functions.</p>
@@ -1486,11 +1526,11 @@ it will be as though the eweda functions are global functions.</p>
         </li>
         
         
-        <li id="section-82">
+        <li id="section-84">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-82">&#182;</a>
+                <a class="pilcrow" href="#section-84">&#182;</a>
               </div>
               <p>A function that always returns <code>0</code>.</p>
 
@@ -1501,11 +1541,11 @@ it will be as though the eweda functions are global functions.</p>
         </li>
         
         
-        <li id="section-83">
+        <li id="section-85">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-83">&#182;</a>
+                <a class="pilcrow" href="#section-85">&#182;</a>
               </div>
               <p>A function that always returns <code>false</code>.</p>
 
@@ -1516,11 +1556,11 @@ it will be as though the eweda functions are global functions.</p>
         </li>
         
         
-        <li id="section-84">
+        <li id="section-86">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-84">&#182;</a>
+                <a class="pilcrow" href="#section-86">&#182;</a>
               </div>
               <p>A function that always returns <code>true</code>.</p>
 
@@ -1531,11 +1571,11 @@ it will be as though the eweda functions are global functions.</p>
         </li>
         
         
-        <li id="section-85">
+        <li id="section-87">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-85">&#182;</a>
+                <a class="pilcrow" href="#section-87">&#182;</a>
               </div>
               <p>Concatenates together all the elements of a list.</p>
 
@@ -1552,11 +1592,11 @@ it will be as though the eweda functions are global functions.</p>
         </li>
         
         
-        <li id="section-86">
+        <li id="section-88">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-86">&#182;</a>
+                <a class="pilcrow" href="#section-88">&#182;</a>
               </div>
               <h2>Default Core Functions</h2>
 <p>The default core uses simple arrays for its lists</p>

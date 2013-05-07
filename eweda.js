@@ -433,6 +433,22 @@
             return map(props(obj), keys(obj));
         };
 
+        var partialCopy = function(test, obj) {
+            var copy = {};
+            each(function(key) {if (test(key, obj)) {copy[key] = obj[key];}}, keys(obj));
+            return copy;
+        };
+
+        // Returns a partial copy of an object containing only the keys specified.
+        E.pick = _(function(names, obj) {
+            return partialCopy(function(key) {return contains(key, names);}, obj);
+        });
+
+        // Returns a partial copy of an object omitting the keys specified.
+        E.omit = _(function(names, obj) {
+            return partialCopy(function(key) {return !contains(key, names);}, obj);
+        });
+
         // Logic Functions
         // ---------------
         //

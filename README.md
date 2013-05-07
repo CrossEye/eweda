@@ -103,12 +103,12 @@ to use the most common names for these, possibly using multiple aliases for thos
 
 ### Objects ###
 
-  * tap
+  * tap (K)
   * eq
   * prop
   * func
   * props
-  * identity (K)
+  * identity (I)
   * alwaysTrue
   * alwaysFalse
   * alwaysZero

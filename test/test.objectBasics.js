@@ -63,3 +63,30 @@ describe('props', function() {
         assert.equal(p('feet'), 'large');
     });
 });
+
+describe('pick', function() {
+    var pick = eweda.pick;
+    var obj = {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6};
+    it('should copy the named properties of an object to the new object', function() {
+        assert.deepEqual(pick(['a', 'c', 'f'], obj), {a: 1, c: 3, f: 6});
+    });
+    it('should ignore properties not included', function() {
+        assert.deepEqual(pick(['a', 'c', 'g'], obj), {a: 1, c: 3});
+    });
+    it('should be automatically curried', function() {
+        var copyAB = pick(['a', 'b']);
+        assert.deepEqual(copyAB(obj), {a: 1, b: 2});
+    });
+});
+
+describe('omit', function() {
+    var omit = eweda.omit;
+    var obj = {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6};
+    it('should copy an object omitting the listed properties', function() {
+        assert.deepEqual(omit(['a', 'c', 'f'], obj), {b: 2, d: 4, e: 5});
+    });
+    it('should be automatically curried', function() {
+        var skipAB = omit(['a', 'b']);
+        assert.deepEqual(skipAB(obj), {c: 3, d: 4, e: 5, f: 6});
+    });
+});

@@ -315,8 +315,7 @@
         // Returns a new list containing only one copy of each element in the original list.  Equality is strict here,
         // meaning reference equality for objects and non-coercing equality for primitives.
         var uniq = E.uniq = function(list) {
-            var h = head(list), t = tail(list);
-            return (isEmpty(list)) ? EMPTY : (contains(h, t)) ? uniq(t) : prepend(h, uniq(t));
+            return foldr(function(x, acc) { return (contains(x, acc)) ? acc : prepend(x, acc); }, [], list);
         };
 
         // Returns a new list by plucking the same named property off all objects in the list supplied.

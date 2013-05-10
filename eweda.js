@@ -268,7 +268,7 @@
 
         // Returns a new list containing only those items that match a given predicate function.
         var filter = E.filter = _(function(fn, list) {
-            return (isEmpty(list)) ? EMPTY : (fn(head(list))) ? prepend(head(list), filter(fn, tail(list))) : filter(fn, tail(list));
+            return foldr(function(x, acc) { return (fn(x)) ? prepend(x, acc) : acc; }, [], list);
         });
 
         // Similar to `filter`, except that it keeps only those that **don't** match the given predicate functions.

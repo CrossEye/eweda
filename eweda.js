@@ -367,6 +367,14 @@
         // Returns a new list with the same elements as the original list, just in the reverse order.
         var reverse = E.reverse = foldl(flip(prepend), EMPTY);
 
+        // returns a list of numbers from "from" to "to".
+        // For example, 
+        //
+        // range(1, 5) // => [1, 2, 3, 4, 5]
+        // range(50, 53) // => [50, 51, 52, 53]
+        var range = E.range = _(function(from, to) {
+            return from > to ? EMPTY : prepend(from, range(from + 1, to)); 
+        });
 
         // Object Functions
         // ----------------

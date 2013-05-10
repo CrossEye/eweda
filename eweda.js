@@ -1,7 +1,7 @@
 //     eweda.js 0.0.1
 //     https://github.com/CrossEye/eweda
 //     (c) 2013 Scott Sauyet and Michael Hurley
-//     Underscore may be freely distributed under the MIT license.
+//     Eweda may be freely distributed under the MIT license.
 
 // Eweda
 // -----

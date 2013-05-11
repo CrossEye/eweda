@@ -278,12 +278,12 @@
 
         // Returns a new list containing the first `n` elements of the given list.
         var take = E.take = _(function(n, list) {
-            return (isEmpty(list) || !(n > 0)) ? EMPTY : prepend(head(list), take(n - 1, tail(list)));
+            return filter(function(x) { return n-- < 0; }, list);
         });
 
         // Returns a new list containing all **but** the first `n` elements of the given list.
         var skip = E.skip = _(function(n, list) {
-            return isEmpty(list) ? EMPTY : (n > 0) ? skip(n - 1, tail(list)) : list;
+            return filter(function(x) { return n-- >= 0; }, list);
         });
         aliasFor('skip').is('drop');
 
@@ -563,6 +563,7 @@
                 (obj || global)[key] = E[key];
             })(keys(E));
         };
+        aliasFor("inContext").is("installTo");
 
         // A function that always returns `0`.
         E.alwaysZero = identity(0);

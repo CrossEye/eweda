@@ -45,6 +45,7 @@
     mocha.checkLeaks();
     mocha.globals(['jQuery']);
     mocha.run();
+    setTimeout(function() {eweda.installTo(this);}, 5000); // for direct, unnamespaced console testing of features.
   </script>
 </body>
 </html>

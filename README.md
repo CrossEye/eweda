@@ -65,6 +65,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * merge
   * head
   * tail
+  * size
 
 ### Functions ###
 
@@ -100,6 +101,7 @@ to use the most common names for these, possibly using multiple aliases for thos
   * xprod (i.e. cartesian product)
   * xprodWith (i.e. cartesian product with function)
   * reverse
+  * range
 
 ### Objects ###
 

@@ -41,7 +41,7 @@ describe('head', function() {
     var head = eweda.head;
 
     it('returns the first element of a list', function() {
-        assert.equal('a', head(['a', 'b', 'c', 'd']));
+        assert.equal(head(['a', 'b', 'c', 'd']), 'a');
     });
 });
 
@@ -50,6 +50,14 @@ describe('tail', function() {
 
     it('returns a new list containing all the elements after the first element of a list', function() {
         assert.deepEqual(['b', 'c', 'd'], tail(['a', 'b', 'c', 'd']));
+    });
+});
+
+describe('size', function() {
+    var size = eweda.size;
+
+    it('counts the elements of a list', function() {
+        assert.equal(size(['a', 'b', 'c', 'd']), 4);
     });
 });
 

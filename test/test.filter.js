@@ -35,6 +35,13 @@ describe('take', function() {
     it('should take only the first `n` elements from a list', function() {
         assert.deepEqual(take(3, ['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['a', 'b', 'c']);
     });
+
+    it('should be automatically curried', function() {
+        var take3 = take(3);
+        assert.deepEqual(take3(['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['a', 'b', 'c']);
+        assert.deepEqual(take3(['w', 'x', 'y', 'z']), ['w', 'x', 'y']);
+
+    });
 });
 
 describe('skip', function() {
@@ -47,6 +54,7 @@ describe('skip', function() {
     it('should be automatically curried', function() {
         var skip2 = skip(2);
         assert.deepEqual(skip2(['a', 'b', 'c', 'd', 'e']), ['c', 'd', 'e']);
+        assert.deepEqual(skip2(['x', 'y', 'z']), ['z']);
     });
 
     it('should be aliased by `drop`', function() {

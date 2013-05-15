@@ -120,17 +120,23 @@
         // Core Functions Derived
         // ----------------------
         //
-        // These functions are also considered part of the core, but are derived from the supplied ones.
+        // These functions are also considered part of the core, but can be derived from the primary ones.
+        // However, if an implementation is supplied, it will be used instead.
 
         // Returns a new list with the new element at the end of a list following all the existing ones.
-        E.append = function(el, list) {
+        E.append = bootstrap.append || function(el, list) {
             return reverse(prepend(el, reverse(list)));
         };
 
         // Returns a new list consisting of the elements of the first list followed by the elements of the second.
-        var merge = E.merge = _(function(list1, list2) {
+        var merge = E.merge = bootstrap.merge || _(function(list1, list2) {
             return (isEmpty(list1)) ? list2 :  prepend(head(list1), merge(tail(list1), list2));
         });
+
+        // Reports the number of elements in the list
+        var size = E.size = bootstrap.size || function(list) {
+            return isEmpty(list) ? 0 : 1 + size(tail(list));
+        };
 
         // Function functions :-)
         // ----------------------
@@ -276,14 +282,20 @@
             return filter(notFn(fn), list);
         });
 
+        // (Internal?) function to filter items based on value and index position.
+        var filterIndex = function(fn, list) { // TODO: expose?
+            return map(head, filter(function(x) {return fn(head(x), head(tail(x)));}, zip(list, range(0, size(list)))));
+        };
+
+
         // Returns a new list containing the first `n` elements of the given list.
         var take = E.take = _(function(n, list) {
-            return filter(function(x) { return n-- < 0; }, list);
+            return filterIndex(function(item, idx) {return idx < n;}, list);
         });
 
         // Returns a new list containing all **but** the first `n` elements of the given list.
         var skip = E.skip = _(function(n, list) {
-            return filter(function(x) { return n-- >= 0; }, list);
+            return filterIndex(function(item, idx) {return idx >= n;}, list);
         });
         aliasFor('skip').is('drop');
 
@@ -344,7 +356,7 @@
         //
         //     zip([1, 2, 3], ['a', 'b', 'c'])
         //     //    => [[1, 'a'], [2, 'b'], [3, 'c']];
-        E.zip = zipWith(prepend);
+        var zip = E.zip = zipWith(prepend);
 
 
         // Creates a new list out of the two supplied by applying the function to each possible pair in the lists.
@@ -366,13 +378,13 @@
         // Returns a new list with the same elements as the original list, just in the reverse order.
         var reverse = E.reverse = foldl(flip(prepend), EMPTY);
 
-        // returns a list of numbers from "from" to "to".
+        // // Returns a list of numbers from `from` (inclusive) to `to` (exclusive).
         // For example, 
         //
-        // range(1, 5) // => [1, 2, 3, 4, 5]
-        // range(50, 53) // => [50, 51, 52, 53]
+        //     range(1, 5) // => [1, 2, 3, 4]
+        //     range(50, 53) // => [50, 51, 52]
         var range = E.range = _(function(from, to) {
-            return from > to ? EMPTY : prepend(from, range(from + 1, to)); 
+            return from >= to ? EMPTY : prepend(from, range(from + 1, to));
         });
 
         // Object Functions
@@ -604,6 +616,9 @@
             },
             isAtom: function(x) {
                 return (x !== null) && (x !== undefined) && Object.prototype.toString.call(x) !== "[object Array]";
+            },
+            size: function(arr) {
+                return arr.length;
             }
         };
     }());

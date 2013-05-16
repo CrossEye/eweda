@@ -14,6 +14,7 @@
   <script src="../lib/test/util.js"></script>
   <script src="../lib/test/assert.js"></script>
   <script src="../eweda.js"></script>
+  <script>eweda.installTo(this);</script>
   <script>mocha.setup('bdd')</script>
   <script src="test.core.js"></script>
   <script src="test.fold.js"></script>
@@ -45,7 +46,6 @@
     mocha.checkLeaks();
     mocha.globals(['jQuery']);
     mocha.run();
-    setTimeout(function() {eweda.installTo(this);}, 5000); // for direct, unnamespaced console testing of features.
   </script>
 </body>
 </html>

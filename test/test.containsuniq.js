@@ -12,16 +12,6 @@ describe("contains", function() {
         assert.equal(contains(99, [1,2,3,9,8,7,100,200,300]), false);
     });
 
-    // no longer requiring contains to handle nested lists. You can get that by flattening
-    // your nested list, then calling contains on that
-//    it("handles nested lists, element present:", function() {
-//        assert.equal(contains(7, [1,[2,3],[[9,[8,7],100],200],300]), true);
-//    });
-//
-//    it("handles nested lists, element not present:", function() {
-//        assert.equal(contains(99, [1,[2,3],[[9,[8,7],100],200],300]), false);
-//    });
-//
     it("returns false for the empty list", function() {
         assert.equal(contains(1, []), false);
     });

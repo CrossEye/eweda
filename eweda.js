@@ -274,7 +274,7 @@
 
         // Returns a new list containing only those items that match a given predicate function.
         var filter = E.filter = _(function(fn, list) {
-            return foldr(function(x, acc) { return (fn(x)) ? prepend(x, acc) : acc; }, [], list);
+            return foldr(function(x, acc) { return (fn(x)) ? prepend(x, acc) : acc; }, EMPTY, list);
         });
 
         // Similar to `filter`, except that it keeps only those that **don't** match the given predicate functions.
@@ -327,7 +327,7 @@
         // Returns a new list containing only one copy of each element in the original list.  Equality is strict here,
         // meaning reference equality for objects and non-coercing equality for primitives.
         var uniq = E.uniq = function(list) {
-            return foldr(function(x, acc) { return (contains(x, acc)) ? acc : prepend(x, acc); }, [], list);
+            return foldr(function(x, acc) { return (contains(x, acc)) ? acc : prepend(x, acc); }, EMPTY, list);
         };
 
         // Returns a new list by plucking the same named property off all objects in the list supplied.

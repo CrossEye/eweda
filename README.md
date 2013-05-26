@@ -35,8 +35,8 @@ The Name
 --------
 
 Ok, so we like bad puns.  That's all.  It's a short name, not already taken.  It could as easily have been `ramda`, but
-then we wouldn't be able to say "_eweda lamb!_"  For non-English speakers, lambs are baby sheep, ewes are female sheep,
-and rams are male sheep.  So perhaps eweda is a grown-up lambda.
+then we wouldn't be able to say " _eweda lamb!_ "  For non-English speakers, lambs are baby sheep, ewes are female sheep,
+and rams are male sheep.  So perhaps eweda is a grown-up lambda... but probably not.
 
 
 

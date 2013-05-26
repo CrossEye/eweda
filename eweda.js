@@ -235,7 +235,7 @@
         //     // test(3) => false, test(21) => false,
 
         // Returns a new list constructed by applying the function to every element of the list supplied.
-        var map = E.map = _(function(fn, list) {
+        var map = E.map = _(bootstrap.map || function(fn, list) {
             return (isEmpty(list)) ? EMPTY : prepend(fn(head(list)), map(fn, tail(list)));
         });
 
@@ -243,13 +243,13 @@
         // element of the list, passing the result to the next call.  We start with the `acc` parameter to get
         // things going.  The function supplied should accept this running value and the latest element of the list,
         // and return an updated value.
-        var foldl = E.foldl = _(function(fn, acc, list) {
+        var foldl = E.foldl = _(bootstrap.foldl || function(fn, acc, list) {
             return (isEmpty(list)) ? acc : foldl(fn, fn(acc, head(list)), tail(list));
         });
         aliasFor("foldl").is("reduce");
 
         // Much like `foldl`/`reduce`, except that this takes as its starting value the first element in the list.
-        var foldl1 = E.foldl1 = _(function (fn, list) {
+        var foldl1 = E.foldl1 = _(bootstrap.foldl1 || function (fn, list) {
             if (isEmpty(list)) {
                 throw new Error("foldl1 does not work on empty lists");
             }
@@ -257,14 +257,14 @@
         });
 
         // Similar to `foldl`/`reduce` except that it moves from right to left on the list.
-        var foldr = E.foldr =_(function(fn, acc, list) {
+        var foldr = E.foldr =_(bootstrap.foldr || function(fn, acc, list) {
             return (isEmpty(list)) ? acc : fn(head(list), foldr(fn, acc, tail(list)));
         });
         aliasFor("foldr").is("reduceRight");
 
 
         // Much like `foldr`/`reduceRight`, except that this takes as its starting value the last element in the list.
-        var foldr1 = E.foldr1 = _(function (fn, list) {
+        var foldr1 = E.foldr1 = _(bootstrap.foldr1 || function (fn, list) {
             if (isEmpty(list)) {
                 throw new Error("foldr1 does not work on empty lists");
             }
@@ -273,65 +273,59 @@
         });
 
         // Returns a new list containing only those items that match a given predicate function.
-        var filter = E.filter = _(function(fn, list) {
+        var filter = E.filter = _(bootstrap.filter || function(fn, list) {
             return foldr(function(x, acc) { return (fn(x)) ? prepend(x, acc) : acc; }, EMPTY, list);
         });
 
         // Similar to `filter`, except that it keeps only those that **don't** match the given predicate functions.
-        E.reject = _(function(fn, list) {
+        E.reject = _(bootstrap.reject || function(fn, list) {
             return filter(notFn(fn), list);
         });
 
-        // (Internal?) function to filter items based on value and index position.
-        var filterIndex = function(fn, list) { // TODO: expose?
-            return map(head, filter(function(x) {return fn(head(x), head(tail(x)));}, zip(list, range(0, size(list)))));
-        };
-
-
         // Returns a new list containing the first `n` elements of the given list.
-        var take = E.take = _(function(n, list) {
-            return filterIndex(function(item, idx) {return idx < n;}, list);
+        var take = E.take = _(bootstrap.reject || function(n, list) {
+            return (isEmpty(list) || !(n > 0)) ? EMPTY : prepend(head(list), take(n - 1, tail(list)));
         });
 
         // Returns a new list containing all **but** the first `n` elements of the given list.
-        var skip = E.skip = _(function(n, list) {
-            return filterIndex(function(item, idx) {return idx >= n;}, list);
+        var skip = E.skip = _(bootstrap.skip || function(n, list) {
+            return isEmpty(list) ? EMPTY : (n > 0) ? skip(n - 1, tail(list)) : list;
         });
         aliasFor('skip').is('drop');
 
         // Returns the first element of the list which matches the predicate, or `false` if no element matches.
-        var find = E.find = _(function(fn, list) {
+        var find = E.find = _(bootstrap.find || function(fn, list) {
             var h = head(list);
             return (isEmpty(list)) ? false : fn(h) ? h : find(fn, tail(list));
         });
 
         // Returns `true` if all elements of the list match the predicate, `false` if there are any that don't.
-        var all = E.all = _(function (fn, list) {
+        var all = E.all = _(bootstrap.all || function (fn, list) {
             return (isEmpty(list)) ? true : fn(head(list)) && all(fn, tail(list));
         });
         aliasFor("all").is("every");
 
 
         // Returns `true` if any elements of the list match the predicate, `false` if none do.
-        var any = E.any = _(function(fn, list) {
+        var any = E.any = _(bootstrap.any || function(fn, list) {
             return (isEmpty(list)) ? false : fn(head(list)) || any(fn, tail(list));
         });
         aliasFor("any").is("some");
 
         // Returns `true` if the list contains the sought element, `false` if it does not.  Equality is strict here,
         // meaning reference equality for objects and non-coercing equality for primitives.
-        var contains = E.contains = _(function(a, lat) {
+        var contains = E.contains = _(bootstrap.contains || function(a, lat) {
             return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
         });
 
         // Returns a new list containing only one copy of each element in the original list.  Equality is strict here,
         // meaning reference equality for objects and non-coercing equality for primitives.
-        var uniq = E.uniq = function(list) {
+        var uniq = E.uniq = bootstrap.uniq || function(list) {
             return foldr(function(x, acc) { return (contains(x, acc)) ? acc : prepend(x, acc); }, EMPTY, list);
         };
 
         // Returns a new list by plucking the same named property off all objects in the list supplied.
-        E.pluck = function(p) {return map(prop(p));};
+        E.pluck = bootstrap.pluck || function(p) {return map(prop(p));};
 
         // Returns a list that contains a flattened version of the supplied list.  For example:
         //
@@ -347,7 +341,7 @@
         //
         //     zipWith(f, [1, 2, 3], ['a', 'b', 'c'])
         //     //    => [f(1, 'a'), f(2, 'b'), f(3, 'c')];
-        var zipWith = E.zipWith = _(function(fn, a, b) {
+        var zipWith = E.zipWith = _(bootstrap.zipWith || function(fn, a, b) {
             return (isEmpty(a) || isEmpty(b)) ? EMPTY : prepend(fn(head(a), head(b)), zipWith(fn, tail(a), tail(b)));
         });
 
@@ -356,7 +350,7 @@
         //
         //     zip([1, 2, 3], ['a', 'b', 'c'])
         //     //    => [[1, 'a'], [2, 'b'], [3, 'c']];
-        var zip = E.zip = zipWith(prepend);
+        var zip = E.zip = bootstrap.zip || zipWith(prepend);
 
 
         // Creates a new list out of the two supplied by applying the function to each possible pair in the lists.
@@ -364,7 +358,7 @@
         //
         //     xProdWith(f, [1, 2], ['a', 'b'])
         //     //    => [f(1, 'a'), f(1, 'b'), f(2, 'a'), f(2, 'b')];
-        var xprodWith = E.xprodWith = _(function(fn, a, b) {
+        var xprodWith = E.xprodWith = _(bootstrap.xprodWith || function(fn, a, b) {
             return (isEmpty(a) || isEmpty(b)) ? EMPTY : foldl1(merge, map(function(z) {return map(_(fn)(z), b);}, a));
         });
 
@@ -373,17 +367,17 @@
         //
         //     xProd([1, 2], ['a', 'b'])
         //     //    => [[1, 'a'], [1, 'b')], [2, 'a'], [2, 'b']];
-        E.xprod = xprodWith(prepend);
+        E.xprod = bootstrap.xprod || xprodWith(prepend);
 
         // Returns a new list with the same elements as the original list, just in the reverse order.
-        var reverse = E.reverse = foldl(flip(prepend), EMPTY);
+        var reverse = E.reverse = bootstrap.reverse || foldl(flip(prepend), EMPTY);
 
         // // Returns a list of numbers from `from` (inclusive) to `to` (exclusive).
         // For example, 
         //
         //     range(1, 5) // => [1, 2, 3, 4]
         //     range(50, 53) // => [50, 51, 52]
-        var range = E.range = _(function(from, to) {
+        var range = E.range = _(bootstrap.range || function(from, to) {
             return from >= to ? EMPTY : prepend(from, range(from + 1, to));
         });
 
@@ -570,12 +564,11 @@
 
         // Expose the functions from eweda as properties on another object.  If this object is the global object, then
         // it will be as though the eweda functions are global functions.
-        E.inContext = function(obj) {
+        E.installTo = function(obj) {
             each(function(key) {
                 (obj || global)[key] = E[key];
             })(keys(E));
         };
-        aliasFor("inContext").is("installTo");
 
         // A function that always returns `0`.
         E.alwaysZero = identity(0);

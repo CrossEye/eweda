@@ -24,7 +24,7 @@
 
     var lib = function(bootstrap) {
 
-        // This function is what is actually returned, with all the functions attached as properties.  That allows
+        // This function is what is actually returned, with all the exposed functions attached as properties.  That allows
         //
         //     var myLib = eweda({
         //         EMPTY: /* ... */,

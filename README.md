@@ -58,7 +58,7 @@ We can construct a new implementation of the API like this:
     var cdr = function(fn) {return fn(function(x, y) { return y; });};
     var atom = function(x) {return (x !== null) && (x !== undefined) && !x.pair;};
     var isEmpty = function(list) {return list == null;},
-    
+
     // These core properties need to be supplied.  Others can also be supplied to override the defaults.
     var ramda = eweda({
         EMPTY: null,

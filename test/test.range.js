@@ -13,4 +13,9 @@ describe('range', function() {
         assert.deepEqual(range(7, 3), []);
         assert.deepEqual(range(5, 5), []);
     });
+
+    it('should be automatically curried', function() {
+        var from10 = range(10);
+        assert.deepEqual(from10(15), [10, 11, 12, 13, 14]);
+    });
 });

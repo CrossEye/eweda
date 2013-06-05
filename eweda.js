@@ -79,7 +79,7 @@
                 };
             };
 
-            return f(EMPTY);
+            return f([]);
         };
 
         // Internal version of `forEach`.  Possibly to be exposed later.

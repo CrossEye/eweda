@@ -44,6 +44,14 @@ describe('take', function() {
     });
 });
 
+describe('takeWhile', function() {
+    var takeWhile = eweda.takeWhile;
+
+    it('should continue taking elements while the function reports `true`', function() {
+        assert.deepEqual(takeWhile(function(x) {return x != 5;}, [1, 3, 5, 7, 9]), [ 1, 3]);
+    });
+});
+
 describe('skip', function() {
     var skip = eweda.skip;
 

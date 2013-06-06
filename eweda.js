@@ -282,9 +282,15 @@
             return filter(notFn(fn), list);
         });
 
+        // Returns a new list containing the elements of the given list up until the first one where the function
+        // supplied returns `false` when passed the element.
+        var takeWhile = E.takeWhile = _(bootstrap.takeWhile || function(fn, list) {
+            return (isEmpty(list) || !fn(head(list))) ? EMPTY : prepend(head(list), takeWhile(fn, tail(list)));
+        });
+
         // Returns a new list containing the first `n` elements of the given list.
-        var take = E.take = _(bootstrap.reject || function(n, list) {
-            return (isEmpty(list) || !(n > 0)) ? EMPTY : prepend(head(list), take(n - 1, tail(list)));
+        var take = E.take = _(bootstrap.take || function(n, list) {
+            return takeWhile((function() {var count = 0; return function(x) {return count++ < n;};}()), list);
         });
 
         // Returns a new list containing all **but** the first `n` elements of the given list.

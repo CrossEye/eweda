@@ -235,10 +235,7 @@
         //     // test(7) => true, test(9) => true, test(10) => false,
         //     // test(3) => false, test(21) => false,
 
-        // Returns a new list constructed by applying the function to every element of the list supplied.
-        var map = E.map = _(bootstrap.map || function(fn, list) {
-            return (isEmpty(list)) ? EMPTY : prepend(fn(head(list)), map(fn, tail(list)));
-        });
+
 
         // Returns a single item, by successively calling the function with the current element and the the next
         // element of the list, passing the result to the next call.  We start with the `acc` parameter to get
@@ -249,6 +246,11 @@
         });
         aliasFor("foldl").is("reduce");
 
+        // Returns a new list constructed by applying the function to every element of the list supplied.
+        var map = E.map = _(bootstrap.map || function(fn, list) {
+            return reverse(foldl(function(acc, x) { return prepend(fn(x), acc); }, EMPTY, list));
+        });
+        
         // Much like `foldl`/`reduce`, except that this takes as its starting value the first element in the list.
         var foldl1 = E.foldl1 = _(bootstrap.foldl1 || function (fn, list) {
             if (isEmpty(list)) {

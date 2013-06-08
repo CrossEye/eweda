@@ -89,6 +89,9 @@
             }
         });
 
+        // Internal function used to simplify some calculations
+        var addOne = function(n) {return n + 1;};
+
 
         // Core Functions Supplied
         // -----------------------
@@ -117,6 +120,7 @@
         //   Boolean function which is `true` for non-list, `false` for a list.
         var isAtom = E.isAtom = bootstrap.isAtom;
 
+
         // Core Functions Derived
         // ----------------------
         //
@@ -133,10 +137,6 @@
             return (isEmpty(list1)) ? list2 :  prepend(head(list1), merge(tail(list1), list2));
         });
 
-        // Reports the number of elements in the list
-        var size = E.size = bootstrap.size || function(list) {
-            return isEmpty(list) ? 0 : 1 + size(tail(list));
-        };
 
         // Function functions :-)
         // ----------------------
@@ -219,6 +219,7 @@
             };
         };
 
+
         // List Functions
         // --------------
         //
@@ -271,6 +272,9 @@
             var rev = reverse(list);
             return foldr(fn, head(rev), reverse(tail(rev)));
         });
+
+        // Reports the number of elements in the list
+        var size = E.size = bootstrap.size || foldl(addOne, 0);
 
         // Returns a new list containing only those items that match a given predicate function.
         var filter = E.filter = _(bootstrap.filter || function(fn, list) {
@@ -381,6 +385,7 @@
             return from >= to ? EMPTY : prepend(from, range(from + 1, to));
         });
 
+
         // Object Functions
         // ----------------
         //
@@ -462,6 +467,7 @@
             return partialCopy(function(key) {return !contains(key, names);}, obj);
         });
 
+
         // Logic Functions
         // ---------------
         //
@@ -470,13 +476,13 @@
 
         // A function wrapping the boolean `&&` operator.  Note that unlike the underlying operator, though, it
         // aways returns `true` or `false`.
-        E.and = _(function (a, b) {
+        var and = E.and = _(function (a, b) {
             return !!(a && b);
         });
 
         // A function wrapping the boolean `||` operator.  Note that unlike the underlying operator, though, it
         // aways returns `true` or `false`.
-        E.or = _(function (a, b) {
+        var or = E.or = _(function (a, b) {
             return !!(a || b);
         });
 
@@ -560,7 +566,6 @@
         // -----------------------
         //
         // A few functions in need of a good home.
-
 
         // Expose the functions from eweda as properties on another object.  If this object is the global object, then
         // it will be as though the eweda functions are global functions.

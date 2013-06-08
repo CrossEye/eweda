@@ -233,6 +233,20 @@ describe('bootstrapping of library', function() {
         });
     });
 
+    describe('takeWhile', function() {
+        var takeWhile = ramda.takeWhile;
+
+        it('should continue taking elements while the function reports `true`', function() {
+            assert(equal(takeWhile(function(x) {return x != 5;}, makeList(1, 3, 5, 7, 9)), makeList(1, 3)));
+        });
+
+        it('should be automatically curried', function() {
+            var takeUntil7 = takeWhile(function(x) {return x != 7;});
+            assert(equal(takeUntil7(makeList(1, 3, 5, 7, 9)), makeList(1, 3, 5)));
+            assert(equal(takeUntil7(makeList(2, 4, 6, 8, 10)), makeList(2, 4, 6, 8, 10)));
+        });
+    });
+
     describe('take', function() {
         var take = ramda.take;
 
@@ -248,6 +262,20 @@ describe('bootstrapping of library', function() {
         });
     });
 
+    describe('skipUntil', function() {
+        var skipUntil = ramda.skipUntil;
+
+        it('should continue taking elements while the function reports `true`', function() {
+            assert(equal(skipUntil(function(x) {return x === 5;}, makeList(1, 3, 5, 7, 9)), makeList(5, 7, 9)));
+        });
+
+        it('should be automatically curried', function() {
+            var skipUntil7 = skipUntil(function(x) {return x === 7;});
+            assert(equal(skipUntil7(makeList(1, 3, 5, 7, 9)), makeList(7, 9)));
+            assert(equal(skipUntil7(makeList(2, 4, 6, 8, 10)), makeList()));
+        });
+    });
+    
     describe('skip', function() {
         var skip = ramda.skip;
 

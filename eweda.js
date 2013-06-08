@@ -299,9 +299,16 @@
             return takeWhile((function() {var count = 0; return function(x) {return count++ < n;};}()), list);
         });
 
+        // Returns a new list containing the elements of the given list starting with the first one where the function
+        // supplied returns `false` when passed the element.
+        var skipUntil = E.skipUntil = _(bootstrap.skipUntil || function(fn, list) {
+            return isEmpty(list) ? EMPTY : fn(head(list)) ? list : skipUntil(fn, tail(list));
+        });
+
         // Returns a new list containing all **but** the first `n` elements of the given list.
         var skip = E.skip = _(bootstrap.skip || function(n, list) {
-            return isEmpty(list) ? EMPTY : (n > 0) ? skip(n - 1, tail(list)) : list;
+            // return isEmpty(list) ? EMPTY : (n > 0) ? skip(n - 1, tail(list)) : list;
+            return skipUntil((function() {var count = 0; return function(x) {return count++ >= n;};}()), list);
         });
         aliasFor('skip').is('drop');
 

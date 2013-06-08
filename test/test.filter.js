@@ -29,6 +29,20 @@ describe('reject', function() {
     });
 });
 
+describe('takeWhile', function() {
+    var takeWhile = eweda.takeWhile;
+
+    it('should continue taking elements while the function reports `true`', function() {
+        assert.deepEqual(takeWhile(function(x) {return x != 5;}, [1, 3, 5, 7, 9]), [1, 3]);
+    });
+
+    it('should be automatically curried', function() {
+        var takeUntil7 = takeWhile(function(x) {return x != 7;});
+        assert.deepEqual(takeUntil7([1, 3, 5, 7, 9]), [1, 3, 5]);
+        assert.deepEqual(takeUntil7([2, 4, 6, 8, 10]), [2, 4, 6, 8, 10]);
+    });
+});
+
 describe('take', function() {
     var take = eweda.take;
 
@@ -40,15 +54,20 @@ describe('take', function() {
         var take3 = take(3);
         assert.deepEqual(take3(['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['a', 'b', 'c']);
         assert.deepEqual(take3(['w', 'x', 'y', 'z']), ['w', 'x', 'y']);
-
     });
 });
 
-describe('takeWhile', function() {
-    var takeWhile = eweda.takeWhile;
+describe('skipUntil', function() {
+    var skipUntil = eweda.skipUntil;
 
     it('should continue taking elements while the function reports `true`', function() {
-        assert.deepEqual(takeWhile(function(x) {return x != 5;}, [1, 3, 5, 7, 9]), [ 1, 3]);
+        assert.deepEqual(skipUntil(function(x) {return x === 5;}, [1, 3, 5, 7, 9]), [5, 7, 9]);
+    });
+
+    it('should be automatically curried', function() {
+        var skipUntil7 = skipUntil(function(x) {return x === 7;});
+        assert.deepEqual(skipUntil7([1, 3, 5, 7, 9]), [7, 9]);
+        assert.deepEqual(skipUntil7([2, 4, 6, 8, 10]), []);
     });
 });
 

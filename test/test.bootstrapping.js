@@ -275,7 +275,7 @@ describe('bootstrapping of library', function() {
             assert(equal(skipUntil7(makeList(2, 4, 6, 8, 10)), makeList()));
         });
     });
-    
+
     describe('skip', function() {
         var skip = ramda.skip;
 

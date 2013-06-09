@@ -275,6 +275,14 @@
             return foldr(fn, head(rev), reverse(tail(rev)));
         });
 
+        // Builds a list from a seed value, using a function that returns `undefined` to quit and a pair otherwise,
+        // consisting of the current value and the seed to be used for the next value.
+
+        var unfoldr = E.unfoldr = _(bootstrap.unfoldr || function(fn, seed) {
+            var pair = fn(seed);
+            return pair ? prepend(head(pair), unfoldr(fn, head(tail(pair)))) : EMPTY;
+        });
+
         // Reports the number of elements in the list
         var size = E.size = bootstrap.size || foldl(addOne, 0);
 

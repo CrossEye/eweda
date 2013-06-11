@@ -3,6 +3,9 @@
 //     (c) 2013 Scott Sauyet and Michael Hurley
 //     Eweda may be freely distributed under the MIT license.
 
+// This version is a first attempt at making the library more performant.  Here we sacrifice some elegance to gain
+// the performance necessary to make this practical.
+
 // Eweda
 // -----
 // A practical functional library for Javascript programmers.  This is a collection of tools to make it easier to
@@ -80,6 +83,27 @@
             };
 
             return f([]);
+        };
+
+        var recur = function(fn) {
+           return function () {
+               var bounce = fn.apply(this, arguments);
+               while (typeof bounce === "function") {
+                   bounce = bounce();
+               }
+               return bounce;
+           };
+        };
+
+        var trampoline = function(name, fn) {
+            var lines = ("" + fn).split(/\r?\n/), first = (lines.pop(), lines.shift()),
+                body = lines.join("\n    "), match = first.match(/\(([^)]*)\)/), args = match && match[1] || "";
+            var newFnStr = ("" + function name(args) {
+                return function () {
+                    return 'body';
+                };
+            }).replace("name", name).replace("args", args).replace("return 'body';", body).split("\n    ").join("\n");
+            return recur(Function("E", "return " + newFnStr)(E));
         };
 
         // Internal version of `forEach`.  Possibly to be exposed later.
@@ -404,9 +428,16 @@
         //
         //     range(1, 5) // => [1, 2, 3, 4]
         //     range(50, 53) // => [50, 51, 52]
-        var range = E.range = _(bootstrap.range || function(from, to) {
-            return from >= to ? EMPTY : prepend(from, range(from + 1, to));
-        });
+//        var range = E.range = _(bootstrap.range || function(from, to) {
+//            return from >= to ? EMPTY : prepend(from, range(from + 1, to));
+//        });
+
+        var range = E.range = _(bootstrap.range || function() {
+            var _range = trampoline('_range', function(from, to, accum) {
+                return from >= to ? accum : _range(from, to - 1, E.prepend(to - 1, accum));
+            });
+            return function(from, to) {return _range(from, to, EMPTY);}
+        }());
 
 
         // Object Functions
@@ -640,6 +671,10 @@
             },
             size: function(arr) {
                 return arr.length;
+            }
+            // Is this really in the spirit of eweda?  Probably not?
+            , range: function(from, to) {
+                return from > to ? EMPTY : Array(to - from + 1).join(1).split("").map(function(elt, i) {return i + from;});
             }
         };
     }());

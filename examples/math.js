@@ -118,7 +118,7 @@ var primes =  (function () {
 // needed, call `bigInt.join('').reverse()`.
 
 var bigint = function(n) {return ('' + n).split('').reverse();};
-var bi2s = function(bi) {return bi.reverse().join('');};
+var bi2s = function(bi) {return bi.join(",").split(",").reverse().join('');}; // need a better clone than .join(",").split(","), but I'm tired...
 
 // brain-dead BigInteger implementation of add function.
 var add = function(a, b) {

@@ -117,6 +117,9 @@ var primes =  (function () {
 // BigInteger represents, e.g. 152, as ['2', '5', '1'], a reversed list of String digits.  If a String representation is
 // needed, call `bigInt.join('').reverse()`.
 
+var bigint = function(n) {return ('' + n).split('').reverse();};
+var bi2s = function(bi) {return bi.reverse().join('');};
+
 // brain-dead BigInteger implementation of add function.
 var add = function(a, b) {
     while (a.length < b.length) a[a.length] = 0;
@@ -178,7 +181,7 @@ var choose = (function() {
 //   });
 
 // Returns an array containing all the factors of n;
-var getFactors = function(n) {
+var divisors = function(n) {
     var factors = [];
     for (var i = 1; i <= Math.sqrt(n); i++) {
         if (!(n % i)) {
@@ -191,7 +194,7 @@ var getFactors = function(n) {
 };
 
 // Returns an array containing all the proper factors of n;
-var getProperFactors = function(n) {
+var properDivisors = function(n) {
     var factors = [1];
     for (var i = 2; i <= Math.sqrt(n); i++) {
         if (!(n % i)) {
@@ -202,3 +205,14 @@ var getProperFactors = function(n) {
     factors.sort(function(a, b) {return a - b;});
     return factors;
 };
+
+var factorial = memoize(function fact(n) {
+    return n < 2 ? 1: n * fact(n - 1);
+});
+
+
+var max = foldl(Math.max, Number.NEGATIVE_INFINITY);
+var maxOver = function(fn, list) {return foldl1(fn, list); };
+
+var min = foldl(Math.max, Number.POSITIVE_INFINITY);
+var minOver = function(fn, list) {return foldl1(fn, list); };

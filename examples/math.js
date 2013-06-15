@@ -173,6 +173,32 @@ var choose = (function() {
 }());
 
 // Horribly inefficient, even if clean
-// var choose = memoize(function choose(n, r) {
-//     return result = n < r ? 0 : (r == 0 || r == n) ? 1 : choose(n - 1, r - 1) + choose(n -1, r);
-// });
+//   var choose = memoize(function choose(n, r) {
+//       return result = n < r ? 0 : (r == 0 || r == n) ? 1 : choose(n - 1, r - 1) + choose(n -1, r);
+//   });
+
+// Returns an array containing all the factors of n;
+var getFactors = function(n) {
+    var factors = [];
+    for (var i = 1; i <= Math.sqrt(n); i++) {
+        if (!(n % i)) {
+            factors.push(i);
+            if (i * i < n) factors.push(n / i);
+        }
+    }
+    factors.sort(function(a, b) {return a - b;});
+    return factors;
+};
+
+// Returns an array containing all the proper factors of n;
+var getProperFactors = function(n) {
+    var factors = [1];
+    for (var i = 2; i <= Math.sqrt(n); i++) {
+        if (!(n % i)) {
+            factors.push(i);
+            if (i * i < n) factors.push(n / i);
+        }
+    }
+    factors.sort(function(a, b) {return a - b;});
+    return factors;
+};

@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('tap', function() {
-    var tap = eweda.tap;
+    var tap = Lib.tap;
     it("returns a function that returns tap's argument", function() {
         var f = tap(100);
         assert.equal(typeof f, "function");
@@ -28,7 +28,7 @@ describe('tap', function() {
 });
 
 describe('eq', function() {
-    var eq = eweda.eq;
+    var eq = Lib.eq;
     var a = [];
     var b = a;
     it("tests for strict equality of its operands", function() {

@@ -1,5 +1,5 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('bootstrapping of library', function() {
     var cons = function(x, y) {
@@ -42,7 +42,7 @@ describe('bootstrapping of library', function() {
                 (l.pair && r.pair && equal(car(l), car(r)) && equal(cdr(l), cdr(r)));
     };
 
-    var ramda = eweda({
+    var sheepda = Lib({
         EMPTY: null,
         isEmpty: function(list) {return list == null;},
         prepend: cons,
@@ -54,7 +54,7 @@ describe('bootstrapping of library', function() {
 
 
     describe('all', function() {
-        var all = ramda.all;
+        var all = sheepda.all;
         var even = function(n) {return n % 2 === 0;};
         var T = function() {return true;};
 
@@ -79,13 +79,13 @@ describe('bootstrapping of library', function() {
         });
 
         it('should be aliased by `every`', function() {
-            assert.equal(ramda.every(even, makeList(2, 4, 6, 8, 10)), true);
-            assert.strictEqual(ramda.every, all);
+            assert.equal(sheepda.every(even, makeList(2, 4, 6, 8, 10)), true);
+            assert.strictEqual(sheepda.every, all);
         });
     });
 
     describe("any", function() {
-        var any = ramda.any;
+        var any = sheepda.any;
         var odd = function(n) {return n % 2 === 1;};
         var T = function() {return true;};
 
@@ -110,13 +110,13 @@ describe('bootstrapping of library', function() {
         });
 
         it('should be aliased by `some`', function() {
-            assert.equal(ramda.some(odd, makeList(2, 4, 6, 8, 10, 11, 12)), true);
-            assert.strictEqual(ramda.some, any);
+            assert.equal(sheepda.some(odd, makeList(2, 4, 6, 8, 10, 11, 12)), true);
+            assert.strictEqual(sheepda.some, any);
         });
     });
 
     describe("contains", function() {
-        var contains = ramda.contains;
+        var contains = sheepda.contains;
         it("returns true if an element is in a list", function() {
             assert.equal(contains(7, makeList(1, 2, 3, 9, 8, 7, 100, 200, 300)), true);
         });
@@ -132,7 +132,7 @@ describe('bootstrapping of library', function() {
 
 
     describe('uniq', function() {
-        var uniq = ramda.uniq;
+        var uniq = sheepda.uniq;
 
         it('returns a set from any array (i.e. purges duplicate elements)', function() {
             var lst = makeList(1, 2, 3, 1, 2, 3, 1, 2, 3);
@@ -146,7 +146,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('isEmpty', function() {
-        var isEmpty = ramda.isEmpty;
+        var isEmpty = sheepda.isEmpty;
 
         it('returns true if the list is empty', function() {
             assert.equal(isEmpty(null), true);
@@ -158,7 +158,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('prepend', function() {
-        var prepend = ramda.prepend;
+        var prepend = sheepda.prepend;
 
         it('adds the element to the beginning of the list', function() {
             assert(equal(prepend('x', makeList('y', 'z')), makeList('x', 'y', 'z')));
@@ -166,7 +166,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('append', function() {
-        var append = ramda.append;
+        var append = sheepda.append;
 
         it('adds the element to the end of the list', function() {
             assert(equal(append('z', makeList('x', 'y')), makeList('x', 'y', 'z')));
@@ -174,7 +174,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('merge', function() {
-        var merge = ramda.merge;
+        var merge = sheepda.merge;
 
         it('adds combines the elements of the two lists', function() {
             assert(equal(merge(makeList('a', 'b'), makeList('c', 'd')), makeList('a', 'b', 'c', 'd')));
@@ -182,7 +182,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('head', function() {
-        var head = ramda.head;
+        var head = sheepda.head;
 
         it('returns the first element of a list', function() {
             assert.equal(head(makeList('a', 'b', 'c', 'd')), 'a');
@@ -190,7 +190,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('tail', function() {
-        var tail = ramda.tail;
+        var tail = sheepda.tail;
 
         it('returns a new list containing all the elements after the first element of a list', function() {
             assert(equal(makeList('b', 'c', 'd'), tail(makeList('a', 'b', 'c', 'd'))));
@@ -198,7 +198,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('size', function() {
-        var size = ramda.size;
+        var size = sheepda.size;
 
         it('counts the elements of a list', function() {
             assert.equal(size(makeList('a', 'b', 'c', 'd')), 4);
@@ -206,7 +206,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('filter', function() {
-        var filter = ramda.filter;
+        var filter = sheepda.filter;
         var even = function(x) {return !(x % 2);};
 
         it('should reduce an array to those matching a filter', function() {
@@ -220,7 +220,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('reject', function() {
-        var reject = ramda.reject;
+        var reject = sheepda.reject;
         var even = function(x) {return !(x % 2);};
 
         it('should reduce an array to those not matching a filter', function() {
@@ -234,7 +234,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('takeWhile', function() {
-        var takeWhile = ramda.takeWhile;
+        var takeWhile = sheepda.takeWhile;
 
         it('should continue taking elements while the function reports `true`', function() {
             assert(equal(takeWhile(function(x) {return x != 5;}, makeList(1, 3, 5, 7, 9)), makeList(1, 3)));
@@ -248,7 +248,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('take', function() {
-        var take = ramda.take;
+        var take = sheepda.take;
 
         it('should take only the first `n` elements from a list', function() {
             assert(equal(take(3, makeList('a', 'b', 'c', 'd', 'e', 'f', 'g')), makeList('a', 'b', 'c')));
@@ -263,7 +263,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('skipUntil', function() {
-        var skipUntil = ramda.skipUntil;
+        var skipUntil = sheepda.skipUntil;
 
         it('should continue taking elements while the function reports `true`', function() {
             assert(equal(skipUntil(function(x) {return x === 5;}, makeList(1, 3, 5, 7, 9)), makeList(5, 7, 9)));
@@ -277,7 +277,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('skip', function() {
-        var skip = ramda.skip;
+        var skip = sheepda.skip;
 
         it('should skip the first `n` elements from a list, returning the remainder', function() {
             assert(equal(skip(3, makeList('a', 'b', 'c', 'd', 'e', 'f', 'g')), makeList('d', 'e', 'f', 'g')));
@@ -290,13 +290,13 @@ describe('bootstrapping of library', function() {
         });
 
         it('should be aliased by `drop`', function() {
-            assert(equal(ramda.drop(1, makeList('a', 'b', 'c')), makeList('b', 'c')));
-            assert.strictEqual(ramda.drop, skip);
+            assert(equal(sheepda.drop(1, makeList('a', 'b', 'c')), makeList('b', 'c')));
+            assert.strictEqual(sheepda.drop, skip);
         });
     });
 
     describe('find', function() {
-        var find = ramda.find;
+        var find = sheepda.find;
         var obj1 = {x: 100};
         var obj2 = {x: 200};
         var a = makeList(11, 10, 9, 'cow', obj1, 8, 7, 100, 200, 300, obj2, 4, 3, 2, 1, 0);
@@ -315,7 +315,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('foldl', function() {
-        var foldl = ramda.foldl;
+        var foldl = sheepda.foldl;
         var add = function(a, b) {return a + b;};
         var mult = function(a, b) {return a * b;};
 
@@ -335,13 +335,13 @@ describe('bootstrapping of library', function() {
         });
 
         it('should be aliased by `reduce`', function() {
-            assert.equal(ramda.reduce(add, 0, makeList(1, 2, 3, 4)), 10);
-            assert.strictEqual(ramda.reduce, foldl);
+            assert.equal(sheepda.reduce(add, 0, makeList(1, 2, 3, 4)), 10);
+            assert.strictEqual(sheepda.reduce, foldl);
         });
     });
 
     describe('foldl1', function() {
-        var foldl1 = ramda.foldl1;
+        var foldl1 = sheepda.foldl1;
         var add = function(a, b) {return a + b;};
         var mult = function(a, b) {return a * b;};
 
@@ -361,7 +361,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('foldr', function() {
-        var foldr = ramda.foldr;
+        var foldr = sheepda.foldr;
         var avg = function(a, b) {return (a + b) / 2;};
 
         it('should fold simple functions over arrays with the supplied accumulator', function() {
@@ -378,13 +378,13 @@ describe('bootstrapping of library', function() {
         });
 
         it('should be aliased by `reduceRight`', function() {
-            assert.equal(ramda.reduceRight(avg, 54, makeList(12, 4, 10, 6)), 12);
-            assert.strictEqual(ramda.reduceRight, foldr);
+            assert.equal(sheepda.reduceRight(avg, 54, makeList(12, 4, 10, 6)), 12);
+            assert.strictEqual(sheepda.reduceRight, foldr);
         });
     });
 
     describe('foldr1', function() {
-        var foldr1 = ramda.foldr1;
+        var foldr1 = sheepda.foldr1;
         var avg = function(a, b) {return (a + b) / 2;};
 
         it('should fold simple functions over arrays without an accumulator', function() {
@@ -402,7 +402,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('map', function() {
-        var map = ramda.map;
+        var map = sheepda.map;
         var times2 = function(x) {return x * 2;};
         var add1 = function(x) {return x + 1;};
 
@@ -417,7 +417,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('pluck', function() {
-        var pluck = ramda.pluck;
+        var pluck = sheepda.pluck;
         var people = makeList({name: 'Fred', age: 23}, {name: 'Wilma', age: 21} , {name: 'Pebbles', age: 2});
 
         it('should return a function that maps the appropriate property over a list', function() {
@@ -428,7 +428,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('xprod', function() {
-        var xprod = ramda.xprod;
+        var xprod = sheepda.xprod;
         var a = makeList(1, 2), b = makeList('a', 'b', 'c');
 
         it('should create the collection of all cross-product pairs of its parameters', function() {
@@ -442,7 +442,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('xprodWith', function() {
-        var xprodWith = ramda.xprodWith;
+        var xprodWith = sheepda.xprodWith;
         var concat = function(x, y) {return '' + x + y;};
         var a = makeList(1, 2), b = makeList('a', 'b', 'c');
 
@@ -459,7 +459,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('range', function() {
-        var range = ramda.range;
+        var range = sheepda.range;
 
         it('should return list of numbers', function() {
             assert(equal(range(0, 5), makeList(0, 1, 2, 3, 4)));
@@ -473,7 +473,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('reverse', function() {
-        var reverse = ramda.reverse;
+        var reverse = sheepda.reverse;
 
         it('should reverse arrays', function() {
             assert(equal(reverse(makeList(1, 2, 3, 4)), makeList(4, 3, 2, 1)));
@@ -485,7 +485,7 @@ describe('bootstrapping of library', function() {
     });
 
     describe('zipWith', function() {
-        var zipWith = ramda.zipWith;
+        var zipWith = sheepda.zipWith;
         var a = makeList(1, 2, 3), b = makeList(100, 200, 300), c = makeList(10, 20, 30, 40, 50, 60);
         var add = function(a, b) { return a + b; };
         var x = function(a, b) { return a * b; };
@@ -503,7 +503,7 @@ describe('bootstrapping of library', function() {
 
     describe('zip', function() {
         it("returns an array of 'tuples'", function() {
-            var zip = ramda.zip;
+            var zip = sheepda.zip;
             var a = makeList(1, 2, 3), b = makeList(100, 200, 300);
             assert(equal(zip(a, b), makeList(cons(1, 100), cons(2, 200), cons(3, 300))));
         });
@@ -537,7 +537,7 @@ describe('bootstrapping capabilities', function() {
     }());
     it('runs with copy of bootstrap configuration, without affecting original version', function() {
         var headCtr = 0, storedHeadCtr = 0, tailCtr = 0, storedTailCtr = 0;
-        var ramda = eweda(bootstrap);
+        var ramda = Lib(bootstrap);
         var map2 = ramda.map;
         var times2 = function(x) {return x * 2;};
         assert.deepEqual(map2(times2, [1, 2, 3, 4]), [2, 4, 6, 8]);
@@ -546,7 +546,7 @@ describe('bootstrapping capabilities', function() {
     });
 
     it('uses optional core functions of bootstrap configuration', function() {
-        var ramda = eweda(bootstrap);
+        var ramda = Lib(bootstrap);
         var test = ['a', 'b', 'c', 'd'];
         var size2 = ramda.size;
         sizeCtr = 0;

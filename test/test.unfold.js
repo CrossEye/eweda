@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('unfoldr', function() {
-    var unfoldr = eweda.unfoldr;
+    var unfoldr = Lib.unfoldr;
 
     it('should unfold simple functions with a starting point to create a list', function() {
         assert.deepEqual(unfoldr(function(n) {if (n > 0) {return [n, n - 1];}}, 10), [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);

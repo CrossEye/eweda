@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('identitity', function() {
-    var identity = eweda.identity;
+    var identity = Lib.identity;
     it('should return a function that returns the object initially supplied', function() {
         var theMeaning = identity(42);
         assert.equal(theMeaning(), 42);
@@ -22,7 +22,7 @@ describe('identitity', function() {
 });
 
 describe ('alwaysZero', function() {
-    var alwaysZero = eweda.alwaysZero;
+    var alwaysZero = Lib.alwaysZero;
     it('should always return zero', function() {
         assert.equal(alwaysZero(), 0);
         assert.equal(alwaysZero(10), 0);
@@ -31,7 +31,7 @@ describe ('alwaysZero', function() {
 });
 
 describe ('alwaysFalse', function() {
-    var alwaysFalse = eweda.alwaysFalse;
+    var alwaysFalse = Lib.alwaysFalse;
     it('should always return false', function() {
         assert.equal(alwaysFalse(), false);
         assert.equal(alwaysFalse(10), false);
@@ -40,7 +40,7 @@ describe ('alwaysFalse', function() {
 });
 
 describe ('alwaysTrue', function() {
-    var alwaysTrue = eweda.alwaysTrue;
+    var alwaysTrue = Lib.alwaysTrue;
     it('should always return true', function() {
         assert.equal(alwaysTrue(), true);
         assert.equal(alwaysTrue(10), true);

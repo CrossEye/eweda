@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var lib = require("./../eweda");
 
 describe('lPartial', function() {
-    var lPartial = eweda.lPartial;
+    var lPartial = lib.lPartial;
     var disc = function(a, b, c) { // note disc(3, 7, 4) => 1
         return b * b - 4 * a * c;
     };
@@ -15,7 +15,7 @@ describe('lPartial', function() {
     });
 
     it('should be aliased by `applyLeft`', function() {
-        assert.strictEqual(eweda.applyLeft, lPartial);
+        assert.strictEqual(lib.applyLeft, lPartial);
     });
 
     // TODO: what would this take?
@@ -28,7 +28,7 @@ describe('lPartial', function() {
 });
 
 describe('rPartial', function() {
-    var rPartial = eweda.rPartial;
+    var rPartial = lib.rPartial;
     var disc = function(a, b, c) { // note disc(3, 7, 4) => 1
         return b * b - 4 * a * c;
     };
@@ -41,7 +41,7 @@ describe('rPartial', function() {
     });
 
     it('should be aliased by `applyRight`', function() {
-        assert.strictEqual(eweda.applyRight, rPartial);
+        assert.strictEqual(lib.applyRight, rPartial);
     });
 
     // TODO: what would this take?

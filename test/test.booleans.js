@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('or', function() {
-    var or = eweda.or;
+    var or = Lib.or;
 
 
     it('should match the Javascript `||`', function() {
@@ -22,7 +22,7 @@ describe('or', function() {
 });
 
 describe('and', function() {
-    var and = eweda.and;
+    var and = Lib.and;
 
     it('should match the Javascript `&&`', function() {
         assert.equal(and(false, true), false);
@@ -40,7 +40,7 @@ describe('and', function() {
 });
 
 describe('not', function() {
-    var not = eweda.not;
+    var not = Lib.not;
 
     it('should match the Javascript `!`', function() {
         assert.equal(not(false), true);
@@ -59,7 +59,7 @@ describe('not', function() {
 });
 
 describe('orFn', function() {
-    var orFn = eweda.orFn;
+    var orFn = Lib.orFn;
 
     it('should combine two boolean-returning functions into one', function() {
         var even = function(x) {return !(x % 2);};
@@ -89,7 +89,7 @@ describe('orFn', function() {
 });
 
 describe('andFn', function() {
-    var andFn = eweda.andFn;
+    var andFn = Lib.andFn;
 
     it('should combine two boolean-returning functions into one', function() {
         var even = function(x) {return !(x % 2);};
@@ -119,7 +119,7 @@ describe('andFn', function() {
 });
 
 describe('notFn', function() {
-    var notFn = eweda.notFn;
+    var notFn = Lib.notFn;
 
     it('should create boolean-returning function that reverses another', function() {
         var even = function(x) {return !(x %2 );};

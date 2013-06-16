@@ -1,9 +1,9 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 
 describe("contains", function() {
-    var contains = eweda.contains;
+    var contains = Lib.contains;
     it("returns true if an element is in a list", function() {
         assert.equal(contains(7, [1,2,3,9,8,7,100,200,300]), true);
     });
@@ -19,7 +19,7 @@ describe("contains", function() {
 
 
 describe('uniq', function() {
-    var uniq = eweda.uniq;
+    var uniq = Lib.uniq;
 
     it('returns a set from any array (i.e. purges duplicate elements)', function() {
         var arr = [1,2,3,1,2,3,1,2,3];

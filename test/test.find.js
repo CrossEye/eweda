@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('find', function() {
-    var find = eweda.find;
+    var find = Lib.find;
     var obj1 = {x: 100};
     var obj2 = {x: 200};
     var a = [11, 10, 9, 'cow', obj1, 8, 7, 100, 200, 300, obj2, 4, 3, 2, 1, 0];

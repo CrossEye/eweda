@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('all', function() {
-    var all = eweda.all;
+    var all = Lib.all;
     var even = function(n) {return n % 2 === 0;};
     var T = function() {return true;};
 
@@ -27,13 +27,13 @@ describe('all', function() {
     });
 
     it('should be aliased by `every`', function() {
-        assert.equal(eweda.every(even, [2, 4, 6, 8, 10]), true);
-        assert.strictEqual(eweda.every, all);
+        assert.equal(Lib.every(even, [2, 4, 6, 8, 10]), true);
+        assert.strictEqual(Lib.every, all);
     });
 });
 
 describe("any", function() {
-    var any = eweda.any;
+    var any = Lib.any;
     var odd = function(n) {return n % 2 === 1;};
     var T = function() {return true;};
 
@@ -58,8 +58,8 @@ describe("any", function() {
     });
 
     it('should be aliased by `some`', function() {
-        assert.equal(eweda.some(odd, [2, 4, 6, 8, 10, 11, 12]), true);
-        assert.strictEqual(eweda.some, any);
+        assert.equal(Lib.some(odd, [2, 4, 6, 8, 10, 11, 12]), true);
+        assert.strictEqual(Lib.some, any);
     });
 });
 

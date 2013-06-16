@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('filter', function() {
-    var filter = eweda.filter;
+    var filter = Lib.filter;
     var even = function(x) {return !(x % 2);};
 
     it('should reduce an array to those matching a filter', function() {
@@ -16,7 +16,7 @@ describe('filter', function() {
 });
 
 describe('reject', function() {
-    var reject = eweda.reject;
+    var reject = Lib.reject;
     var even = function(x) {return !(x % 2);};
 
     it('should reduce an array to those not matching a filter', function() {
@@ -30,7 +30,7 @@ describe('reject', function() {
 });
 
 describe('takeWhile', function() {
-    var takeWhile = eweda.takeWhile;
+    var takeWhile = Lib.takeWhile;
 
     it('should continue taking elements while the function reports `true`', function() {
         assert.deepEqual(takeWhile(function(x) {return x != 5;}, [1, 3, 5, 7, 9]), [1, 3]);
@@ -44,7 +44,7 @@ describe('takeWhile', function() {
 });
 
 describe('take', function() {
-    var take = eweda.take;
+    var take = Lib.take;
 
     it('should take only the first `n` elements from a list', function() {
         assert.deepEqual(take(3, ['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['a', 'b', 'c']);
@@ -58,7 +58,7 @@ describe('take', function() {
 });
 
 describe('skipUntil', function() {
-    var skipUntil = eweda.skipUntil;
+    var skipUntil = Lib.skipUntil;
 
     it('should continue taking elements while the function reports `true`', function() {
         assert.deepEqual(skipUntil(function(x) {return x === 5;}, [1, 3, 5, 7, 9]), [5, 7, 9]);
@@ -72,7 +72,7 @@ describe('skipUntil', function() {
 });
 
 describe('skip', function() {
-    var skip = eweda.skip;
+    var skip = Lib.skip;
 
     it('should skip the first `n` elements from a list, returning the remainder', function() {
         assert.deepEqual(skip(3, ['a', 'b', 'c', 'd', 'e', 'f', 'g']), ['d', 'e', 'f', 'g']);
@@ -85,7 +85,7 @@ describe('skip', function() {
     });
 
     it('should be aliased by `drop`', function() {
-        assert.deepEqual(eweda.drop(1, ['a', 'b', 'c']), ['b', 'c']);
-        assert.strictEqual(eweda.drop, skip);
+        assert.deepEqual(Lib.drop(1, ['a', 'b', 'c']), ['b', 'c']);
+        assert.strictEqual(Lib.drop, skip);
     });
 });

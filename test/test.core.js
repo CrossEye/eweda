@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('isEmpty', function() {
-    var isEmpty = eweda.isEmpty;
+    var isEmpty = Lib.isEmpty;
 
     it('returns true if the list is empty', function() {
         assert.equal(isEmpty([]), true);
@@ -14,7 +14,7 @@ describe('isEmpty', function() {
 });
 
 describe('prepend', function() {
-    var prepend = eweda.prepend;
+    var prepend = Lib.prepend;
 
     it('adds the element to the beginning of the list', function() {
         assert.deepEqual(prepend('x', ['y', 'z']), ['x', 'y', 'z']);
@@ -22,7 +22,7 @@ describe('prepend', function() {
 });
 
 describe('append', function() {
-    var append = eweda.append;
+    var append = Lib.append;
 
     it('adds the element to the end of the list', function() {
         assert.deepEqual(append('z', ['x', 'y']), ['x', 'y', 'z']);
@@ -30,7 +30,7 @@ describe('append', function() {
 });
 
 describe('merge', function() {
-    var merge = eweda.merge;
+    var merge = Lib.merge;
 
     it('adds combines the elements of the two lists', function() {
         assert.deepEqual(merge(['a', 'b'], ['c', 'd']), ['a', 'b', 'c', 'd']);
@@ -38,7 +38,7 @@ describe('merge', function() {
 });
 
 describe('head', function() {
-    var head = eweda.head;
+    var head = Lib.head;
 
     it('returns the first element of a list', function() {
         assert.equal(head(['a', 'b', 'c', 'd']), 'a');
@@ -46,7 +46,7 @@ describe('head', function() {
 });
 
 describe('tail', function() {
-    var tail = eweda.tail;
+    var tail = Lib.tail;
 
     it('returns a new list containing all the elements after the first element of a list', function() {
         assert.deepEqual(['b', 'c', 'd'], tail(['a', 'b', 'c', 'd']));
@@ -54,7 +54,7 @@ describe('tail', function() {
 });
 
 describe('size', function() {
-    var size = eweda.size;
+    var size = Lib.size;
 
     it('counts the elements of a list', function() {
         assert.equal(size(['a', 'b', 'c', 'd']), 4);

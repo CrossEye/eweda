@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('wrap', function() {
-    var wrap = eweda.wrap;
+    var wrap = Lib.wrap;
 
     it('surrounds the invocation of one function with another', function() {
         var greet = function(name) {return 'Hello ' + name;};

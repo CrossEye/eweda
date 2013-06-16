@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('flip', function() {
-    var flip = eweda.flip;
+    var flip = Lib.flip;
     it('should return a function which inverts the first two arguments to the supplied function', function() {
         var f = function(a, b, c) {return a + ' ' + b + ' ' + c;};
         var g = flip(f);
@@ -18,7 +18,7 @@ describe('flip', function() {
 });
 
 describe('once', function() {
-    var once = eweda.once;
+    var once = Lib.once;
 
     it('should return a function that calls the supplied function only the first time called', function() {
         var ctr = 0;
@@ -50,7 +50,7 @@ describe('once', function() {
 });
 
 describe('memoize', function() {
-    var memoize = eweda.memoize;
+    var memoize = Lib.memoize;
 
     it('should calculate the value for a given input only once', function() {
         var ctr = 0;

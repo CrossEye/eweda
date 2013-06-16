@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('foldl', function() {
-    var foldl = eweda.foldl;
+    var foldl = Lib.foldl;
     var add = function(a, b) {return a + b;};
     var mult = function(a, b) {return a * b;};
 
@@ -22,8 +22,8 @@ describe('foldl', function() {
     });
 
     it('should be aliased by `reduce`', function() {
-        assert.equal(eweda.reduce(add, 0, [1, 2, 3, 4]), 10);
-        assert.strictEqual(eweda.reduce, foldl);
+        assert.equal(Lib.reduce(add, 0, [1, 2, 3, 4]), 10);
+        assert.strictEqual(Lib.reduce, foldl);
     });
 
     // TODO:  do we need to use a function constructor version of curry to make this work?
@@ -34,7 +34,7 @@ describe('foldl', function() {
 });
 
 describe('foldl1', function() {
-    var foldl1 = eweda.foldl1;
+    var foldl1 = Lib.foldl1;
     var add = function(a, b) {return a + b;};
     var mult = function(a, b) {return a * b;};
 
@@ -60,7 +60,7 @@ describe('foldl1', function() {
 });
 
 describe('foldr', function() {
-    var foldr = eweda.foldr;
+    var foldr = Lib.foldr;
     var avg = function(a, b) {return (a + b) / 2;};
 
     it('should fold simple functions over arrays with the supplied accumulator', function() {
@@ -77,8 +77,8 @@ describe('foldr', function() {
     });
 
     it('should be aliased by `reduceRight`', function() {
-        assert.equal(eweda.reduceRight(avg, 54, [12, 4, 10, 6]), 12);
-        assert.strictEqual(eweda.reduceRight, foldr);
+        assert.equal(Lib.reduceRight(avg, 54, [12, 4, 10, 6]), 12);
+        assert.strictEqual(Lib.reduceRight, foldr);
     });
 
     // TODO:  do we need to use a function constructor version of curry to make this work?
@@ -89,7 +89,7 @@ describe('foldr', function() {
 });
 
 describe('foldr1', function() {
-    var foldr1 = eweda.foldr1;
+    var foldr1 = Lib.foldr1;
     var avg = function(a, b) {return (a + b) / 2;};
 
     it('should fold simple functions over arrays without an accumulator', function() {

@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('prop', function() {
-    var prop = eweda.prop;
+    var prop = Lib.prop;
     var fred = {name: 'Fred', age:23};
 
     it('should return a function that fetches the appropriate property', function() {
@@ -12,13 +12,13 @@ describe('prop', function() {
     });
 
     it.skip('should be aliased by `get`', function() { // TODO: should it?
-        assert.equal(eweda.get('age')(fred), 23);
-        assert.strictEqual(eweda.get, prop);
+        assert.equal(Lib.get('age')(fred), 23);
+        assert.strictEqual(Lib.get, prop);
     });
 });
 
 describe('func', function() {
-    var func = eweda.func;
+    var func = Lib.func;
 
     it('should return a function that applies the appropriate function to the supplied object', function() {
         var fred = {first: 'Fred', last: 'Flintstone', getName: function() {return this.first + ' ' + this.last;}};
@@ -42,7 +42,7 @@ describe('func', function() {
 
 // TODO: This needs a better home than objectBasics
 describe('pluck', function() {
-    var pluck = eweda.pluck;
+    var pluck = Lib.pluck;
     var people = [{name: 'Fred', age: 23}, {name: 'Wilma', age: 21} , {name: 'Pebbles', age: 2}];
 
     it('should return a function that maps the appropriate property over an array', function() {
@@ -53,7 +53,7 @@ describe('pluck', function() {
 });
 
 describe('props', function() {
-    var props = eweda.props;
+    var props = Lib.props;
     var fred = {name: 'Fred', age: 23, feet: 'large'};
 
     it('should return a function that fetches the appropriate properties from the initially supplied object', function() {
@@ -65,7 +65,7 @@ describe('props', function() {
 });
 
 describe('pick', function() {
-    var pick = eweda.pick;
+    var pick = Lib.pick;
     var obj = {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6};
     it('should copy the named properties of an object to the new object', function() {
         assert.deepEqual(pick(['a', 'c', 'f'], obj), {a: 1, c: 3, f: 6});
@@ -80,7 +80,7 @@ describe('pick', function() {
 });
 
 describe('omit', function() {
-    var omit = eweda.omit;
+    var omit = Lib.omit;
     var obj = {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6};
     it('should copy an object omitting the listed properties', function() {
         assert.deepEqual(omit(['a', 'c', 'f'], obj), {b: 2, d: 4, e: 5});

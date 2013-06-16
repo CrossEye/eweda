@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('xprod', function() {
-    var xprod = eweda.xprod;
+    var xprod = Lib.xprod;
     var a = [1, 2], b = ['a', 'b', 'c'];
 
     it('should create the collection of all cross-product pairs of its parameters', function() {
@@ -22,7 +22,7 @@ describe('xprod', function() {
 });
 
 describe('xprodWith', function() {
-    var xprodWith = eweda.xprodWith;
+    var xprodWith = Lib.xprodWith;
     var concat = function(x, y) {return '' + x + y;};
     var a = [1, 2], b = ['a', 'b', 'c'];
 

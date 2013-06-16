@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('range', function() {
-    var range = eweda.range;
+    var range = Lib.range;
 
     it('should return list of numbers', function() {
         assert.deepEqual(range(0, 5), [0, 1, 2, 3, 4]);

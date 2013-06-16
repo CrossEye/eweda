@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('compose', function() {
-    var compose = eweda.compose;
+    var compose = Lib.compose;
     function a(x) {return x + "A";}
     function b(x) {return x + "B";}
     function c(x) {return x + "C";}
@@ -17,7 +17,7 @@ describe('compose', function() {
 });
 
 describe('pipe', function() {
-    var pipe = eweda.pipe;
+    var pipe = Lib.pipe;
     function a(x) {return x + "A";}
     function b(x) {return x + "B";}
     function c(x) {return x + "C";}

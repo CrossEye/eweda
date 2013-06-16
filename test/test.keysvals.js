@@ -1,9 +1,9 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 
 describe("keys", function() {
-    var keys = eweda.keys;
+    var keys = Lib.keys;
     var obj = {a: 100, b: [1,2,3], c: { x: 200, y: 300}, d: "D", e: null, f: (function(){}())};
     it("returns an array of the given object's keys", function() {
         assert.deepEqual(keys(obj), ['a','b','c','d','e','f']);
@@ -12,7 +12,7 @@ describe("keys", function() {
 
 
 describe("values", function() {
-    var values = eweda.values;
+    var values = Lib.values;
     var obj = {a: 100, b: [1,2,3], c: { x: 200, y: 300}, d: "D", e: null, f: (function(){}())};
     var undef;
     it("returns an array of the given object's values", function() {

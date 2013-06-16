@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('zipWith', function() {
-    var zipWith = eweda.zipWith;
+    var zipWith = Lib.zipWith;
     var a = [1,2,3], b = [100, 200, 300], c = [10, 20, 30, 40, 50, 60];
     var add = function(a, b) { return a + b; };
     var x = function(a, b) { return a * b; };
@@ -20,7 +20,7 @@ describe('zipWith', function() {
 
 describe('zip', function() {
     it("returns an array of 'tuples'", function() {
-        var zip = eweda.zip;
+        var zip = Lib.zip;
         var a = [1,2,3], b = [100, 200, 300];
         assert.deepEqual(zip(a, b), [[1, 100], [2, 200], [3, 300]]);
     });

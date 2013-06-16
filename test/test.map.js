@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('map', function() {
-    var map = eweda.map;
+    var map = Lib.map;
     var times2 = function(x) {return x * 2;};
     var add1 = function(x) {return x + 1;};
 

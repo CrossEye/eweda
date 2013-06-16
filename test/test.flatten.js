@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('flatten', function() {
-    var flatten = eweda.flatten;
+    var flatten = Lib.flatten;
 
     it("turns a nested list into one flat list", function() {
         var nest = [1, [2], [3, [4, 5], 6, [[[7], 8]]], 9, 10];

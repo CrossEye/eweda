@@ -1,8 +1,8 @@
 var assert = require('assert');
-var eweda = require('./../eweda');
+var Lib = require('./../eweda');
 
 describe('maybe', function() {
-    var maybe = eweda.maybe;
+    var maybe = Lib.maybe;
     var undef;
     function f(a, b, c) {
         return 1 + a + b + c;

@@ -1,8 +1,8 @@
 var assert = require("assert");
-var eweda = require("./../eweda");
+var Lib = require("./../eweda");
 
 describe('add', function() {
-    var add = eweda.add;
+    var add = Lib.add;
 
     it('should add together two numbers', function() {
         assert.equal(10, add(3, 7));
@@ -15,7 +15,7 @@ describe('add', function() {
 });
 
 describe('multiply', function() {
-    var multiply = eweda.multiply;
+    var multiply = Lib.multiply;
 
     it('should add together two numbers', function() {
         assert.equal(42, multiply(6, 7));
@@ -28,7 +28,7 @@ describe('multiply', function() {
 });
 
 describe('subtract', function() {
-    var subtract = eweda.subtract;
+    var subtract = Lib.subtract;
 
     it('should subtract two numbers', function() {
         assert.equal(15, subtract(22, 7));
@@ -41,7 +41,7 @@ describe('subtract', function() {
 });
 
 describe('subtractN', function() {
-    var subtractN = eweda.subtractN;
+    var subtractN = Lib.subtractN;
 
     it('should subtract two numbers', function() {
         assert.equal(15, subtractN(7,22));
@@ -54,7 +54,7 @@ describe('subtractN', function() {
 });
 
 describe('divide', function() {
-    var divide = eweda.divide;
+    var divide = Lib.divide;
 
     it('should divide two numbers', function() {
         assert.equal(4, divide(28, 7));
@@ -67,7 +67,7 @@ describe('divide', function() {
 });
 
 describe('divideBy', function() {
-    var divideBy = eweda.divideBy;
+    var divideBy = Lib.divideBy;
 
     it('should divide two numbers', function() {
         assert.equal(4, divideBy(7, 28));
@@ -81,7 +81,7 @@ describe('divideBy', function() {
 });
 
 describe('sum', function() {
-    var sum = eweda.sum;
+    var sum = Lib.sum;
 
     it('should add together the array of numbers supplied', function() {
         assert.equal(10, sum([1, 2, 3, 4]));
@@ -89,7 +89,7 @@ describe('sum', function() {
 });
 
 describe('product', function() {
-    var product = eweda.product;
+    var product = Lib.product;
 
     it('should multiply together the array of numbers supplied', function() {
         assert.equal(24, product([1, 2, 3, 4]));

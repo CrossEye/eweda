@@ -131,6 +131,7 @@
         E.append = bootstrap.append || function(el, list) {
             return reverse(prepend(el, reverse(list)));
         };
+        aliasFor("append").is("push");
 
         // Returns a new list consisting of the elements of the first list followed by the elements of the second.
         var merge = E.merge = bootstrap.merge || _(function(list1, list2) {
@@ -409,6 +410,36 @@
         });
 
 
+        var indexOfIt = function(obj, list, acc) {
+           return isEmpty(list) ? -1 : 
+             head(list) === obj ? acc + 1 : indexOfIt(obj, tail(list), acc + 1);
+        };
+
+        // Returns the first zero-indexed position of an object in a flat list
+        E.indexOf = _(bootstrap.indexOf || function(obj, list) {
+            return indexOfIt(obj, list, -1);
+        });
+
+        var lastIndexOfIt = function(obj, list, currPos, lastPos) {
+            if(isEmpty(list)) {
+                return lastPos;
+            } 
+            if (head(list) === obj) {
+                lastPos = currPos;
+            }
+            return lastIndexOfIt(obj, tail(list), currPos + 1, lastPos);
+        };
+
+        // Returns the last zero-indexed position of an object in a flat list
+        E.lastIndexOf = _(bootstrap.lastIndexOf || function(obj, list) {
+            return lastIndexOfIt(obj, list, 0, -1);
+        });
+
+        // join
+        E.join = _(bootstrap.join || function(sep, list) {
+            return foldl(function(x, y) { return (x !== "") ? x + sep + y : y; }, "", list);
+        });
+
         // Object Functions
         // ----------------
         //
@@ -608,7 +639,7 @@
         E.alwaysTrue = identity(true);
 
         // Concatenates together all the elements of a list.
-        E.join = foldl(add, '');
+        //E.join = foldl(add, '');
 
         return E;
     };

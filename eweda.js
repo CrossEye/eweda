@@ -137,6 +137,7 @@
         var merge = E.merge = bootstrap.merge || _(function(list1, list2) {
             return (isEmpty(list1)) ? list2 :  prepend(head(list1), merge(tail(list1), list2));
         });
+        aliasFor("merge").is("concat");
 
 
         // Function functions :-)
@@ -437,9 +438,15 @@
 
         // join
         E.join = _(bootstrap.join || function(sep, list) {
-            return foldl(function(x, y) { return (x !== "") ? x + sep + y : y; }, "", list);
+            return foldl(function(acc, el) { return (acc !== "") ? acc + sep + el : el; }, "", list);
         });
 
+        E.splice = _(bootstrap.splice || function(start, len, list) {
+            return merge(take(start, list), skip(start + len, list));
+        });
+        
+       
+        
         // Object Functions
         // ----------------
         //

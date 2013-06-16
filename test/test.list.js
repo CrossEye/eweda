@@ -27,6 +27,15 @@ describe('lastIndexOf', function() {
 describe("join", function() {
   it("concatenates a list's elements to a string, with an seperator string between elements", function() {
     var list = [1,2,3,4];
-    assert.deepEqual(eweda.join("~", list), "1~2~3~4");
+    assert.equal(eweda.join("~", list), "1~2~3~4");
   });
 });
+
+describe("splice", function() {
+  it("removes specified elements from a list", function() {
+    var list = [0,1,2,3,4,5,6,7,8,9];
+    assert.deepEqual(eweda.splice(3, 2, list), [0,1,2,5,6,7,8,9]);
+  });
+});
+
+

@@ -96,11 +96,3 @@ describe('product', function() {
     });
 });
 
-// TODO: doesn't really belong with math, but where?
-describe('join', function() {
-    var join = eweda.join;
-
-    it('should concatenate the strings in a list', function() {
-        assert.equal('abcd', join(['a', 'b', 'c', 'd']));
-    });
-});

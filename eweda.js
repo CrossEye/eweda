@@ -343,8 +343,8 @@
 
         // Returns `true` if the list contains the sought element, `false` if it does not.  Equality is strict here,
         // meaning reference equality for objects and non-coercing equality for primitives.
-        var contains = E.contains = _(bootstrap.contains || function(a, lat) {
-            return (isEmpty(lat)) ? false : head(lat) === a || contains(a, tail(lat));
+        var contains = E.contains = _(bootstrap.contains || function(a, list) {
+            return (isEmpty(list)) ? false : head(list) === a || contains(a, tail(list));
         });
 
         // Returns a new list containing only one copy of each element in the original list.  Equality is strict here,

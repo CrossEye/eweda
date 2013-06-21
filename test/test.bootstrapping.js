@@ -364,6 +364,10 @@ describe('bootstrapping of library', function() {
         var foldr = sheepda.foldr;
         var avg = function(a, b) {return (a + b) / 2;};
 
+        it('should fold lists in the right order', function() {
+            assert.equal(foldr(function(a, b) {return a + b;}, '', makeList('a', 'b', 'c', 'd')), 'abcd');
+        });
+
         it('should fold simple functions over arrays with the supplied accumulator', function() {
             assert.equal(foldr(avg, 54, makeList(12, 4, 10, 6)), 12);
         });
@@ -386,6 +390,10 @@ describe('bootstrapping of library', function() {
     describe('foldr1', function() {
         var foldr1 = sheepda.foldr1;
         var avg = function(a, b) {return (a + b) / 2;};
+
+        it('should fold lists in the right order', function() {
+            assert.equal(foldr1(function(a, b) {return a + b;}, makeList('a', 'b', 'c', 'd')), 'abcd');
+        });
 
         it('should fold simple functions over arrays without an accumulator', function() {
             assert.equal(foldr1(avg,  makeList(12, 4, 10, 6, 54)), 12);

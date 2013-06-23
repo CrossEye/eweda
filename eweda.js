@@ -66,10 +66,16 @@
             return arr;
         };
 
-        // Creates a new function which accepts any initial subsequence of the arguments to the supplied function, and
-        // then, if that subsequence is complete, evaluates the supplied function, and if not, returns a new (also
-        // curried) function which expects the remaining arguments to combine with this subsequence and call the
-        // original function.
+        // Returns a curried version of the supplied function.  For example:
+        //
+        //      var discriminant = function(a, b, c) {
+        //          return b * b - 4 * a * c;
+        //      };
+        //      var f = curry(discriminant);
+        //      var g = f(3), h = f(3, 7);
+        //      g(7) ≅ h; g(7, 4) == h(4) == f(3, 7, 4) = 1;
+        //
+        //  Almost all exposed functions of more than one parameter already have curry applied to them.
         var _ = E.curry = function(fn) {
             var arity = fn.length;
             var f = function(args) {

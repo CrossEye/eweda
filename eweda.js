@@ -66,8 +66,11 @@
             return arr;
         };
 
-        // Local version of partial application.
-        var _ = function(fn) {
+        // Creates a new function which accepts any initial subsequence of the arguments to the supplied function, and
+        // then, if that subsequence is complete, evaluates the supplied function, and if not, returns a new (also
+        // curried) function which expects the remaining arguments to combine with this subsequence and call the
+        // original function.
+        var _ = E.curry = function(fn) {
             var arity = fn.length;
             var f = function(args) {
                 return function () {

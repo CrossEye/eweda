@@ -1,8 +1,10 @@
 Project Eweda
 =============
 
-A practical functional library for Javascript programmers.  _Eweda lamb!_
+A (probably im-)practical functional library for Javascript programmers.  _Eweda lamb!_
 
+This turned out to be more of an academic exercise than something practical.  But there is a parallel library that
+is more practical in [Ramda](https://github.com/CrossEye/ramda).
 
 
 Goals
